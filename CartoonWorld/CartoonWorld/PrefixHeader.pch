@@ -1,0 +1,53 @@
+//
+//  PrefixHeader.pch
+//  二次元境
+//
+//  Created by MS on 15/11/27.
+//  Copyright (c) 2015年 MS. All rights reserved.
+//
+
+#ifndef _____PrefixHeader_pch
+#define _____PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+// 自定义宏
+#import "Color.h"
+#import "Url.h"
+#import "Padding.h"
+#import "Constant.h"
+#import "FontSize.h"
+#import "Method.h"
+
+// 工具
+#import "ToolsManager.h"
+#import "AlertManager.h"
+#import "RefreshManager.h"
+
+// 类别
+#import "UIView+Initialization.h"
+#import "UILabel+Initialization.h"
+#import "UIButton+Initialization.h"
+#import "UIImageView+Initialization.h"
+#import "NSString+Adaptive.h"
+
+// 自定义常用类
+#import "RGBColor.h"
+#import "AllWay.h"
+#import "NetWorkingManager.h"
+
+// 三方
+#import <Masonry.h>
+#import <UIImageView+WebCache.h>
+#import <MJExtension.h>
+#import <MBProgressHUD.h>
+
+// 自定义NSLog
+#ifdef DEBUG
+#define NSLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#else
+#define NSLog(...)
+#endif
+
+#endif
