@@ -21,11 +21,20 @@
     return view;
 }
 
-# pragma mark - Getter & Setter
+# pragma mark - Setter
 
-- (CGFloat)width
+- (void)setX:(CGFloat)x
 {
-    return self.frame.size.width;
+    CGRect frame = self.frame;
+    frame.origin.x = x;
+    self.frame = frame;
+}
+
+- (void)setY:(CGFloat)y
+{
+    CGRect frame = self.frame;
+    frame.origin.y = y;
+    self.frame = frame;
 }
 
 - (void)setWidth:(CGFloat)width
@@ -35,16 +44,33 @@
     self.frame = frame;
 }
 
-- (CGFloat)height
-{
-    return self.frame.size.height;
-}
-
 - (void)setHeight:(CGFloat)height
 {
     CGRect frame = self.frame;
     frame.size.height = height;
     self.frame = frame;
+}
+
+# pragma mark - Getter
+
+- (CGFloat)x
+{
+    return self.frame.origin.x;
+}
+
+- (CGFloat)y
+{
+    return self.frame.origin.y;
+}
+
+- (CGFloat)width
+{
+    return self.frame.size.width;
+}
+
+- (CGFloat)height
+{
+    return self.frame.size.height;
 }
 
 - (CGFloat)maxY
@@ -54,7 +80,7 @@
 
 - (CGFloat)minY
 {
-    return CGRectGetMidY(self.frame);
+    return CGRectGetMinY(self.frame);
 }
 
 - (CGFloat)maxX
@@ -64,7 +90,7 @@
 
 - (CGFloat)minX
 {
-    return CGRectGetMidX(self.frame);
+    return CGRectGetMinX(self.frame);
 }
 
 @end

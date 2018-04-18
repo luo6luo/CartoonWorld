@@ -14,5 +14,6 @@
 @property (nonatomic, strong) NSString *content_filter;  // 内容
 @property (nonatomic, strong) NSString *face;            // 头像
 @property (nonatomic, strong) NSString *nickname;        // 昵称
+@property (nonatomic, strong) NSString *likeCount;       // 喜欢数
 
 @end

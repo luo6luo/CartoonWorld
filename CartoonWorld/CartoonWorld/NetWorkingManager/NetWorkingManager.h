@@ -100,6 +100,16 @@ typedef void(^FailureBlock)(NSError * error);
 
 
 /**
+ 漫画内容
+
+ @param success 请求成功
+ @param failure 请求失败
+ */
+- (void)comicContentSuccess:(SuccessBlock)success
+                    failure:(FailureBlock)failure;
+
+
+/**
  更多漫画
 
  @param page     当前页数
@@ -118,6 +128,24 @@ typedef void(^FailureBlock)(NSError * error);
 
 
 /**
+ 更多每日漫条
+
+ @param page     当前页数
+ @param argCon   不知道）
+ @param argName  类型名称
+ @param argValue 类型值
+ @param success  请求成功
+ @param failure  请求失败
+ */
+- (void)moreDailycomicsWithPage:(NSInteger)page
+                         argCon:(NSInteger)argCon
+                        argName:(NSString *)argName
+                       argValue:(NSInteger)argValue
+                        success:(SuccessBlock)success
+                        failure:(FailureBlock)failure;
+
+
+/**
  更多专题
 
  @param argCon   标识类型
@@ -131,19 +159,38 @@ typedef void(^FailureBlock)(NSError * error);
                     failure:(FailureBlock)failure;
 
 
-/**漫画阅读*/
-- (void)readCortoonWithChapterId:(NSInteger)chapterId success:(SuccessBlock)success failure:(FailureBlock)failure;
+/**
+ 分类搜索
 
-/**热门搜索条*/
-- (void)hotSearchSuccess:(SuccessBlock)success failure:(FailureBlock)failure;
+ @param success  请求成功
+ @param failure  请求失败
+ */
+- (void)searchClassificationSuccess:(SuccessBlock)success
+                            failure:(FailureBlock)failure;
 
-/**根据关键字搜索*/
-- (void)searchWithString:(NSString *)string page:(NSInteger)page success:(SuccessBlock)success failure:(FailureBlock)failure;
 
-/**中二堆*/
-- (void)zhongErWithURL:(NSString *)url success:(SuccessBlock)success failure:(FailureBlock)failure;
 
-/**绘图控*/
-- (void)drawWithURL:(NSString *)url success:(SuccessBlock)success failure:(FailureBlock)failure;
+/**
+ 热门搜索条
+
+ @param success 请求成功
+ @param failure 请求失败
+ */
+- (void)hotSearchSuccess:(SuccessBlock)success
+                 failure:(FailureBlock)failure;
+
+
+/**
+ 根据关键字搜索
+
+ @param string  搜索关键字
+ @param page    搜索页面
+ @param success 请求成功
+ @param failure 请求失败
+ */
+- (void)searchWithString:(NSString *)string
+                    page:(NSInteger)page
+                 success:(SuccessBlock)success
+                 failure:(FailureBlock)failure;
 
 @end

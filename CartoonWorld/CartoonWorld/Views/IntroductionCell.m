@@ -30,7 +30,7 @@
 - (void)setupIntroductionSubviews
 {
     // 标题
-    self.titleLabel = [UILabel labelWithText:@"作品介绍" textColor:COLOR_TEXT_BLACK fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
+    self.titleLabel = [UILabel labelWithText:@"作品介绍" textColor:COLOR_TEXT_BLACK fontSize:FONT_TITLE textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.titleLabel];
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(LEFT_RIGHT);
@@ -40,14 +40,14 @@
     }];
     
     // 内容
-    self.contentLabel = [UILabel labelWithText:nil textColor:COLOR_TEXT_BLACK fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.contentLabel = [UILabel labelWithText:nil textColor:COLOR_TEXT_BLACK fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     self.contentLabel.numberOfLines = 0;
     [self.contentView addSubview:self.contentLabel];
     [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(LEFT_RIGHT);
         make.right.equalTo(self).offset(-LEFT_RIGHT);
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(MIDDLE_SPASE);
-        make.bottom.equalTo(self).offset(-TOP_BOTTOM);
+        make.top.equalTo(self.titleLabel.mas_bottom);
+        make.bottom.equalTo(self).offset(-MIDDLE_SPASE);
     }];
 }
 

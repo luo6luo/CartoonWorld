@@ -10,8 +10,8 @@
 
 @interface OtherUserCell ()
 
-@property (nonatomic ,strong) UIImageView * imageV;
-@property (nonatomic ,strong) UILabel * titleL;
+@property (nonatomic ,strong) UIImageView * leftImage; // 左图片
+@property (nonatomic ,strong) UILabel * middleLabel;   // 中间label
 
 @end
 
@@ -20,38 +20,53 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        self.backgroundColor = [UIColor whiteColor];
-        [self initSubViews];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = COLOR_WHITE;
+        
+        [self setupSubview];
     }
     return self;
 }
 
-- (void)setDataDic:(NSDictionary *)dataDic
+- (void)setupSubview
 {
-    _dataDic = dataDic;
-    _imageV.image = [UIImage imageNamed:dataDic[@"image"]];
-     _titleL.text = dataDic[@"name"];
+    // 图标
+    self.leftImage = [[UIImageView alloc] init];
+    [self.contentView addSubview:self.leftImage];
+    [self.leftImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(LEFT_RIGHT);
+        make.centerY.equalTo(self);
+        make.width.height.mas_equalTo(ICON_HEIGHT);
+    }];
+    
+    // 标题
+    self.middleLabel = [UILabel labelWithText:nil textColor:COLOR_TEXT_BLACK fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    [self.contentView addSubview:self.middleLabel];
+    [self.middleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.leftImage.mas_right).offset(2*MIDDLE_SPASE);
+        make.centerY.equalTo(self);
+        make.right.equalTo(self).offset(LEFT_RIGHT);
+        make.height.mas_equalTo(LABEL_HEIGHT);
+    }];
+    
+    // 分界线
+    UIView *line = [UIView new];
+    line.backgroundColor = COLOR_APP_LINE;
+    [self.contentView addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self);
+        make.height.mas_equalTo(1);
+    }];
 }
 
-- (void)initSubViews
+- (void)setInfoArr:(NSArray *)infoArr
 {
-    _imageV = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 22, 22)];
-    [self.contentView addSubview:_imageV];
+    _infoArr = infoArr;
     
-    _titleL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxY(_imageV.frame) + 10, 10, 100, 22)];
-    _titleL.textAlignment = NSTextAlignmentLeft;
-    _titleL.textColor = TEXT_COLOR;
-    _titleL.font = [UIFont systemFontOfSize:13];
-    [self.contentView addSubview:_titleL];
-    
-    UILabel * sliptLabel = [[UILabel alloc] init];
-    sliptLabel.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
-    [self.contentView addSubview:sliptLabel];
-    [sliptLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView.mas_left);
-        make.bottom.equalTo(self.contentView.mas_bottom);
-        make.size.mas_equalTo(CGSizeMake(SCREEN_WIDTH, 1));
-    }];
+    if (infoArr.count > 1) {
+        self.leftImage.image = [UIImage imageNamed:infoArr[0]];
+        self.middleLabel.text = infoArr[1];
+    }
 }
 
 @end

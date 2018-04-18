@@ -59,12 +59,12 @@
 - (NSDictionary *)setupPageMenuWithOptions
 {
     NSDictionary *options = @{
-      DZROptionMenuHeight: @(64),
+      DZROptionMenuHeight: @(NAVIGATIONBAR_HEIGHT),
       DZROptionItemWidth: @(60.0),
       DZROptionIndicatorWidth: @(35.0),
       DZROptionIndicatorHeight: @(2.0),
-      DZROptionItemTopMargin: @(20.0),
-      DZROptionIndicatorTopToItem: @(50.0),
+      DZROptionItemTopMargin: @(STATUSBAR_HEIGHT),
+      DZROptionIndicatorTopToMenu: @(STATUSBAR_HEIGHT + 30),
       DZROptionItemsSpace: @(0.0),
       DZROptionCurrentPage: @(0),
       DZROptionMenuColor: COLOR_PINK,

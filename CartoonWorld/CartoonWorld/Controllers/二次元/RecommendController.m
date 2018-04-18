@@ -9,7 +9,7 @@
 #import "RecommendController.h"
 #import "WebController.h"
 #import "ComicController.h"
-#import "MoreComicController.h"
+#import "ComicListController.h"
 #import "MoreOtherController.h"
 
 #import "RecommendCell.h"
@@ -43,10 +43,6 @@ static NSString *const kTitleHeader = @"titleHeader";
 
     [self setupViews];
 }
-
-# pragma mark - Getter
-
-
 
 # pragma mark - 下载数据
 
@@ -153,10 +149,14 @@ static NSString *const kTitleHeader = @"titleHeader";
         [self.navigationController pushViewController:webController animated:YES];
     } else {
         // 其他
-        MoreComicController *moreComicController = [[MoreComicController alloc] init];
+        ComicListController *moreComicController = [[ComicListController alloc] init];
         moreComicController.argName = model.argName;
         moreComicController.argValue = model.argValue;
+        moreComicController.argCon = 0;
         moreComicController.title = model.itemTitle;
+        
+        [RefreshManager Refreshing:moreComicController.tableView];
+        
         moreComicController.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:moreComicController animated:YES];
     }

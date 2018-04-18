@@ -10,9 +10,8 @@
 
 @interface ComicModel : NSObject
 
-@property (nonatomic, strong) NSString *author_name;       // 作者（二次元推荐）
+// 共有
 @property (nonatomic ,assign) NSInteger comicId;           // 漫画id
-@property (nonatomic ,strong) NSString *cornerInfo;        // 最新章节（二次元推荐）
 @property (nonatomic ,strong) NSString *cover;             // 漫画封面
 @property (nonatomic ,strong) NSString *descriptionStr;    // 描述
 @property (nonatomic ,assign) NSInteger is_vip;
@@ -20,7 +19,12 @@
 @property (nonatomic, assign) NSInteger newestChapter;     // 最新章节
 @property (nonatomic, strong) NSArray *tags;               // 漫画标签
 
-@property (nonatomic ,assign) NSInteger conTag;            // 数量（更多提醒信息数量）
-@property (nonatomic ,strong) NSString *author;            // 作者（二次元订阅，更多）
+// 二次元-推荐
+@property (nonatomic, strong) NSString *author_name;       // 作者
+@property (nonatomic ,strong) NSString *cornerInfo;        // 最新章节
+
+// 漫画列表，二次元-订阅
+@property (nonatomic ,assign) NSInteger conTag;            // 数量
+@property (nonatomic ,strong) NSString *author;            // 作者
 
 @end

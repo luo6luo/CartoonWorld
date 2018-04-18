@@ -6,18 +6,10 @@
 //  Copyright © 2017年 顿顿. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "ComicBaseScrollView.h"
 
-typedef NS_ENUM(NSInteger, CatalogScrollDirection) {
-    CatalogUp = 1,
-    CatalogDown,
-    CatalogOther
-};
-
-@interface ComicCatalogController : UICollectionViewController
+@interface ComicCatalogController : ComicBaseScrollView
 
 @property (nonatomic, strong) NSArray *dataArr;
-@property (nonatomic, assign) BOOL mainViewIsUp; // 主视图是否上滑动
-@property (nonatomic, copy) void(^catalogScrollBlock)(CatalogScrollDirection direction); 
 
 @end

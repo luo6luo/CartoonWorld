@@ -53,9 +53,8 @@
     [self addSubview:self.coverImage];
     
     // 漫画名
-    self.comicName = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
+    self.comicName = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_TITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.comicName];
-    CGFloat comicNameWidth = (SCREEN_WIDTH - 2*LEFT_RIGHT - VERTICAL_CELL_WIDTH)/2;
     [self.comicName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.coverImage.mas_right).offset(LEFT_RIGHT);
         make.top.equalTo(self.coverImage);
@@ -64,7 +63,7 @@
     }];
     
     // 作者
-    self.author = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.author = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.author];
     [self.author mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.height.equalTo(self.comicName);
@@ -72,7 +71,7 @@
     }];
     
     // 描述
-    self.shortDescription = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.shortDescription = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.shortDescription];
     [self.shortDescription mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.comicName);
@@ -81,7 +80,7 @@
     }];
     
     // 标签
-    self.tags = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.tags = [UILabel labelWithText:nil textColor:COLOR_TEXT_WHITE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.tags];
     [self.tags mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.comicName);
@@ -90,17 +89,17 @@
     }];
     
     // 点击标题
-    self.clickTitle = [UILabel labelWithText:@"点击" textColor:COLOR_TEXT_WHITE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.clickTitle = [UILabel labelWithText:@"点击" textColor:COLOR_TEXT_WHITE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.clickTitle];
     [self.clickTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.comicName);
-        make.width.mas_equalTo(25);
+        make.width.mas_equalTo(30);
         make.height.mas_equalTo(LABEL_HEIGHT);
         make.bottom.equalTo(self.tags.mas_top).offset(-MIDDLE_SPASE);
     }];
     
     // 点击总数
-    self.clickTotal = [UILabel labelWithText:nil textColor:COLOR_TEXT_ORANGE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.clickTotal = [UILabel labelWithText:nil textColor:COLOR_TEXT_ORANGE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.clickTotal];
     [self.clickTotal mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.clickTitle.mas_right);
@@ -110,17 +109,17 @@
     }];
     
     // 收藏标题
-    self.favoriteTitle = [UILabel labelWithText:@"收藏" textColor:COLOR_TEXT_WHITE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.favoriteTitle = [UILabel labelWithText:@"收藏" textColor:COLOR_TEXT_WHITE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.favoriteTitle];
     [self.favoriteTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.clickTotal.mas_right);
-        make.width.mas_equalTo(25);
+        make.width.mas_equalTo(30);
         make.height.mas_equalTo(LABEL_HEIGHT);
         make.bottom.equalTo(self.tags.mas_top).offset(-MIDDLE_SPASE);
     }];
     
     // 收藏总数
-    self.favoriteTotal = [UILabel labelWithText:nil textColor:COLOR_TEXT_ORANGE fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.favoriteTotal = [UILabel labelWithText:nil textColor:COLOR_TEXT_ORANGE fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.favoriteTotal];
     [self.favoriteTotal mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.favoriteTitle.mas_right);

@@ -16,7 +16,10 @@
 @property (nonatomic, strong) NSString *subTitle;       // 提示条的内容
 @property (nonatomic, strong) NSString *title;          // 标题
 @property (nonatomic, strong) NSString *url;            // 网页链接
-@property (nonatomic, assign) NSInteger specialId;
-@property (nonatomic, assign) NSInteger specialType;
+
+@property (nonatomic, assign) NSInteger specialId;      // 专题id
+@property (nonatomic, assign) NSInteger specialType;    // 专题类型
+
+@property (nonatomic, assign) NSInteger comicId;        // 漫画id
 
 @end

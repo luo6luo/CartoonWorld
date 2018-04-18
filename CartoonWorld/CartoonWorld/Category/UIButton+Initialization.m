@@ -26,7 +26,7 @@
     }
     
     if (!titleColor) {
-        titleColor = TEXT_COLOR;
+        titleColor = COLOR_TEXT_BLACK;
     }
     
     if (!titleFontSize) {

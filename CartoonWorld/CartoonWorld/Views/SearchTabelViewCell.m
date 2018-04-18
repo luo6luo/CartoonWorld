@@ -54,14 +54,14 @@
     _click_totalL = [[UILabel alloc] init];
     _click_totalL.frame = CGRectMake(CGRectGetMaxX(_coverImage.frame) + 10, CGRectGetMaxY(_nameL.frame) + 5, SCREEN_WIDTH - 30 - (SCREEN_WIDTH/3 - 20) * 3/4, 15);
     _click_totalL.textAlignment = NSTextAlignmentLeft;
-    _click_totalL.textColor = TEXT_COLOR;
+    _click_totalL.textColor = COLOR_TEXT_BLACK;
     _click_totalL.font = [UIFont systemFontOfSize:12];
     [self.contentView addSubview:_click_totalL];
     
     _description = [[UILabel alloc] init];
     _description.frame = CGRectMake(CGRectGetMaxX(_coverImage.frame) + 10, CGRectGetMaxY(_click_totalL.frame) + 5, SCREEN_WIDTH - 30 - (SCREEN_WIDTH/3 - 20) * 3/4, 35);
     _description.textAlignment = NSTextAlignmentLeft;
-    _description.textColor = TEXT_COLOR;
+    _description.textColor = COLOR_TEXT_BLACK;
     _description.numberOfLines = 0;
     _description.font = [UIFont systemFontOfSize:12];
     [self.contentView addSubview:_description];

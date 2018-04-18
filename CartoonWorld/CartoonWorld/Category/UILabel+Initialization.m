@@ -17,7 +17,7 @@
 {
     
     if (!text) { text = @""; }
-    if (!textColor) { textColor = TEXT_COLOR; }
+    if (!textColor) { textColor = COLOR_TEXT_BLACK; }
     
     UILabel *label = [[UILabel alloc] init];
     label.text = text;

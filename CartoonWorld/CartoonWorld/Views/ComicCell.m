@@ -93,21 +93,21 @@
     
     //作者
     self.authorNameL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headerImageV.frame) + 10, CGRectGetMaxY(self.bookNameL.frame) + 5, SCREEN_WIDTH - 45 - width, (B_height - 20 - B_height/5 - B_height/4)/3)];
-    self.authorNameL.textColor = TEXT_COLOR;
+//    self.authorNameL.textColor = TEXT_COLOR;
     self.authorNameL.textAlignment = NSTextAlignmentLeft;
     self.authorNameL.font = [UIFont systemFontOfSize:11];
     [self.contentView addSubview:self.authorNameL];
     
     //更新时间
     self.updateL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headerImageV.frame) + 10, CGRectGetMaxY(self.authorNameL.frame) + 5, SCREEN_WIDTH - 45 - width, (B_height - 20 - B_height/5 - B_height/4)/3)];
-    self.updateL.textColor = TEXT_COLOR;
+//    self.updateL.textColor = TEXT_COLOR;
     self.updateL.textAlignment = NSTextAlignmentLeft;
     self.updateL.font = [UIFont systemFontOfSize:10];
     [self.contentView addSubview:self.updateL];
     
     //总点击
     self.dianJiL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(self.headerImageV.frame) + 10, CGRectGetMaxY(self.updateL.frame) + 5, SCREEN_WIDTH - 45 - width, (B_height - 20 - B_height/5 - B_height/4)/3)];
-    self.dianJiL.textColor = TEXT_COLOR;
+//    self.dianJiL.textColor = TEXT_COLOR;
     self.dianJiL.textAlignment = NSTextAlignmentLeft;
     self.dianJiL.font = [UIFont systemFontOfSize:10];
     [self.contentView addSubview:self.dianJiL];

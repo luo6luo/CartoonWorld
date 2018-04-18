@@ -9,58 +9,46 @@
 #ifndef Url_h
 #define Url_h
 
+/*
+ 此处特别说明：
+ AFNetWorking库中，在拼接完整的URL时候，使用了下诉方法：
+ [NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString]
+ 
+ 该方法有一个注意的地方，拼接的 URLString 不能带 ”/“，否则会把 baseURL 修改了
+ eg: self.baseURL = [NSURL URLWithString:@"http://eg.com/v1/"]
+ URLString : /foo  -->  http://eg.com/foo
+             /foo/ -->  http://eg.com/foo/
+             foo   -->  http://eg.com/v1/foo
+             foo/  -->  http://eg.com/v1/foo
+ 
+ 此处很容易就把URL给拼错了。。。TAT
+ */
+
 // 基础接口
-#define BASE_URL @"http://app.u17.com/v3/appV3_3/ios/phone/"
+#define BASE_URL @"https://easy-mock.com/mock/5ac98c186db1e91cf4558443/cartoon"
 
 // 二次元
-#define Recommend_URL    @"comic/boutiqueListNew" // 推荐
-#define VIP_URL          @"list/vipList"          // vip
-#define Subscription_URL @"list/commonComicList"  // 订阅
-#define Cartoon_URL      @"http://m.u17.com/wap/cartoon/list?" // 动画
+#define Recommend_URL      @"home/recommend"     // 推荐
+#define VIP_URL            @"home/vip"           // vip
+#define Subscription_URL   @"home/subscription"  // 订阅
+#define Cartoon_URL        @"http://m.u17.com/wap/cartoon/list?" // 动画（网页）
+#define Special_Detail_URL @"http://www.u17.com/z/zt/appspecial/special_comic_list_v3.html?special_id=%ld" // 专题详情（网页）
 
 // 二次元 - 更多
-#define More_Comic_URL   @"list/commonComicList"   // 更多漫画
-#define More_Topic_URL   @"comic/special"          // 更多专题
+#define More_Comic_URL       @"home/recommend/more/others"      // 更多漫画
+#define More_Topic_URL       @"home/recommend/more/topics"      // 更多专题
+#define More_dailycomics_URL @"home/recommend/more/dailycomics" // 更多每日条漫
 
 // 漫画介绍
-#define Comic_Catalog_URL   @"comic/detail_static_new" // 漫画目录
-#define Comic_Detail_URL    @"comic/detail_realtime"   // 漫画详情
-#define Comic_Comment_URL   @"comment/list"            // 漫画评价
-#define Comic_GuessLike_URL @"comic/guessLike"         // 猜你喜欢
+#define Comic_Catalog_URL   @"comic/catalog"   // 漫画目录
+#define Comic_Detail_URL    @"comic/detail"    // 漫画详情
+#define Comic_Comment_URL   @"comic/comment"   // 漫画评价
+#define Comic_GuessLike_URL @"comic/guesslike" // 猜你喜欢
+#define Comic_Content_URL   @"comic/content"   // 漫画内容
 
-
-
-
-//漫画介绍
-#define ManHuaJieShao_URL @"http://app.u17.com/v3/app/android/phone/comic/detail_static?comicid=%ld&t=1448367030&v=2220099"
-//漫画内容
-#define ManHuaNeiRong_URL @"http://app.u17.com/v3/app/android/phone/comic/chapter?chapter_id=%ld&t=1448367544&v=2220099"
-
-
-
-//中二堆-精华
-#define ZED_Essence_URL @"http://api.zhuizhuiyoyo.com/request.php?method=topics%2Flist&timestamp=1449131214099&param=%7B%22count%22%3A20%2C%22page%22%3A1%2C%22tag%22%3A%22best%22%7D&sig=323001f726f9195150db5ce1ca2473e9"
-//中二堆-同人
-#define ZED_Colleague_URL @"http://api.zhuizhuiyoyo.com/request.php?method=topics%2Flist&timestamp=1449131561167&param=%7B%22count%22%3A20%2C%22type%22%3A4%2C%22page%22%3A1%7D&sig=a7aa05360110be3e2c23d951f8d9480a"
-//中二堆-cos
-#define ZED_COS_URL @"http://api.zhuizhuiyoyo.com/request.php?method=topics%2Flist&timestamp=1449131515957&param=%7B%22count%22%3A20%2C%22type%22%3A12%2C%22page%22%3A1%7D&sig=efa97477f72b05e69fda7063d6563fcc"
-//中二堆-资源
-#define ZED_Source_URL @"http://api.zhuizhuiyoyo.com/request.php?method=topics%2Flist&timestamp=1449131446303&param=%7B%22count%22%3A20%2C%22type%22%3A7%2C%22page%22%3A1%7D&sig=956e575d2abdb4f4ff380cd093f1bebe"
-//中二堆-吐槽
-#define ZED_Debunk_URL @"http://api.zhuizhuiyoyo.com/request.php?method=topics%2Flist&timestamp=1449131388820&param=%7B%22count%22%3A20%2C%22type%22%3A1%2C%22page%22%3A1%7D&sig=85e08e8cd48dae064fd5f7a473ee8a3b"
-
-
-//搜搜搜(搜索热门)
-#define SSS_search_URL @"http://app.u17.com/v3/app/android/phone/search/hotkeywords?t=1448370111&v=2220099"
-//搜搜搜(打上汉字检索到的漫画名字)
-#define SSS_search_Write_URL @"http://app.u17.com/v3/app/android/phone/search/relative?inputText=%@&t=1448368607&v=2220099"
-//搜搜搜(打上汉子,按确定键检索到的漫画)
-#define SSS_search_Sure_URL @"http://app.u17.com/v3/app/android/phone/search/rslist?q=%@&page=%ld&t=1448369103&v=2220099"
-
-
-//说说看-最新
-#define SSK_Latest_URL @"http://api.zhuizhuiyoyo.com/request.php?method=welfare%2Flist&timestamp=1449627118965&param=%7B%22count%22%3A20%2C%22o%22%3A%22n%22%2C%22page%22%3A1%2C%22user_id%22%3A0%7D&sig=47e5b0a2488caab52689eb9769c71041"
-//说说看-最热
-#define SSK_Hotest_URL @"http://api.zhuizhuiyoyo.com/request.php?method=welfare%2Flist&timestamp=1447764577896&param=%7B%22count%22%3A20%2C%22o%22%3A%22h%22%2C%22page%22%3A1%2C%22user_id%22%3A0%7D&sig=a15ce7ff34477d595cd557391dafc290"
+// 搜索
+#define Search_Classification_URL @"search/classification" // 分类搜索
+#define Search_Hot_URL            @"search/hotkeywords"    // 热门搜索
+#define Search_Value_URL          @"search/value"          // 值搜索
 
 #endif /* Url_h */

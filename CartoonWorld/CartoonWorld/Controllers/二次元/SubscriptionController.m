@@ -7,6 +7,7 @@
 //
 
 #import "SubscriptionController.h"
+#import "ComicController.h"
 
 #import "SubscriptionCell.h"
 
@@ -44,7 +45,7 @@ static NSString *const kSubscriptionCell = @"subscriptionCell";
 {
     //添加活动指示器
     if (!self.isFinishedDownload) {
-        [AlertManager showLoading];
+        [ActivityManager showLoadingInView:self.view];
     }
     
     //开始请求
@@ -60,12 +61,12 @@ static NSString *const kSubscriptionCell = @"subscriptionCell";
         
         [self.tableView reloadData];
         [RefreshManager stopRefreshInView:self.tableView];
-        [AlertManager dismissLoadingWithstatus:ShowSuccess];
+        [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
         self.view.userInteractionEnabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [RefreshManager stopRefreshInView:self.tableView];
-        [AlertManager dismissLoadingWithstatus:ShowFailure];
+        [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
         self.view.userInteractionEnabled = YES;
     }];
 }
@@ -122,7 +123,11 @@ static NSString *const kSubscriptionCell = @"subscriptionCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    ComicModel * comicModel = self.modelArr[indexPath.row];
+    ComicController * comicController = [[ComicController alloc] init];
+    comicController.comicId = comicModel.comicId;
+    comicController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:comicController animated:YES];
 }
 
 @end

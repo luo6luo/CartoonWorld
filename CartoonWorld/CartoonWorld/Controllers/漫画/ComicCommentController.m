@@ -7,92 +7,132 @@
 //
 
 #import "ComicCommentController.h"
+#import "CommentCell.h"
+#import "CommentModel.h"
 
-@interface ComicCommentController ()
+static NSString *kCommentCell = @"commentCell";
+
+@interface ComicCommentController ()<UITableViewDelegate, UITableViewDataSource>
+
+@property (nonatomic, strong) UITableView *tableView;        // 表格
+@property (nonatomic, assign) NSInteger commentPage;         // 评论当前页数
+@property (nonatomic, strong) NSMutableArray *commentModels; // 评论内容
+@property (nonatomic, assign) BOOL hasMore;                  // 是否有更多
 
 @end
 
 @implementation ComicCommentController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.view.backgroundColor = COLOR_BACK_WHITE;
+    self.commentModels = [NSMutableArray array];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self setupTabelView];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
-}
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+- (void)setupTabelView
+{
+    CGRect tableViewFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT);
+    self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = COLOR_BACK_WHITE;
     
-    // Configure the cell...
+    self.tableView.estimatedRowHeight = 0.0;
+    self.tableView.estimatedSectionFooterHeight = 0.0;
+    self.tableView.estimatedSectionHeaderHeight = 0.0;
     
-    return cell;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+        
+    [self.view addSubview:self.tableView];
+    
+    // 添加上拉刷新
+    [RefreshManager pullUpRefreshInView:self.tableView targer:self action:@selector(loadMoreCommentData)];
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+# pragma mark - Load data
+
+// 加载评论类容
+- (void)loadCommentData
+{
+    [ActivityManager showLoadingInView:self.view];
+    
+    // 加载评论
+    WeakSelf(self);
+    [[NetWorkingManager defualtManager] comicCommentWithComicID:self.comicId page:self.commentPage threadID:self.thread_id success:^(id responseBody) {
+        weakself.hasMore = [responseBody[@"hasMore"] boolValue];
+        if (self.commentPage == 1) {
+            [weakself.commentModels removeAllObjects];
+            weakself.commentModels = responseBody[@"models"];
+        } else {
+            [weakself.commentModels addObjectsFromArray:responseBody[@"models"]];
+        }
+        
+        [weakself.tableView reloadData];
+        [ActivityManager dismissLoadingInView:weakself.view status:ShowSuccess];
+        [RefreshManager stopRefreshInView:weakself.tableView];
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@", error.localizedDescription);
+        [ActivityManager dismissLoadingInView:weakself.view status:ShowFailure];
+        [RefreshManager stopRefreshInView:weakself.tableView];
+    }];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+// 加载新的数据
+- (void)loadNewCommentData
+{
+    self.commentPage = 1;
+    [self loadCommentData];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+// 加载更多数据
+- (void)loadMoreCommentData
+{
+    if (self.hasMore) {
+        self.commentPage++;
+        [self loadCommentData];
+    }
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+# pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.commentModels.count;
 }
-*/
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CommentCell *commentCell = [tableView dequeueReusableCellWithIdentifier:kCommentCell];
+    if (!commentCell) {
+        commentCell = [[CommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCommentCell];
+        commentCell.commentModel = self.commentModels[indexPath.row];
+    }
+    return commentCell;
+}
+
+# pragma mark - Table view delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CommentModel *model = self.commentModels[indexPath.row];
+    CGFloat textWidth = SCREEN_WIDTH - 2*LEFT_RIGHT - ICON_HEIGHT - MIDDLE_SPASE;
+    CGSize labelSize = [model.content_filter adaptiveSizeWithWidth:textWidth height:MAXFLOAT fontSize:FONT_SUBTITLE];
+    return labelSize.height + 2*TOP_BOTTOM + 2*LABEL_HEIGHT;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
 
 @end

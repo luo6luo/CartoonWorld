@@ -7,6 +7,7 @@
 //
 
 #import "VIPController.h"
+#import "ComicController.h"
 
 #import "RecommendCell.h"
 #import "TitleViewHeader.h"
@@ -38,7 +39,7 @@ static NSString *const kTitleHeader = @"titleHeader";
 {
     //添加活动指示器
     if (!self.isFinishedDownload) {
-        [AlertManager showLoading];
+        [ActivityManager showLoadingInView:self.view];
     }
     
     //开始请求
@@ -48,12 +49,12 @@ static NSString *const kTitleHeader = @"titleHeader";
         
         [self.collectionView reloadData];
         [RefreshManager stopRefreshInView:self.collectionView];
-        [AlertManager dismissLoadingWithstatus:ShowSuccess];
+        [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
         self.view.userInteractionEnabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [RefreshManager stopRefreshInView:self.collectionView];
-        [AlertManager dismissLoadingWithstatus:ShowFailure];
+        [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
         self.view.userInteractionEnabled = YES;
     }];
 }
@@ -167,7 +168,12 @@ referenceSizeForHeaderInSection:(NSInteger)section
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    VIPTypeModel *typeModel = self.typeArr[indexPath.section];
+    ComicModel * comicModel = typeModel.comics[indexPath.row];
+    ComicController * comicController = [[ComicController alloc] init];
+    comicController.comicId = comicModel.comicId;
+    comicController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:comicController animated:YES];
 }
 
 @end

@@ -47,7 +47,7 @@
     }];
     
     // 漫画标题
-    self.title = [UILabel labelWithText:@"" textColor:TEXT_COLOR fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
+    self.title = [UILabel labelWithText:@"" textColor:COLOR_TEXT_BLACK fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.title];
     [self.title mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.coverImage.mas_right).offset(LEFT_RIGHT);
@@ -57,7 +57,7 @@
     }];
     
     // 漫画标签
-    self.tags = [UILabel labelWithText:@"" textColor:TEXT_GRAD_COLOR fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.tags = [UILabel labelWithText:@"" textColor:COLOR_TEXT_GRAY fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.tags];
     [self.tags mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.coverImage.mas_right).offset(LEFT_RIGHT);
@@ -67,7 +67,7 @@
     }];
     
     // 漫画简介
-    self.content = [UILabel labelWithText:@"" textColor:TEXT_GRAD_COLOR fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
+    self.content = [UILabel labelWithText:@"" textColor:COLOR_TEXT_GRAY fontSize:FONT_CONTENT textAlignment:NSTextAlignmentLeft];
     self.content.numberOfLines = 0;
     [self.contentView addSubview:self.content];
     [self.content mas_makeConstraints:^(MASConstraintMaker *make) {

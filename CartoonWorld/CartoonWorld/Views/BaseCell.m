@@ -58,7 +58,7 @@
     [self.contentView addSubview:_avatarImage];
     
     _nameL = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_avatarImage.frame)+ 10, 5, SCREEN_WIDTH - 30 - 40, 18)];
-    _nameL.textColor = TEXT_COLOR;
+//    _nameL.textColor = TEXT_COLOR;
     _nameL.textAlignment = NSTextAlignmentLeft;
     _nameL.font = [UIFont systemFontOfSize:12];
     [self.contentView addSubview:_nameL];
@@ -76,7 +76,7 @@
     [self.contentView addSubview:_titleL];
     
     self.contentL = [[UILabel alloc] init];
-    _contentL.textColor = TEXT_COLOR;
+//    _contentL.textColor = TEXT_COLOR;
     _contentL.textAlignment = NSTextAlignmentLeft;
     _contentL.font = [UIFont systemFontOfSize:12];
     _contentL.numberOfLines = 0;

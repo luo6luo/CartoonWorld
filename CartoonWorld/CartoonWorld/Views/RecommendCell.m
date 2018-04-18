@@ -9,6 +9,7 @@
 #import "RecommendCell.h"
 #import "ComicModel.h"
 #import "AdvertisementModel.h"
+#import "OtherWorksModel.h"
 
 @interface RecommendCell ()
 
@@ -53,6 +54,13 @@
         if ([model content]) {
             self.update.text = [NSString stringWithFormat:@"最新章节%@",[model content]];
         }
+    } else if ([model isKindOfClass:[OtherWorksModel class]]) {
+        model = (OtherWorksModel *)model;
+        [self.imageView sd_setImageWithURL:[NSURL URLWithString:[model coverUrl]]];
+        self.title.text = [model name];
+        if ([model passChapterNum]) {
+            self.update.text = [NSString stringWithFormat:@"最新章节%ld", (long)[model passChapterNum]];
+        }
     }
 }
 
@@ -86,11 +94,11 @@
     [self.contentView addSubview:self.imageView];
     
     // 漫画标题
-    self.title = [UILabel labelWithText:@"" textColor:TEXT_COLOR fontSize:FONT_CONTENT textAlignment:NSTextAlignmentCenter];
+    self.title = [UILabel labelWithText:@"" textColor:COLOR_TEXT_BLACK fontSize:FONT_CONTENT textAlignment:NSTextAlignmentCenter];
     [self.contentView addSubview:self.title];
     
     // 漫画最新章节
-    self.update = [UILabel labelWithText:@"" textColor:TEXT_COLOR fontSize:FONT_CONTENT textAlignment:NSTextAlignmentCenter];
+    self.update = [UILabel labelWithText:@"" textColor:COLOR_TEXT_BLACK fontSize:FONT_CONTENT textAlignment:NSTextAlignmentCenter];
     [self.contentView addSubview:self.update];
 }
 

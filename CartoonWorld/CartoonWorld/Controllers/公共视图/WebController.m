@@ -39,7 +39,7 @@
 // 开始加载
 - (void)startRequest
 {
-    [AlertManager showLoading];
+    [ActivityManager showLoadingInView:self.view];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
 }
 
@@ -54,13 +54,13 @@
 {
     NSLog(@"结束");
     self.title = webView.title;
-    [AlertManager dismissLoadingWithstatus:ShowSuccess];
+    [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     NSLog(@"失败");
-    [AlertManager dismissLoadingWithstatus:ShowFailure];
+    [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
 }
 
 @end

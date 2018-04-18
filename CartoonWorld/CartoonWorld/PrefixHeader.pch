@@ -23,7 +23,9 @@
 // 工具
 #import "ToolsManager.h"
 #import "AlertManager.h"
+#import "ActivityManager.h"
 #import "RefreshManager.h"
+#import "Enumerator.h"
 
 // 类别
 #import "UIView+Initialization.h"
@@ -31,6 +33,7 @@
 #import "UIButton+Initialization.h"
 #import "UIImageView+Initialization.h"
 #import "NSString+Adaptive.h"
+#import "UIImage+Color.h"
 
 // 自定义常用类
 #import "RGBColor.h"

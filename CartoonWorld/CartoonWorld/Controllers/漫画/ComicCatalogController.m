@@ -7,14 +7,15 @@
 //
 
 #import "ComicCatalogController.h"
+#import "ComicContentController.h"
 #import "CatalogCell.h"
 #import "CatalogHeader.h"
 #import "CatalogModel.h"
 
-@interface ComicCatalogController ()<UICollectionViewDelegateFlowLayout, UIScrollViewDelegate>
+@interface ComicCatalogController ()<UICollectionViewDelegateFlowLayout, UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (nonatomic, assign) BOOL isPosiviteOrder; // 正序
-@property (nonatomic, assign) CGFloat lastOffsetY;  // 上次y轴偏移量
+@property (nonatomic, strong) UICollectionView *collectionView;
 
 @end
 
@@ -28,24 +29,26 @@ static NSString * const kCatalogHeader = @"catalogHeader";
     [super viewDidLoad];
     self.view.backgroundColor = COLOR_BACK_WHITE;
     self.isPosiviteOrder = YES;
-    self.lastOffsetY = 0;
     
     [self setupCollectionView];
 }
 
 - (void)setupCollectionView
 {
-    self.collectionView.bounces = YES;
+    CGRect collectionViewFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT);
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:collectionViewFrame collectionViewLayout:layout];
+    self.collectionView.alwaysBounceVertical = YES;
     self.collectionView.backgroundColor = COLOR_BACK_WHITE;
+    
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    
+    [self.view addSubview:self.collectionView];
+    
+    // 注册
     [self.collectionView registerNib:[UINib nibWithNibName:@"CatalogCell" bundle:nil] forCellWithReuseIdentifier:kCatalogCell];
     [self.collectionView registerClass:[CatalogHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kCatalogHeader];
-}
-
-- (void)setMainViewIsUp:(BOOL)mainViewIsUp
-{
-    _mainViewIsUp = mainViewIsUp;
-    
-    self.collectionView.scrollEnabled = YES;
 }
 
 # pragma mark - UICollectionViewDataSource
@@ -92,6 +95,12 @@ static NSString * const kCatalogHeader = @"catalogHeader";
     } else {
         model = self.dataArr[self.dataArr.count - 1 - indexPath.row];
     }
+    
+    ComicContentController *controller = [[ComicContentController alloc] init];
+    controller.title = model.name;
+    controller.model = model;
+    controller.hidesBottomBarWhenPushed = YES;
+    [self.rootController.navigationController pushViewController:controller animated:YES];
 }
 
 # pragma mark - UICollectionViewDelegateFlowLayout
@@ -103,7 +112,7 @@ static NSString * const kCatalogHeader = @"catalogHeader";
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    return UIEdgeInsetsMake(0.0, LEFT_RIGHT, TOP_BOTTOM, LEFT_RIGHT);
+    return UIEdgeInsetsMake(0.0, LEFT_RIGHT, 2*TOP_BOTTOM, LEFT_RIGHT);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
@@ -119,45 +128,6 @@ static NSString * const kCatalogHeader = @"catalogHeader";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
     return CGSizeMake(SCREEN_WIDTH, HEIGHT_HEADER_CATALOG);
-}
-
-# pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView == self.collectionView) {
-        // 设置滑动方向
-        CGFloat offsetY = scrollView.contentOffset.y;
-        CatalogScrollDirection direciton = CatalogOther;
-        if (self.lastOffsetY - offsetY > 0) {
-            direciton = CatalogDown;
-        } else if (self.lastOffsetY - offsetY < 0) {
-            direciton = CatalogUp;
-        } 
-        
-        if (self.mainViewIsUp) {
-            if (direciton == CatalogDown && self.collectionView.contentOffset.y <= 0) {
-                // 目录不动，整体视图下滑动
-                if (self.catalogScrollBlock) {
-                    self.collectionView.scrollEnabled = NO;
-                    self.catalogScrollBlock(CatalogDown);
-                }
-            }
-        } else if (!self.mainViewIsUp) {
-            if (direciton == CatalogUp) {
-                // 目录不动，整体视图上滑动
-                if (self.catalogScrollBlock) {
-                    self.collectionView.scrollEnabled = NO;
-                    self.collectionView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
-                    self.catalogScrollBlock(CatalogUp);
-                }
-            } else if (direciton == CatalogDown) {
-                self.collectionView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
-            }
-        }
-        
-        self.lastOffsetY = scrollView.contentOffset.y;
-    }
 }
 
 @end

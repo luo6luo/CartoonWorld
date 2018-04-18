@@ -7,6 +7,8 @@
 //
 
 #import "MoreOtherController.h"
+#import "ComicController.h"
+#import "WebController.h"
 #import "MoreOtherCell.h"
 #import "MoreTopicModel.h"
 
@@ -99,7 +101,7 @@ static NSString *kMoreOtherCell = @"moreOtherCell";
     self.view.userInteractionEnabled = NO;
     
     WeakSelf(self);
-    [[NetWorkingManager defualtManager] moreComicWithPage:self.currentPage argCon:self.argCon argName:self.argName argValue:self.argValue success:^(id responseBody) {
+    [[NetWorkingManager defualtManager] moreDailycomicsWithPage:self.currentPage argCon:self.argCon argName:self.argName argValue:self.argValue success:^(id responseBody) {
         
         // 获取数据
         weakself.hasMore = [responseBody[@"hasMore"] boolValue];
@@ -202,7 +204,22 @@ static NSString *kMoreOtherCell = @"moreOtherCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    MoreTopicModel *moreModel = self.dataArr[indexPath.row];
+    if (self.moreType == Topic && moreModel.specialId > 0) {
+        // 专题
+        NSString *urlString = [NSString stringWithFormat:Special_Detail_URL, moreModel.specialId];
+        WebController *webController = [[WebController alloc] init];
+        webController.urlString = urlString;
+        [webController startRequest];
+        webController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:webController animated:YES];
+    } else if (self.moreType == DayComic) {
+        // 每日条漫
+        ComicController * comicController = [[ComicController alloc] init];
+        comicController.comicId = moreModel.comicId;
+        comicController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:comicController animated:YES];
+    }
 }
 
 @end

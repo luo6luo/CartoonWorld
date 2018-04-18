@@ -46,7 +46,7 @@
     }];
     
     //标题
-    self.title = [UILabel labelWithText:@"" textColor:TEXT_COLOR fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
+    self.title = [UILabel labelWithText:@"" textColor:COLOR_TEXT_GRAY fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     [self addSubview:self.title];
     [self.title mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.iconImage.mas_right).offset(MIDDLE_SPASE);

@@ -12,27 +12,27 @@
 #import "ComicCommentController.h"
 
 #import "ComicHeadView.h"
+#import "CustomNavigationBar.h"
 
 #import "ComicInfoModel.h"
 #import "ComicDetailModel.h"
 
 #import <DZRPageMenuController.h>
 
-typedef NS_ENUM(NSInteger, MainScrollDirection) {
-    MainUp = 1,
-    MainDown,
-    MainOther
-};
-
 @interface ComicController ()<UIScrollViewDelegate, DZRPageMenuDelegate, DZRPageMenuDataSource>
 
 @property (nonatomic, strong) UIScrollView *mainScrollView;
 @property (nonatomic, strong) ComicHeadView *headerView; // 作者（作品）详情
-@property (nonatomic, strong) UIImageView *barImage;     // 导航栏背景视图
+@property (nonatomic, strong) CustomNavigationBar *navigationBar;        // 自定义导航栏
 @property (nonatomic, strong) DZRPageMenuController *pageMenu;           // 菜单栏
 @property (nonatomic, strong) ComicDetailController *detailController;   // 详情
 @property (nonatomic, strong) ComicCatalogController *catalogController; // 目录
 @property (nonatomic, strong) ComicCommentController *commentController; // 评论
+
+@property (nonatomic, assign) NSInteger commentPage; // 评论页面
+@property (nonatomic, assign) CGFloat lastOffsetY;   // 上次y轴偏移量
+@property (nonatomic, assign) BOOL isUp;             // 菜单栏是否顶头
+@property (nonatomic, assign) BOOL isScrolling;      // 判断是否正在滚动
 
 // 数据
 @property (nonatomic, strong) ComicDetailModel *detailModel;  // 漫画详情
@@ -42,17 +42,15 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 @property (nonatomic, strong) NSArray *otherWorks;      // 其他作品
 @property (nonatomic, strong) NSArray *commentModels;   // 评论内容
 
-@property (nonatomic, assign) NSInteger commentPage; // 评论页面
-@property (nonatomic, assign) CGFloat lastOffsetY;   // 上次y轴偏移量
-@property (nonatomic, assign) BOOL isUp;             // 菜单栏是否顶头
-@property (nonatomic, assign) BOOL isScrolling;      // 判断是否正在滚动
-
 // 此处判断几个网络请求是否加载完毕，不论成功与否
 @property (nonatomic, assign) BOOL isFinishedLoadComicDetail;  // 漫画详情加载完毕
 @property (nonatomic, assign) BOOL isFinishedLoadComicCatalog; // 漫画目录加载完毕
 @property (nonatomic, assign) BOOL isFinishedLoadComicComment; // 漫画评论加载完毕
 @property (nonatomic, assign) BOOL isFinishedLoadGuessLike;    // 漫画猜你喜欢加载完毕
 @property (nonatomic, assign) BOOL isLoadFailure;              // 加载失败
+
+// 判断是否为初次加载子视图
+@property (nonatomic, strong) NSMutableDictionary *isFirstShow;
 
 @end
 
@@ -67,8 +65,6 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
     self.isUp = NO;
     self.isScrolling = NO;
     
-    self.barImage = self.navigationController.navigationBar.subviews.firstObject;
-    
     self.lastOffsetY = 0;
     self.commentPage = -1;
     
@@ -78,6 +74,10 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
     self.isFinishedLoadGuessLike = NO;
     self.isLoadFailure = NO;
     
+    self.isFirstShow = [NSMutableDictionary dictionary];
+    [self.isFirstShow setObject:@(NO) forKey:@"comment"];
+    
+    [self setupSubviews];
     [self loadComicData];
 }
 
@@ -85,20 +85,14 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new] forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = [UIImage new];
-    [self.navigationController.navigationBar setTranslucent:YES];
-    self.barImage.alpha = 0;
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-    self.navigationController.navigationBar.shadowImage = nil;
-    [self.navigationController.navigationBar setTranslucent:NO];
-    self.barImage.alpha = 1;
+
+    self.navigationController.navigationBar.hidden = NO;
 }
 
 # pragma mark - Getter & Setter
@@ -107,7 +101,19 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 {
     if (!_detailController) {
         _detailController = [[ComicDetailController alloc] init];
+        _detailController.rootController = self;
         _detailController.title = @"详情";
+        
+        WeakSelf(self);
+        _detailController.scrollBlock = ^(ScrollDirection direction) {
+            if (direction == ScrollUp && !weakself.isUp) {
+                // 上滑动
+                [weakself scrollToUp];
+            } else if (direction == ScrollDown && weakself.isUp) {
+                // 下滑动
+                [weakself scrollToDown];
+            }
+        };
     }
     return _detailController;
 }
@@ -115,36 +121,18 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 - (ComicCatalogController *)catalogController
 {
     if (!_catalogController) {
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        _catalogController = [[ComicCatalogController alloc] initWithCollectionViewLayout:layout];
+        _catalogController = [[ComicCatalogController alloc] init];
+        _catalogController.rootController = self;
         _catalogController.title = @"目录";
         
         WeakSelf(self);
-        _catalogController.catalogScrollBlock = ^(CatalogScrollDirection direction) {
-            if (direction == CatalogUp && !weakself.isUp) {
+        _catalogController.scrollBlock = ^(ScrollDirection direction) {
+            if (direction == ScrollUp && !weakself.isUp) {
                 // 上滑动
-                weakself.mainScrollView.scrollEnabled = NO;
-                weakself.isScrolling = YES;
-                [UIView animateWithDuration:0.5 animations:^{
-                    [weakself.mainScrollView setContentOffset:CGPointMake(0, HEIGHT_HEADER_COMICDETAIL - 64)];
-                } completion:^(BOOL finished) {
-//                    [weakself.navigationController.navigationBar setBackgroundImage:[weakself imageWithColor:[COLOR_PINK colorWithAlphaComponent:1]] forBarMetrics:UIBarMetricsDefault];
-                    weakself.barImage.alpha = 1;
-                    weakself.mainScrollView.scrollEnabled = YES;
-                    weakself.isScrolling = NO;
-                    weakself.isUp = YES;
-                }];
-            } else if (direction == CatalogDown && weakself.isUp) {
+                [weakself scrollToUp];
+            } else if (direction == ScrollDown && weakself.isUp) {
                 // 下滑动
-                weakself.mainScrollView.scrollEnabled = NO;
-                [UIView animateWithDuration:0.5 animations:^{
-                    weakself.barImage.alpha = 0;;
-                    [weakself.mainScrollView setContentOffset:CGPointMake(0, 0)];
-                } completion:^(BOOL finished) {
-                    weakself.isScrolling = NO;
-                    weakself.mainScrollView.scrollEnabled = YES;
-                    weakself.isUp = NO;
-                }];
+                [weakself scrollToDown];
             }
         };
     }
@@ -155,34 +143,86 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 {
     if (!_commentController) {
         _commentController = [[ComicCommentController alloc] init];
+        _commentController.rootController = self;
         _commentController.title = @"评论";
+        
+        WeakSelf(self);
+        _commentController.scrollBlock = ^(ScrollDirection direction) {
+            if (direction == ScrollUp && !weakself.isUp) {
+                // 上滑动
+                [weakself scrollToUp];
+            } else if (direction == ScrollDown && weakself.isUp) {
+                // 下滑动
+                [weakself scrollToDown];
+            }
+        };
     }
     return _commentController;
+}
+
+- (CustomNavigationBar *)navigationBar
+{
+    if (!_navigationBar) {
+        _navigationBar = [[CustomNavigationBar alloc] init];
+        
+        // 点击左按钮
+        WeakSelf(self);
+        _navigationBar.leftBtnClickedBlock = ^{
+            [weakself.navigationController popViewControllerAnimated:YES];
+        };
+    }
+    return _navigationBar;
 }
 
 - (void)setIsUp:(BOOL)isUp
 {
     _isUp = isUp;
     
+    // 通知子视图菜单栏的位置
     self.catalogController.mainViewIsUp = isUp;
+    self.detailController.mainViewIsUp = isUp;
+    self.commentController.mainViewIsUp = isUp;
 }
 
-- (UIImage *)imageWithColor:(UIColor *)color {
-    CGRect rect = CGRectMake(0, 0, 1, 1);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [color setFill];
-    CGContextFillRect(context, rect);
-    UIImage *imgae = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return imgae;
+# pragma mark - Up & Down
+
+// 向上滑
+- (void)scrollToUp
+{
+    self.mainScrollView.scrollEnabled = NO;
+    self.isScrolling = YES;
+    [UIView animateWithDuration:0.3 animations:^{
+        // 注意：此处减去2个navigationBar高度，是因为 mainScrollView 的 初始y = 0
+        // 实际偏移offsetY位置 = 初始y位置 - 移动距离
+        // 即 0 - （HEIGHT_HEADER_COMICDETAIL - NAVIGATIONBAR_HEIGHT）
+        [self.mainScrollView setContentOffset:CGPointMake(0, HEIGHT_HEADER_COMICDETAIL -  NAVIGATIONBAR_HEIGHT)];
+    } completion:^(BOOL finished) {
+        self.navigationBar.barAlpha = 1;
+        self.mainScrollView.scrollEnabled = YES;
+        self.isScrolling = NO;
+        self.isUp = YES;
+    }];
+}
+
+// 向下滑
+- (void)scrollToDown
+{
+    self.mainScrollView.scrollEnabled = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        [self.mainScrollView setContentOffset:CGPointMake(0, 0)];
+        self.navigationBar.barAlpha = 0;
+    } completion:^(BOOL finished) {
+        self.isScrolling = NO;
+        self.mainScrollView.scrollEnabled = YES;
+        self.isUp = NO;
+    }];
 }
 
 # pragma mark - Download data
 
 - (void)loadComicData
 {
-    [AlertManager showLoading];
+    [ActivityManager showLoadingInView:self.view];
     
     WeakSelf(self);
     
@@ -205,20 +245,6 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
         weakself.chapterList = responseBody[@"chapterList"];
         weakself.otherWorks = responseBody[@"otherWorks"];
         
-        
-        // 加载评论
-        [[NetWorkingManager defualtManager] comicCommentWithComicID:weakself.comicId page:weakself.commentPage threadID:weakself.comicInfoModel.thread_id success:^(id responseBody) {
-            weakself.commentModels = responseBody[@"data"];
-            
-            weakself.isFinishedLoadComicComment = YES;
-            [weakself loadSuccess];
-        } failure:^(NSError *error) {
-            weakself.isFinishedLoadComicComment = YES;
-            weakself.isLoadFailure = YES;
-            [weakself loadFailure];
-        }];
-        
-        weakself.title = weakself.comicInfoModel.name;
         weakself.isFinishedLoadComicCatalog = YES;
         [weakself loadSuccess];
     
@@ -246,11 +272,26 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 {
     if (self.isFinishedLoadComicDetail &&
         self.isFinishedLoadComicCatalog &&
-        self.isFinishedLoadComicComment &&
         self.isFinishedLoadGuessLike) {
         
-        [self setupSubviews];
-        [AlertManager dismissLoadingWithstatus:ShowSuccess];
+        // 配置详情界面参数
+        self.detailController.comicInfoModel = self.comicInfoModel;
+        self.detailController.detailModel = self.detailModel;
+        self.detailController.guessLikeModels = self.guessLikeModels;
+        self.detailController.otherWorkModels = self.otherWorks;
+        self.detailController.mainViewIsUp = self.isUp;
+        
+        // 配置目录界面参数
+        self.catalogController.dataArr = self.chapterList;
+        self.catalogController.mainViewIsUp = self.isUp;
+        
+        // 配置评论界面的参数
+        self.navigationBar.title = self.comicInfoModel.name;
+        self.commentController.comicId = self.comicInfoModel.comic_id;
+        self.commentController.thread_id = self.comicInfoModel.thread_id;
+        
+        [self setupData];
+        [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
     }
 }
 
@@ -259,12 +300,11 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 {
     if (self.isFinishedLoadComicDetail &&
         self.isFinishedLoadComicCatalog &&
-        self.isFinishedLoadComicComment &&
         self.isFinishedLoadGuessLike &&
         self.isLoadFailure) {
         
-        [self setupSubviews];
-        [AlertManager dismissLoadingWithstatus:ShowFailure];
+        [self setupData];
+        [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
     }
 }
 
@@ -283,12 +323,22 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
     
     // 头视图
     self.headerView = [[ComicHeadView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, HEIGHT_HEADER_COMICDETAIL)];
-    self.headerView.comicInfoModel = self.comicInfoModel;
-    self.headerView.detailModel = self.detailModel;
     [self.mainScrollView addSubview:self.headerView];
     
+    // 自定义导航栏
+    [self.view addSubview:self.navigationBar];
+    self.navigationBar.barAlpha = 0;
+}
+
+// 加载数据
+- (void)setupData
+{
+    // 头视图
+    self.headerView.comicInfoModel = self.comicInfoModel;
+    self.headerView.detailModel = self.detailModel;
+    
     // 菜单项
-    self.pageMenu = [[DZRPageMenuController alloc] initWithFrame:CGRectMake(0, HEIGHT_HEADER_COMICDETAIL, SCREEN_WIDTH, SCREEN_HEIGHT - 64) delegate:self];
+    self.pageMenu = [[DZRPageMenuController alloc] initWithFrame:CGRectMake(0, HEIGHT_HEADER_COMICDETAIL, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT) delegate:self];
     [self.mainScrollView addSubview:self.pageMenu.view];
 }
 
@@ -304,12 +354,12 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
       DZROptionIndicatorHeight: @(2.0),
       DZROptionItemTopMargin: @(10.0),
       DZROptionItemBottomMargin: @(5),
-      DZROptionIndicatorTopToItem: @(35.0),
+      DZROptionIndicatorTopToMenu: @(35.0),
       DZROptionItemsSpace: @(0.0),
       DZROptionCurrentPage: @(0),
       DZROptionMenuColor: COLOR_PINK,
       DZROptionControllersScrollViewColor: COLOR_BACK_GRAY,
-      DZROptionSelectorItemTitleColor: [UIColor whiteColor],
+      DZROptionSelectorItemTitleColor: COLOR_WHITE,
       DZROptionUnselectorItemTitleColor: COLOR_TEXT_UNSELECT,
       DZROptionIndicatorColor: [UIColor whiteColor],
       DZROptionItemsCenter: @(YES),
@@ -322,30 +372,23 @@ typedef NS_ENUM(NSInteger, MainScrollDirection) {
 
 - (NSArray *)addChildControllersToPageMenu
 {
-    // 详情
-    self.detailController.comicInfoModel = self.comicInfoModel;
-    self.detailController.detailModel = self.detailModel;
-    self.detailController.guessLikeModels = self.guessLikeModels;
-    
-    // 目录
-    self.catalogController.dataArr = self.chapterList;
-    self.catalogController.mainViewIsUp = self.isUp;
-    
-    // 评论
-    
-    return @[self.detailController, self.catalogController, self.commentController];
+    return @[
+      self.detailController,
+      self.catalogController,
+      self.commentController
+    ];
 }
 
 # pragma mark - Page delegate
 
 - (void)pageMenu:(UIViewController *)pageMenu willMoveTheChildController:(UIViewController *)childController atIndexPage:(NSInteger)indexPage
 {
-    
-}
-
-- (void)pageMenu:(UIViewController *)pageMenu didMoveTheChildController:(UIViewController *)childController atIndexPage:(NSInteger)indexPage
-{
-    
+    if (![self.isFirstShow[@"comment"] boolValue]) {
+        if (indexPage == 2 && childController == self.commentController) {
+            [self.commentController loadNewCommentData];
+            [self.isFirstShow setValue:@(YES) forKey:@"comment"];
+        }
+    }
 }
 
 @end
