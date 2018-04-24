@@ -12,6 +12,10 @@
 
 @property (nonatomic, copy) void(^leftBtnClickedBlock)();
 @property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) UIColor *barColor;
 @property (nonatomic, assign) CGFloat barAlpha;
+
+// 布局
+- (void)layoutSelfSubviews;
 
 @end

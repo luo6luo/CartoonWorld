@@ -194,8 +194,8 @@
     [UIView animateWithDuration:0.3 animations:^{
         // 注意：此处减去2个navigationBar高度，是因为 mainScrollView 的 初始y = 0
         // 实际偏移offsetY位置 = 初始y位置 - 移动距离
-        // 即 0 - （HEIGHT_HEADER_COMICDETAIL - NAVIGATIONBAR_HEIGHT）
-        [self.mainScrollView setContentOffset:CGPointMake(0, HEIGHT_HEADER_COMICDETAIL -  NAVIGATIONBAR_HEIGHT)];
+        // 即 0 - （HEIGHT_HEADER_COMICDETAIL - NAVIGATIONBAR_HEIGHT_V）
+        [self.mainScrollView setContentOffset:CGPointMake(0, HEIGHT_HEADER_COMICDETAIL -  NAVIGATIONBAR_HEIGHT_V)];
     } completion:^(BOOL finished) {
         self.navigationBar.barAlpha = 1;
         self.mainScrollView.scrollEnabled = YES;
@@ -338,7 +338,7 @@
     self.headerView.detailModel = self.detailModel;
     
     // 菜单项
-    self.pageMenu = [[DZRPageMenuController alloc] initWithFrame:CGRectMake(0, HEIGHT_HEADER_COMICDETAIL, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT) delegate:self];
+    self.pageMenu = [[DZRPageMenuController alloc] initWithFrame:CGRectMake(0, HEIGHT_HEADER_COMICDETAIL, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V) delegate:self];
     [self.mainScrollView addSubview:self.pageMenu.view];
 }
 

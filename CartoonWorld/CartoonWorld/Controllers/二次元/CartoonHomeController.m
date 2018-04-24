@@ -59,7 +59,7 @@
 - (NSDictionary *)setupPageMenuWithOptions
 {
     NSDictionary *options = @{
-      DZROptionMenuHeight: @(NAVIGATIONBAR_HEIGHT),
+      DZROptionMenuHeight: @(NAVIGATIONBAR_HEIGHT_V),
       DZROptionItemWidth: @(60.0),
       DZROptionIndicatorWidth: @(35.0),
       DZROptionIndicatorHeight: @(2.0),

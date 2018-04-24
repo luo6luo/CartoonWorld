@@ -20,7 +20,7 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.frame = CGRectMake(0, 0, SCREEN_WIDTH, NAVIGATIONBAR_HEIGHT);
+        self.frame = CGRectMake(0, 0, SCREEN_WIDTH, NAVIGATIONBAR_HEIGHT_V);
         self.backgroundColor = COLOR_PINK;
         
         [self setupBarView];

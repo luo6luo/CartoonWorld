@@ -78,7 +78,7 @@ static NSString *kResultHeader = @"resultHeader";
     };
     
     // 搜索列表
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.searchBar.maxY, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT) style:UITableViewStyleGrouped];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.searchBar.maxY, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V) style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = COLOR_BACK_WHITE;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

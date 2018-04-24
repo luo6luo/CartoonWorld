@@ -35,7 +35,7 @@ static NSString * const kCatalogHeader = @"catalogHeader";
 
 - (void)setupCollectionView
 {
-    CGRect collectionViewFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT);
+    CGRect collectionViewFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V);
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     self.collectionView = [[UICollectionView alloc] initWithFrame:collectionViewFrame collectionViewLayout:layout];
     self.collectionView.alwaysBounceVertical = YES;

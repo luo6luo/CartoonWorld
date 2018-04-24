@@ -16,18 +16,36 @@
     if (@available(iOS 11, *)) {
         [NSClassFromString(@"_UIBackButtonContainerView")
          jr_swizzleMethod:@selector(addSubview:)
-         withMethod:@selector(iOS11BackButtonNoTextTrick_addSubview:)
+         withMethod:@selector(versionNotLessThan11_addSubview:)
+         error:nil];
+    } else {
+        [NSClassFromString(@"UINavigationItemButtonView")
+         jr_swizzleMethod:@selector(addSubview:)
+         withMethod:@selector(versionLessThan11_addSubview:)
          error:nil];
     }
 }
-- (void)iOS11BackButtonNoTextTrick_addSubview:(UIView *)view
+
+// 版本大于等于11
+- (void)versionNotLessThan11_addSubview:(UIView *)view
 {
     view.alpha = 0;
     if ([view isKindOfClass:[UIButton class]]) {
         UIButton *button = (id)view;
         [button setTitle:@"" forState:UIControlStateNormal];
     }
-    [self iOS11BackButtonNoTextTrick_addSubview:view];
+    [self versionNotLessThan11_addSubview:view];
+}
+
+// 版本小于11
+- (void)versionLessThan11_addSubview:(UIView *)view
+{
+    view.alpha = 0;
+    if ([view isKindOfClass:[UILabel class]]) {
+        UILabel *label = (id)view;
+        label.text = @"";
+    }
+    [self versionLessThan11_addSubview:view];
 }
 
 @end

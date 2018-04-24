@@ -22,13 +22,8 @@
     
     //  统一设置返回按钮图片
     UIImage *backImage = [UIImage imageNamed:@"back_button"];
-    if (@available(iOS 11.0, *)) {
-        [UINavigationBar appearance].backIndicatorImage = backImage;
-        [UINavigationBar appearance].backIndicatorTransitionMaskImage = backImage;
-    } else {
-        [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[backImage resizableImageWithCapInsets:UIEdgeInsetsMake(0, backImage.size.width, 0, 0)] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-        [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(-233, 0) forBarMetrics:UIBarMetricsDefault];
-    }
+    [UINavigationBar appearance].backIndicatorImage = backImage;
+    [UINavigationBar appearance].backIndicatorTransitionMaskImage = backImage;
     
     // status
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent]; // 设置状态栏样式

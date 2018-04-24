@@ -39,7 +39,7 @@ static NSString *kUserOtherCell = @"userOtherCell";
 
 - (void)setupSubview
 {
-    self.myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT) style:UITableViewStyleGrouped];
+    self.myTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V) style:UITableViewStyleGrouped];
     self.myTableView.delegate = self;
     self.myTableView.dataSource = self;
     self.myTableView.backgroundColor = COLOR_BACK_WHITE;

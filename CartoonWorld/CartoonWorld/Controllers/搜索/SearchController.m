@@ -62,7 +62,7 @@ static NSString *kSearchCell = @"searchCll";
 - (void)setupSearchBar
 {
     // 搜索导航栏
-    UIView *searchNavigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAVIGATIONBAR_HEIGHT)];
+    UIView *searchNavigationBar = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, NAVIGATIONBAR_HEIGHT_V)];
     searchNavigationBar.backgroundColor = COLOR_PINK;
     [self.view addSubview:searchNavigationBar];
     
@@ -83,7 +83,7 @@ static NSString *kSearchCell = @"searchCll";
 - (void)setupCollection
 {
     UICollectionViewFlowLayout * layout = [[UICollectionViewFlowLayout alloc] init];
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, NAVIGATIONBAR_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT - TABBAR_HEIGHT ) collectionViewLayout:layout];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, NAVIGATIONBAR_HEIGHT_V, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V - TABBAR_HEIGHT ) collectionViewLayout:layout];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = COLOR_BACK_WHITE;

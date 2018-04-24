@@ -21,11 +21,11 @@
 #import "Method.h"
 
 // 工具
+#import "Enumerator.h"
 #import "ToolsManager.h"
 #import "AlertManager.h"
 #import "ActivityManager.h"
 #import "RefreshManager.h"
-#import "Enumerator.h"
 
 // 类别
 #import "UIView+Initialization.h"

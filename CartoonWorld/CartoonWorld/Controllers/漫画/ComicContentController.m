@@ -8,6 +8,7 @@
 
 #import "ComicContentController.h"
 #import "AppDelegate.h"
+#import "CustomNavigationBar.h"
 #import "ReadScrollView.h"
 #import "ReadMenuBar.h"
 
@@ -15,13 +16,21 @@
 
 #define ANIMATION_DURATION  0.5
 
-@interface ComicContentController ()<ReadMenuBarDelegate, ReadScrollViewDataSource>
+static NSString *const kScrollOrientation = @"scrollType";
+static NSString *const kScreenOrientation = @"screenType";
+static NSString *const kDeviceOrientation = @"orientation";
 
+
+@interface ComicContentController ()<ReadMenuBarDelegate, ReadScrollViewDataSource, ReadScrollViewDelegate>
+
+@property (nonatomic, strong) CustomNavigationBar *navigationBar; // 导航栏
 @property (nonatomic, strong) ReadScrollView *scrollView; // 滚动视图
 @property (nonatomic, strong) ReadMenuBar *menuBar; // 菜单栏
 
 @property (nonatomic, strong) NSMutableDictionary *menuItemStatus; // 菜单栏中几个按钮的状态
 @property (nonatomic, strong) NSArray *dataSource;
+
+// 点击屏幕隐藏展示导航条和菜单条的相关属性
 @property (nonatomic, assign) BOOL isHiddenBar;
 
 @end
@@ -40,22 +49,39 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barTintColor = COLOR_TOOL_BAR;
+    [UIApplication sharedApplication].statusBarHidden = YES;
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    self.navigationController.navigationBar.barTintColor = COLOR_PINK;
-    
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    appDelegate.allowRotation = 0;
-    
-    [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
-    [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:@"orientation"];
+    [UIApplication sharedApplication].statusBarHidden = NO;
+    self.navigationController.navigationBar.hidden = NO;
 }
 
 # pragma mark - Getter
+
+- (CustomNavigationBar *)navigationBar
+{
+    if (!_navigationBar) {
+        _navigationBar = [[CustomNavigationBar alloc] init];
+        _navigationBar.title = self.title;
+        _navigationBar.barColor = COLOR_TOOL_BAR;
+        
+        WeakSelf(self);
+        _navigationBar.leftBtnClickedBlock = ^{
+            // 返回显示竖屏
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+            appDelegate.allowRotation = 0;
+            [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:kDeviceOrientation];
+            [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:kDeviceOrientation];
+            
+            [weakself.navigationController popViewControllerAnimated:YES];
+        };
+    }
+    return _navigationBar;
+}
 
 - (ReadMenuBar *)menuBar
 {
@@ -70,26 +96,37 @@
 {
     if (!_scrollView) {
         _scrollView = [[ReadScrollView alloc] init];
-        _scrollView.dataSource = self;
+        _scrollView.readDataSource = self;
+        _scrollView.readDelegate = self;
         
         WeakSelf(self);
         _scrollView.touchScreenBlock = ^{
-            __block CGRect navigationBarFrame = weakself.navigationController.navigationBar.frame;
+            CGFloat navigationBarHeight = 0;
+            ScreenOrientationType screenType = [weakself.menuItemStatus[kScreenOrientation] integerValue];
+            if (screenType == ScreenOrientationTypeVertical) {
+                navigationBarHeight = NAVIGATIONBAR_HEIGHT_V;
+            } else if (screenType == ScreenOrientationTypeHorizontal) {
+                navigationBarHeight = NAVIGATIONBAR_HEIGHT_H;
+            }
+            
+            __block CGRect navigationBarFrame = weakself.navigationBar.frame;
             __block CGRect menuBarFrame = weakself.menuBar.frame;
-            if (weakself.isHiddenBar && navigationBarFrame.origin.y == -(NAVIGATIONBAR_HEIGHT - STATUSBAR_HEIGHT) && menuBarFrame.origin.y == SCREEN_CONTENT_HEITH) {
-                navigationBarFrame.origin.y += NAVIGATIONBAR_HEIGHT;
+            if (weakself.isHiddenBar && navigationBarFrame.origin.y == -navigationBarHeight  && menuBarFrame.origin.y == SCREEN_HEIGHT) {
+                // 隐藏bar
+                navigationBarFrame.origin.y += navigationBarHeight;
                 menuBarFrame.origin.y -= HEIGHT_MENU_BAR;
                 [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-                    weakself.navigationController.navigationBar.frame = navigationBarFrame;
+                    weakself.navigationBar.frame = navigationBarFrame;
                     weakself.menuBar.frame = menuBarFrame;
                 } completion:^(BOOL finished) {
                     weakself.isHiddenBar = NO;
                 }];
-            } else if (!weakself.isHiddenBar && navigationBarFrame.origin.y == STATUSBAR_HEIGHT && menuBarFrame.origin.y == SCREEN_CONTENT_HEITH - HEIGHT_MENU_BAR){
-                navigationBarFrame.origin.y -= NAVIGATIONBAR_HEIGHT;
+            } else if (!weakself.isHiddenBar && navigationBarFrame.origin.y == 0 && menuBarFrame.origin.y == SCREEN_HEIGHT - HEIGHT_MENU_BAR) {
+                // 显示bar
+                navigationBarFrame.origin.y -= navigationBarHeight;
                 menuBarFrame.origin.y += HEIGHT_MENU_BAR;
                 [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-                    weakself.navigationController.navigationBar.frame = navigationBarFrame;
+                    weakself.navigationBar.frame = navigationBarFrame;
                     weakself.menuBar.frame = menuBarFrame;
                 } completion:^(BOOL finished) {
                     weakself.isHiddenBar = YES;
@@ -108,8 +145,8 @@
     self.menuItemStatus = [NSMutableDictionary dictionary];
     self.menuItemStatus.dictionary = @{
       @"light": @(YES), // 默认开灯
-      @"screen": @(ScreenOrientationTypeVertical),
-      @"scroll": @(ScrollOrientationTypeVertical)
+      @"screen": @(ScreenOrientationTypeVertical), // 默认竖屏
+      @"scroll": @(ScrollOrientationTypeVertical)  // 默认竖滑
     };
     
     WeakSelf(self);
@@ -117,7 +154,7 @@
     [[NetWorkingManager defualtManager] comicContentSuccess:^(id responseBody) {
         weakself.dataSource = responseBody;
         weakself.menuBar.maxPage = weakself.dataSource.count;
-        [weakself.scrollView refreshImageData];
+        [weakself.scrollView reloadData];
         [ActivityManager dismissLoadingInView:weakself.view status:ShowSuccess];
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -128,6 +165,7 @@
 - (void)setupSubviews
 {
     [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.menuBar];
 }
 
@@ -138,10 +176,15 @@
     return self.dataSource.count;
 }
 
-- (NSString *)scrollView:(UIScrollView *)scrollView imageURLAtIndex:(NSInteger)index
+- (ComicContentModel *)scrollView:(UIScrollView *)scrollView imageModelAtIndex:(NSInteger)index
 {
     ComicContentModel *model = self.dataSource[index];
-    return model.img05;
+    return model;
+}
+
+- (void)scrollView:(UIScrollView *)scrollView scrollToCurrentIndex:(NSInteger)currentIndex
+{
+    self.menuBar.currentPage = currentIndex;
 }
 
 # pragma mark - Read menu bar delegare
@@ -154,27 +197,43 @@
     } else if (type == ButtonTypeScreen) {
         // 横竖屏
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        ScreenOrientationType screen = [self.menuItemStatus[@"screen"] integerValue];
+        ScrollOrientationType scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
+        ScreenOrientationType screen = [self.menuItemStatus[kScreenOrientation] integerValue];
         if (screen == ScreenOrientationTypeVertical) {
-            appDelegate.allowRotation = 1;
-            [self.menuItemStatus setObject:@(ScreenOrientationTypeHorizontal) forKey:@"screen"];
+            if (scrollType == ScrollOrientationTypeHorizontal) {
+                [AlertManager alerAddToController:self text:@"已经是横滑咯，不能再横屏啦~"];
+            } else if (scrollType == ScrollOrientationTypeVertical) {
+                appDelegate.allowRotation = 1;
+                [self.menuItemStatus setObject:@(ScreenOrientationTypeHorizontal) forKey:kScreenOrientation];
+            }
         } else if (screen == ScreenOrientationTypeHorizontal) {
             appDelegate.allowRotation = 0;
-            [self.menuItemStatus setObject:@(ScreenOrientationTypeVertical) forKey:@"screen"];
+            [self.menuItemStatus setObject:@(ScreenOrientationTypeVertical) forKey:kScreenOrientation];
         }
         
         [self setupScreenRotationWithOrientation:screen];
-        self.scrollView.screenType = screen;
-        [self.menuBar relayoutSubviews];
+        [self.navigationBar layoutSelfSubviews];
+        [self.menuBar layoutSelfSubviews];
+        self.scrollView.screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
     } else if (type == ButtonTypeBrightness) {
         // 亮度
         
     } else if (type == ButtonTypeScroll) {
         // 横竖滚动
-        
+        ScreenOrientationType screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
+        ScrollOrientationType scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
+        if (scrollType == ScrollOrientationTypeVertical) {
+            if (screenType == ScreenOrientationTypeVertical) {
+                [self.menuItemStatus setObject:@(ScrollOrientationTypeHorizontal) forKey:kScrollOrientation];
+            } else if (screenType == ScreenOrientationTypeHorizontal) {
+                // 横屏不能竖滑
+                [AlertManager alerAddToController:self text:@"已经是横屏咯，不能再横滑啦~"];
+            }
+        } else if (scrollType == ScrollOrientationTypeHorizontal) {
+            [self.menuItemStatus setObject:@(ScrollOrientationTypeVertical) forKey:kScrollOrientation];
+        }
+        self.scrollView.scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
     }
-    
-    NSLog(@"type: %ld", (long)type);
 }
 
 - (void)slider:(UISlider *)slider valueChanged:(NSInteger)newValue

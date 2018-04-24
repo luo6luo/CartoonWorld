@@ -12,6 +12,7 @@
 
 @property (nonatomic, assign) CGFloat height; // 图片高
 @property (nonatomic, assign) CGFloat width;  // 图片宽
+@property (nonatomic, assign) CGFloat showHeight; // 图片屏幕上显示的高（默认是竖屏的高度）
 @property (nonatomic, assign) NSInteger image_id; // 图片的id
 @property (nonatomic, assign) NSInteger type;     // 图片类型
 @property (nonatomic, assign) NSInteger total_tucao;

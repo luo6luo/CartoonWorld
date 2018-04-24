@@ -40,8 +40,9 @@ typedef NS_ENUM(NSInteger ,ButtonType) {
 
 @property (nonatomic, weak) id<ReadMenuBarDelegate> delegate;
 @property (nonatomic, assign) NSInteger maxPage; // 最大页数
+@property (nonatomic, assign) NSInteger currentPage; // 当前页
 
-// 重新布局(针对转屏)
-- (void)relayoutSubviews;
+// 重新布局
+- (void)layoutSelfSubviews;
 
 @end

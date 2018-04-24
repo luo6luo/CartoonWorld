@@ -46,8 +46,15 @@
 - (void)setMaxPage:(NSInteger)maxPage
 {
     _maxPage = maxPage;
-    self.pageLabel.text = [NSString stringWithFormat:@"0/%ld",(long)maxPage];
-    self.slider.maximumValue = maxPage;
+    self.pageLabel.text = [NSString stringWithFormat:@"0/%ld",(long)maxPage - 1];
+    self.slider.maximumValue = maxPage - 1;
+}
+
+- (void)setCurrentPage:(NSInteger)currentPage
+{
+    _currentPage = currentPage;
+    self.pageLabel.text = [NSString stringWithFormat:@"%ld/%ld", (long)currentPage, (long)self.maxPage - 1];
+    self.slider.value = currentPage;
 }
 
 # pragma mark - Set up
@@ -94,7 +101,7 @@
         [self addSubview:button];
     }
     
-    [self setNeedsLayout];
+    [self layoutSelfSubviews];
 }
 
 - (UIButton *)setupMenuItemWithIndex:(NSInteger)index
@@ -124,23 +131,17 @@
 
 # pragma mark - Layout
 
-- (void)layoutSubviews
+- (void)layoutSelfSubviews
 {
+    self.frame = CGRectMake(0, SCREEN_HEIGHT - HEIGHT_MENU_BAR, SCREEN_WIDTH, HEIGHT_MENU_BAR);
     CGFloat contentWidth = SCREEN_WIDTH - 2*LEFT_RIGHT;
     CGFloat itemWidth = (contentWidth - (self.titles.count - 1) * MIDDLE_SPASE) / self.titles.count;
-    self.frame = CGRectMake(0, SCREEN_CONTENT_HEITH - HEIGHT_MENU_BAR, SCREEN_WIDTH, HEIGHT_MENU_BAR);
     self.pageLabel.frame = CGRectMake(LEFT_RIGHT, TOP_BOTTOM, 2*LABEL_HEIGHT, LABEL_HEIGHT);
     self.slider.frame = CGRectMake(self.pageLabel.maxX + MIDDLE_SPASE, TOP_BOTTOM, contentWidth - self.pageLabel.width - MIDDLE_SPASE, LABEL_HEIGHT);
     for (int i = 0; i < self.titles.count; i++) {
         UIButton *button = [self viewWithTag:i + 10];
         button.frame = CGRectMake(LEFT_RIGHT + (itemWidth + MIDDLE_SPASE) * i, self.slider.maxY + TOP_BOTTOM, itemWidth, HEIGHT_MENU_ITEM);
     }
-}
-
-// 重新布局（主要为了屏幕横竖屏变换）
-- (void)relayoutSubviews
-{
-    [self setNeedsLayout];
 }
 
 # pragma mark - Response event

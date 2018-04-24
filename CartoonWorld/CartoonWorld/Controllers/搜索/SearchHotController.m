@@ -99,9 +99,9 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
     
     // 热门列表
     self.searchList = [[UITableView alloc] initWithFrame:CGRectMake(0,
-                                                                    NAVIGATIONBAR_HEIGHT,
+                                                                    NAVIGATIONBAR_HEIGHT_V,
                                                                     SCREEN_WIDTH,
-                                                                    SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT)
+                                                                    SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V)
                                                    style:UITableViewStyleGrouped];
     self.searchList.delegate = self;
     self.searchList.dataSource = self;

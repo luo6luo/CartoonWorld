@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ComicContentModel;
 
 @protocol ReadScrollViewDataSource <NSObject>
 
@@ -23,18 +24,31 @@
  @param scrollView 加载图片的滚动视图
  @param index      图视图下标
  */
-- (NSString *)scrollView:(UIScrollView *)scrollView imageURLAtIndex:(NSInteger)index;
+- (ComicContentModel *)scrollView:(UIScrollView *)scrollView imageModelAtIndex:(NSInteger)index;
+
+@end
+
+@protocol ReadScrollViewDelegate <NSObject>
+
+/**
+ 当前页
+
+ @param scrollView   加载图片的滚动视图
+ @param currentIndex 当前下标
+ */
+- (void)scrollView:(UIScrollView *)scrollView scrollToCurrentIndex:(NSInteger)currentIndex;
 
 @end
 
 @interface ReadScrollView : UIScrollView
 
-@property (nonatomic, weak) id<ReadScrollViewDataSource> dataSource;
+@property (nonatomic, weak) id<ReadScrollViewDataSource> readDataSource;
+@property (nonatomic, weak) id<ReadScrollViewDelegate> readDelegate;
 @property (nonatomic, assign) ScreenOrientationType screenType; // 屏幕方向类型
 @property (nonatomic, assign) ScrollOrientationType scrollType; // 滚动方向类型
 @property (nonatomic, copy) void(^touchScreenBlock)();    // 点击屏幕
 
 // 刷新数据
-- (void)refreshImageData;
+- (void)reloadData;
 
 @end
