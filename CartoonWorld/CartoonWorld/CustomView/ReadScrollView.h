@@ -46,7 +46,9 @@
 @property (nonatomic, weak) id<ReadScrollViewDelegate> readDelegate;
 @property (nonatomic, assign) ScreenOrientationType screenType; // 屏幕方向类型
 @property (nonatomic, assign) ScrollOrientationType scrollType; // 滚动方向类型
-@property (nonatomic, copy) void(^touchScreenBlock)();    // 点击屏幕
+
+@property (nonatomic, copy) void(^startScrollBlock)(); // 开始滑动
+@property (nonatomic, copy) void(^touchScreenBlock)(); // 点击屏幕
 
 // 刷新数据
 - (void)reloadData;

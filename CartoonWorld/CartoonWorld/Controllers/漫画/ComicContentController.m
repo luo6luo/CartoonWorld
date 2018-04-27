@@ -40,7 +40,7 @@ static NSString *const kDeviceOrientation = @"orientation";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = COLOR_BAR_GRAY;
+    self.view.backgroundColor = COLOR_BACK_COMIC_READ;
     
     [self setupSubviews];
     [self setupData];

@@ -18,10 +18,11 @@
 #define COLOR_ORANGE        RGB(243, 133, 59)    // 橘色
 
 // 背景
-#define COLOR_APP_LINE      RGB(229, 229, 229) // 分割线颜色
-#define COLOR_CELL_BACk     RGB(245, 245, 245) // cell背景色
-#define COLOR_BACK_GRAY     RGB(247, 247, 247) // 灰色背景颜色
-#define COLOR_BACK_WHITE    [RGBColor colorWithHexString:@"#FFFAF0"] // 米色背景颜色
+#define COLOR_APP_LINE    RGB(229, 229, 229) // 分割线颜色
+#define COLOR_CELL_BACk   RGB(245, 245, 245) // cell背景色
+#define COLOR_BACK_GRAY   RGB(247, 247, 247) // 灰色背景颜色
+#define COLOR_BACK_WHITE  [RGBColor colorWithHexString:@"#FFFAF0"] // 米色背景颜色
+#define COLOR_BACK_COMIC_READ RGB(247, 244, 228) // 漫画阅读界面
 
 // 文字
 #define COLOR_TEXT_WHITE       [UIColor whiteColor]                   // 白色
