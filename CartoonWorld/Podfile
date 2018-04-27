@@ -1,0 +1,17 @@
+platform:ios, '8.0'
+
+target 'CartoonWorld' do
+
+pod 'AFNetworking'
+pod 'MJRefresh'
+pod 'SDWebImage'
+pod 'Masonry'
+pod 'MJExtension'
+pod 'DZRPageMenuController'
+pod 'MBProgressHUD'
+pod 'SDCycleScrollView'
+pod 'JRSwizzle'
+pod 'QBImagePickerController'
+pod 'Realm', '~>3.0.2'
+
+end
