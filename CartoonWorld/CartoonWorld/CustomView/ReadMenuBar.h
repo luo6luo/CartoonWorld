@@ -27,12 +27,28 @@ typedef NS_ENUM(NSInteger ,ButtonType) {
 - (void)button:(UIButton *)button clickedWithButtonType:(ButtonType)type isSelected:(BOOL)isSelected;
 
 /**
+ 滑块开始滑动
+
+ @param slider       滑块
+ @param currentValue 当前值
+ */
+- (void)slider:(UISlider *)slider startToSlideAtCurrentValue:(NSInteger)currentValue;
+
+/**
  滑块值改变
 
  @param slider   该滑块
  @param newValue 滑块新值
  */
 - (void)slider:(UISlider *)slider valueChanged:(NSInteger)newValue;
+
+/**
+ 滑块停止滑动
+
+ @param slider       滑块
+ @param currentValue 当前值
+ */
+- (void)slider:(UISlider *)slider stopToSlideAtCurrentValue:(NSInteger)currentValue;
 
 @end
 

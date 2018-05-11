@@ -64,7 +64,7 @@
     self.imageNames = @[
       @[@"off_light", @"open_light"],
       @[@"horizontal_screen", @"vertical_screen"],
-      @[@"brightness", @"brightness"],
+      @[@"light_switch", @"light_switch"],
       @[@"horizontal_scroll", @"vertical_scroll"]
     ];
     
@@ -92,7 +92,9 @@
     self.slider = [[UISlider alloc] init];
     self.slider.minimumValue = 0;
     [self.slider setThumbImage:[UIImage imageNamed:@"round"] forState:UIControlStateNormal];
+    [self.slider addTarget:self action:@selector(sliderStartToSlide:) forControlEvents:UIControlEventTouchDown];
     [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.slider addTarget:self action:@selector(sliderStopToSlide:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.slider];
     
     // 按钮
@@ -168,6 +170,20 @@
     }
 }
 
+// 开始滑动
+- (void)sliderStartToSlide:(UISlider *)sender
+{
+    if (self.maxPage <= 0) {
+        self.slider.value = 0;
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(slider:startToSlideAtCurrentValue:)]) {
+        [self.delegate slider:sender startToSlideAtCurrentValue:ceil(sender.value)];
+    }
+}
+
+// 滑动值变化
 - (void)sliderValueChanged:(UISlider *)sender
 {
     if (self.maxPage <= 0) {
@@ -178,6 +194,19 @@
     self.pageLabel.text = [NSString stringWithFormat:@"%d/%ld", (int)ceil(sender.value), (long)self.maxPage];
     if ([self.delegate respondsToSelector:@selector(slider:valueChanged:)]) {
         [self.delegate slider:sender valueChanged:ceil(sender.value)];
+    }
+}
+
+// 结束滑动
+- (void)sliderStopToSlide:(UISlider *)sender
+{
+    if (self.maxPage <= 0) {
+        self.slider.value = 0;
+        return;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(slider:stopToSlideAtCurrentValue:)]) {
+        [self.delegate slider:sender stopToSlideAtCurrentValue:ceil(sender.value)];
     }
 }
 

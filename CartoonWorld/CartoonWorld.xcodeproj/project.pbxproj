@@ -122,6 +122,8 @@
 		6FD5343A1F135A2A00E7218B /* ComicInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD534391F135A2A00E7218B /* ComicInfoModel.m */; };
 		6FD5343E1F13856400E7218B /* ComicHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD5343D1F13856400E7218B /* ComicHeadView.m */; };
 		6FD655EB1F8CBCE00053D0FA /* CustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD655EA1F8CBCE00053D0FA /* CustomNavigationBar.m */; };
+		6FF6D33720A190C4007A449A /* LightStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6D33620A190C4007A449A /* LightStateView.m */; };
+		6FF6D33A20A1A3CC007A449A /* BrightnessControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6D33920A1A3CC007A449A /* BrightnessControlView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -423,6 +425,11 @@
 		6FD5343D1F13856400E7218B /* ComicHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComicHeadView.m; sourceTree = "<group>"; };
 		6FD655E91F8CBCE00053D0FA /* CustomNavigationBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomNavigationBar.h; sourceTree = "<group>"; };
 		6FD655EA1F8CBCE00053D0FA /* CustomNavigationBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomNavigationBar.m; sourceTree = "<group>"; };
+		6FF6D33320A18FA0007A449A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		6FF6D33520A190C4007A449A /* LightStateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LightStateView.h; sourceTree = "<group>"; };
+		6FF6D33620A190C4007A449A /* LightStateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightStateView.m; sourceTree = "<group>"; };
+		6FF6D33820A1A3CC007A449A /* BrightnessControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrightnessControlView.h; sourceTree = "<group>"; };
+		6FF6D33920A1A3CC007A449A /* BrightnessControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightnessControlView.m; sourceTree = "<group>"; };
 		920E9A4BEB67EB82FA6BBC38 /* libPods-CartoonWorld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CartoonWorld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -441,6 +448,7 @@
 		403A9FDD095050AABD79E3C7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6FF6D33320A18FA0007A449A /* AVFoundation.framework */,
 				920E9A4BEB67EB82FA6BBC38 /* libPods-CartoonWorld.a */,
 			);
 			name = Frameworks;
@@ -1012,6 +1020,10 @@
 				6FD142E3207F4FA4000FF9D9 /* ReadScrollView.m */,
 				6FD142E5207F4FD9000FF9D9 /* ReadMenuBar.h */,
 				6FD142E6207F4FD9000FF9D9 /* ReadMenuBar.m */,
+				6FF6D33520A190C4007A449A /* LightStateView.h */,
+				6FF6D33620A190C4007A449A /* LightStateView.m */,
+				6FF6D33820A1A3CC007A449A /* BrightnessControlView.h */,
+				6FF6D33920A1A3CC007A449A /* BrightnessControlView.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -1178,6 +1190,7 @@
 				6F91061F1FB05FB200C55B39 /* SearchHotCell.m in Sources */,
 				6F1294E81EEA41810099ABE7 /* StyleManager.m in Sources */,
 				6F1294CE1EEA41800099ABE7 /* MyController.m in Sources */,
+				6FF6D33720A190C4007A449A /* LightStateView.m in Sources */,
 				6F7696FD1F6FB9100098311F /* OtherWorksCell.m in Sources */,
 				6F1294111EEA416F0099ABE7 /* UIView+Initialization.m in Sources */,
 				6FD142E1207F4F6D000FF9D9 /* ComicContentController.m in Sources */,
@@ -1186,6 +1199,7 @@
 				6F37C1CF1F43EF3300B5A0F1 /* ComicListCell.m in Sources */,
 				6F005AC21F46DBE900DCBC81 /* MoreTopicModel.m in Sources */,
 				6F1294DC1EEA41800099ABE7 /* CoversModel.m in Sources */,
+				6FF6D33A20A1A3CC007A449A /* BrightnessControlView.m in Sources */,
 				6F7492E51F5FD15500B234B7 /* IntroductionCell.m in Sources */,
 				6F1294D81EEA41800099ABE7 /* BaseModel.m in Sources */,
 				6F1294E51EEA41810099ABE7 /* NetWorkingManager.m in Sources */,

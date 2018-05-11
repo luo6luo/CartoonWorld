@@ -11,6 +11,8 @@
 #import "CustomNavigationBar.h"
 #import "ReadScrollView.h"
 #import "ReadMenuBar.h"
+#import "LightStateView.h"
+#import "BrightnessControlView.h"
 
 #import "ComicContentModel.h"
 
@@ -18,6 +20,8 @@
 
 static NSString *const kScrollOrientation = @"scrollType";
 static NSString *const kScreenOrientation = @"screenType";
+static NSString *const kLightSwitchState  = @"lightSwitchState";
+static NSString *const kShowBrightnessSlider = @"showBrightnessSlider";
 static NSString *const kDeviceOrientation = @"orientation";
 
 
@@ -26,6 +30,7 @@ static NSString *const kDeviceOrientation = @"orientation";
 @property (nonatomic, strong) CustomNavigationBar *navigationBar; // 导航栏
 @property (nonatomic, strong) ReadScrollView *scrollView; // 滚动视图
 @property (nonatomic, strong) ReadMenuBar *menuBar; // 菜单栏
+@property (nonatomic, strong) LightStateView *lightStateView; // 关灯效果图
 
 @property (nonatomic, strong) NSMutableDictionary *menuItemStatus; // 菜单栏中几个按钮的状态
 @property (nonatomic, strong) NSArray *dataSource;
@@ -101,40 +106,91 @@ static NSString *const kDeviceOrientation = @"orientation";
         
         WeakSelf(self);
         _scrollView.touchScreenBlock = ^{
-            CGFloat navigationBarHeight = 0;
-            ScreenOrientationType screenType = [weakself.menuItemStatus[kScreenOrientation] integerValue];
-            if (screenType == ScreenOrientationTypeVertical) {
-                navigationBarHeight = NAVIGATIONBAR_HEIGHT_V;
-            } else if (screenType == ScreenOrientationTypeHorizontal) {
-                navigationBarHeight = NAVIGATIONBAR_HEIGHT_H;
-            }
+             [weakself showNavigationBarAndMenuBar];
+             [weakself hiddenNavigationBarAndMenuBar];
             
-            __block CGRect navigationBarFrame = weakself.navigationBar.frame;
-            __block CGRect menuBarFrame = weakself.menuBar.frame;
-            if (weakself.isHiddenBar && navigationBarFrame.origin.y == -navigationBarHeight  && menuBarFrame.origin.y == SCREEN_HEIGHT) {
-                // 隐藏bar
-                navigationBarFrame.origin.y += navigationBarHeight;
-                menuBarFrame.origin.y -= HEIGHT_MENU_BAR;
-                [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-                    weakself.navigationBar.frame = navigationBarFrame;
-                    weakself.menuBar.frame = menuBarFrame;
-                } completion:^(BOOL finished) {
-                    weakself.isHiddenBar = NO;
-                }];
-            } else if (!weakself.isHiddenBar && navigationBarFrame.origin.y == 0 && menuBarFrame.origin.y == SCREEN_HEIGHT - HEIGHT_MENU_BAR) {
-                // 显示bar
-                navigationBarFrame.origin.y -= navigationBarHeight;
-                menuBarFrame.origin.y += HEIGHT_MENU_BAR;
-                [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-                    weakself.navigationBar.frame = navigationBarFrame;
-                    weakself.menuBar.frame = menuBarFrame;
-                } completion:^(BOOL finished) {
-                    weakself.isHiddenBar = YES;
-                }];
+            BOOL isShowBrightnessSlider = [weakself.menuItemStatus[kShowBrightnessSlider] boolValue];
+            if (isShowBrightnessSlider) {
+                [BrightnessControlView dismissControlBar];
+                [weakself.menuItemStatus setObject:@(NO) forKey:kShowBrightnessSlider];
+            }
+        };
+        
+        _scrollView.startScrollBlock = ^{
+            [weakself hiddenNavigationBarAndMenuBar];
+            
+            BOOL isShowBrightnessSlider = [weakself.menuItemStatus[kShowBrightnessSlider] boolValue];
+            if (isShowBrightnessSlider) {
+                [BrightnessControlView dismissControlBar];
+                [weakself.menuItemStatus setObject:@(NO) forKey:kShowBrightnessSlider];
             }
         };
     }
     return _scrollView;
+}
+
+- (LightStateView *)lightStateView
+{
+    if (!_lightStateView) {
+        _lightStateView = [LightStateView new];
+    }
+    return _lightStateView;
+}
+
+# pragma mark - Show & Hidden bar
+
+// 隐藏导航栏和菜单栏
+- (void)hiddenNavigationBarAndMenuBar
+{
+    CGFloat navigationBarHeight = 0;
+    ScreenOrientationType screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
+    if (screenType == ScreenOrientationTypeVertical) {
+        navigationBarHeight = NAVIGATIONBAR_HEIGHT_V;
+    } else if (screenType == ScreenOrientationTypeHorizontal) {
+        navigationBarHeight = NAVIGATIONBAR_HEIGHT_H;
+    }
+    
+    CGRect navigationBarFrame = self.navigationBar.frame;
+    CGRect menuBarFrame = self.menuBar.frame;
+    if (!self.isHiddenBar && navigationBarFrame.origin.y == 0 &&
+        menuBarFrame.origin.y == SCREEN_HEIGHT - HEIGHT_MENU_BAR) {
+        // 显示bar
+        navigationBarFrame.origin.y -= navigationBarHeight;
+        menuBarFrame.origin.y += HEIGHT_MENU_BAR;
+        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+            self.navigationBar.frame = navigationBarFrame;
+            self.menuBar.frame = menuBarFrame;
+        } completion:^(BOOL finished) {
+            self.isHiddenBar = YES;
+        }];
+    }
+}
+
+// 显示导航栏和菜单栏
+- (void)showNavigationBarAndMenuBar
+{
+    CGFloat navigationBarHeight = 0;
+    ScreenOrientationType screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
+    if (screenType == ScreenOrientationTypeVertical) {
+        navigationBarHeight = NAVIGATIONBAR_HEIGHT_V;
+    } else if (screenType == ScreenOrientationTypeHorizontal) {
+        navigationBarHeight = NAVIGATIONBAR_HEIGHT_H;
+    }
+    
+    CGRect navigationBarFrame = self.navigationBar.frame;
+    CGRect menuBarFrame = self.menuBar.frame;
+    if (self.isHiddenBar && navigationBarFrame.origin.y == -navigationBarHeight  &&
+        menuBarFrame.origin.y == SCREEN_HEIGHT) {
+        // 隐藏bar
+        navigationBarFrame.origin.y += navigationBarHeight;
+        menuBarFrame.origin.y -= HEIGHT_MENU_BAR;
+        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+            self.navigationBar.frame = navigationBarFrame;
+            self.menuBar.frame = menuBarFrame;
+        } completion:^(BOOL finished) {
+            self.isHiddenBar = NO;
+        }];
+    }
 }
 
 # pragma mark - set up
@@ -144,9 +200,10 @@ static NSString *const kDeviceOrientation = @"orientation";
     self.isHiddenBar = NO;
     self.menuItemStatus = [NSMutableDictionary dictionary];
     self.menuItemStatus.dictionary = @{
-      @"light": @(YES), // 默认开灯
-      @"screen": @(ScreenOrientationTypeVertical), // 默认竖屏
-      @"scroll": @(ScrollOrientationTypeVertical)  // 默认竖滑
+      kLightSwitchState: @(YES), // 默认开灯
+      kShowBrightnessSlider: @(NO), // 默认没有弹出亮度控制器
+      kScreenOrientation: @(ScreenOrientationTypeVertical), // 默认竖屏
+      kScrollOrientation: @(ScrollOrientationTypeVertical)  // 默认竖滑
     };
     
     WeakSelf(self);
@@ -167,6 +224,7 @@ static NSString *const kDeviceOrientation = @"orientation";
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.navigationBar];
     [self.view addSubview:self.menuBar];
+    [self.view addSubview:self.lightStateView];
 }
 
 # pragma mark - Read scroll view
@@ -192,66 +250,115 @@ static NSString *const kDeviceOrientation = @"orientation";
 - (void)button:(UIButton *)button clickedWithButtonType:(ButtonType)type isSelected:(BOOL)isSelected
 {
     if (type == ButtonTypeLight) {
-        // 开关灯
-        
+        [self touchLightSwitch];
     } else if (type == ButtonTypeScreen) {
-        // 横竖屏
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        ScrollOrientationType scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
-        ScreenOrientationType screen = [self.menuItemStatus[kScreenOrientation] integerValue];
-        if (screen == ScreenOrientationTypeVertical) {
-            if (scrollType == ScrollOrientationTypeHorizontal) {
-                [AlertManager alerAddToController:self text:@"已经是横滑咯，不能再横屏啦~"];
-            } else if (scrollType == ScrollOrientationTypeVertical) {
-                appDelegate.allowRotation = 1;
-                [self.menuItemStatus setObject:@(ScreenOrientationTypeHorizontal) forKey:kScreenOrientation];
-            }
-        } else if (screen == ScreenOrientationTypeHorizontal) {
-            appDelegate.allowRotation = 0;
-            [self.menuItemStatus setObject:@(ScreenOrientationTypeVertical) forKey:kScreenOrientation];
-        }
-        
-        [self setupScreenRotationWithOrientation:screen];
-        [self.navigationBar layoutSelfSubviews];
-        [self.menuBar layoutSelfSubviews];
-        self.scrollView.screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
+        [self touchScreenRotationButton];
     } else if (type == ButtonTypeBrightness) {
-        // 亮度
-        
+        [self adjustBrightness];
     } else if (type == ButtonTypeScroll) {
-        // 横竖滚动
-        ScreenOrientationType screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
-        ScrollOrientationType scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
-        if (scrollType == ScrollOrientationTypeVertical) {
-            if (screenType == ScreenOrientationTypeVertical) {
-                [self.menuItemStatus setObject:@(ScrollOrientationTypeHorizontal) forKey:kScrollOrientation];
-            } else if (screenType == ScreenOrientationTypeHorizontal) {
-                // 横屏不能竖滑
-                [AlertManager alerAddToController:self text:@"已经是横屏咯，不能再横滑啦~"];
-            }
-        } else if (scrollType == ScrollOrientationTypeHorizontal) {
-            [self.menuItemStatus setObject:@(ScrollOrientationTypeVertical) forKey:kScrollOrientation];
-        }
-        self.scrollView.scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
+        [self touchScreenScrollOrientationButton];
     }
+}
+
+- (void)slider:(UISlider *)slider startToSlideAtCurrentValue:(NSInteger)currentValue
+{
+    NSLog(@"开始滑动：%ld",(long)currentValue);
+    [self.scrollView startPageTurningAtCurrentPage:currentValue];
 }
 
 - (void)slider:(UISlider *)slider valueChanged:(NSInteger)newValue
 {
     NSLog(@"第%ld页", (long)newValue);
+    [self.scrollView turnToIndexPage:newValue];
+}
+
+- (void)slider:(UISlider *)slider stopToSlideAtCurrentValue:(NSInteger)currentValue
+{
+    NSLog(@"停止滑动：%ld",(long)currentValue);
+    [self.scrollView stopPageTurning];
 }
 
 # pragma mark - Screen rotation
+
+// 点击屏幕横竖屏方向按钮
+- (void)touchScreenRotationButton
+{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    ScrollOrientationType scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
+    ScreenOrientationType screen = [self.menuItemStatus[kScreenOrientation] integerValue];
+    if (screen == ScreenOrientationTypeVertical) {
+        if (scrollType == ScrollOrientationTypeHorizontal) {
+            [AlertManager alerAddToController:self text:@"已经是横滑咯，不能再横屏啦~"];
+        } else if (scrollType == ScrollOrientationTypeVertical) {
+            appDelegate.allowRotation = 1;
+            [self.menuItemStatus setObject:@(ScreenOrientationTypeHorizontal) forKey:kScreenOrientation];
+        }
+    } else if (screen == ScreenOrientationTypeHorizontal) {
+        appDelegate.allowRotation = 0;
+        [self.menuItemStatus setObject:@(ScreenOrientationTypeVertical) forKey:kScreenOrientation];
+    }
+    
+    [self setupScreenRotationWithOrientation:screen];
+    [self.navigationBar layoutSelfSubviews];
+    [self.menuBar layoutSelfSubviews];
+    self.scrollView.screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
+}
+
+// 点击屏幕滚动方向按钮
+- (void)touchScreenScrollOrientationButton
+{
+    ScreenOrientationType screenType = [self.menuItemStatus[kScreenOrientation] integerValue];
+    ScrollOrientationType scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
+    if (scrollType == ScrollOrientationTypeVertical) {
+        if (screenType == ScreenOrientationTypeVertical) {
+            [self.menuItemStatus setObject:@(ScrollOrientationTypeHorizontal) forKey:kScrollOrientation];
+        } else if (screenType == ScreenOrientationTypeHorizontal) {
+            // 横屏不能竖滑
+            [AlertManager alerAddToController:self text:@"已经是横屏咯，不能再横滑啦~"];
+        }
+    } else if (scrollType == ScrollOrientationTypeHorizontal) {
+        [self.menuItemStatus setObject:@(ScrollOrientationTypeVertical) forKey:kScrollOrientation];
+    }
+    self.scrollView.scrollType = [self.menuItemStatus[kScrollOrientation] integerValue];
+}
 
 // 设置屏幕旋转
 - (void)setupScreenRotationWithOrientation:(ScreenOrientationType)type
 {
     if (type == ScreenOrientationTypeVertical) {
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:@"orientation"];
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:kDeviceOrientation];
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:kDeviceOrientation];
     } else if (type == ScreenOrientationTypeHorizontal) {
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:@"orientation"];
-        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:@"orientation"];
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIDeviceOrientationLandscapeLeft] forKey:kDeviceOrientation];
+        [[UIDevice currentDevice] setValue:[NSNumber numberWithInteger:UIInterfaceOrientationPortrait] forKey:kDeviceOrientation];
+    }
+}
+
+# pragma mark - lighting
+
+// 调节亮度
+- (void)adjustBrightness
+{
+    BOOL isShowBrightnessSlider = [self.menuItemStatus[kShowBrightnessSlider] boolValue];
+    if (isShowBrightnessSlider) {
+        [BrightnessControlView dismissControlBar];
+        [self.menuItemStatus setObject:@(NO) forKey:kShowBrightnessSlider];
+    } else {
+        [BrightnessControlView showControlBarInView:self.view];
+        [self.menuItemStatus setObject:@(YES) forKey:kShowBrightnessSlider];
+    }
+}
+
+// 点击灯泡开关
+- (void)touchLightSwitch
+{
+    BOOL isOpenSwitch = [self.menuItemStatus[kLightSwitchState] boolValue];
+    if (isOpenSwitch) {
+        self.lightStateView.isOpenLight = NO;
+        [self.menuItemStatus setObject:@(NO) forKey:kLightSwitchState];
+    } else {
+        self.lightStateView.isOpenLight = YES;
+        [self.menuItemStatus setObject:@(YES) forKey:kLightSwitchState];
     }
 }
 

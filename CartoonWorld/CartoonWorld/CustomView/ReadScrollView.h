@@ -53,4 +53,13 @@
 // 刷新数据
 - (void)reloadData;
 
+// 开始翻页
+- (void)startPageTurningAtCurrentPage:(NSInteger)currentPage;
+
+// 翻到该下标页
+- (void)turnToIndexPage:(NSInteger)indexPage;
+
+// 停止翻页
+- (void)stopPageTurning;
+
 @end
