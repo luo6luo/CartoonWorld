@@ -35,10 +35,10 @@
 
 
 // 二次元
-#define VERTICAL_CELL_HEIGHT      (SCREEN_WIDTH - 4*LEFT_RIGHT) * 1/2                    // 竖的cell高
-#define VERTICAL_CELL_WIDTH       (SCREEN_WIDTH - 4*LEFT_RIGHT) / 3                      // 竖的cell宽
-#define HORIZONTAL_CELL_HEIGHT    (SCREEN_WIDTH - 3*LEFT_RIGHT) * 2/5                    // 横的cell高
-#define HORIZONTAL_CELL_WIDTH     (SCREEN_WIDTH - 3*LEFT_RIGHT) / 2                      // 横的cell宽
+#define VERTICAL_CELL_HEIGHT      (SCREEN_WIDTH - 4*LEFT_RIGHT) * 1/2 // 竖的cell高
+#define VERTICAL_CELL_WIDTH       (SCREEN_WIDTH - 4*LEFT_RIGHT) / 3   // 竖的cell宽
+#define HORIZONTAL_CELL_HEIGHT    (SCREEN_WIDTH - 3*LEFT_RIGHT) * 2/5 // 横的cell高
+#define HORIZONTAL_CELL_WIDTH     (SCREEN_WIDTH - 3*LEFT_RIGHT) / 2   // 横的cell宽
 #define SUBSCRIPTION_CELL_HEIGHT  (VERTICAL_CELL_HEIGHT - 2*LABEL_HEIGHT + 2*TOP_BOTTOM) // 订阅cell的高
 #define AD_HEADER_HEIGHT          SCREEN_WIDTH * 1/2   // 广告头高
 #define TITLE_HEADER_HEIGHT       40                   // 标题头高度
