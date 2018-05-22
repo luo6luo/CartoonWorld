@@ -31,14 +31,6 @@
  点击菜单栏的”屏幕方向”和“滑动方向”两个按钮后，利用setter传值，重置frame
  */
 
-// 拖动滑条图片上浮，图片位置
-typedef NS_ENUM(NSInteger, ImagePosition) {
-    ImagePositionLeft = -1,
-    ImagePositionCurrent,
-    ImagePositionRight,
-    ImagePositionUnknow
-};
-
 #import "ReadScrollView.h"
 #import "ComicContentModel.h"
 
@@ -48,9 +40,12 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
 
 // 当拖动滑动条时
 #define IMAGE_UP_DELAY_TIME 0.1 // 图片浮现的延迟时间
+#define IMAGE_MOVE_TIME     0.3 // 图片在移动中的时间
 #define CURRENT_SCALE_VALUE 0.6 // 当前图片的缩放值
-#define LEFT_RIGHT_MARGIN   15  // 左右图片相对于其左右图片的间距
+#define LEFT_RIGHT_MARGIN   30  // 左右图片相对于其左右图片的间距
 
+// 图片
+#define DEFAULT_IMAGE  [UIImage imageNamed:@"default_background"]
 
 // 注意针对横屏，此处已经转屏
 #define SCREEN_SCALE  (SCREEN_WIDTH / SCREEN_HEIGHT)
@@ -67,6 +62,9 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
 @property (nonatomic, assign) CGPoint currentOffset;       // 当前滑动偏移量
 @property (nonatomic, assign) CGFloat scrollViewVerticalScreenOffsetY; // 滚动视图竖屏下的偏移量y值
 @property (nonatomic, assign) CGFloat firstImageVerticalScreenOffsetY; // 当前第一张视图的偏移量y值
+
+// 滑块相关
+@property (nonatomic, assign) CGFloat lastValue; // 滑块当前值
 
 // 翻页
 @property (nonatomic, assign) BOOL isSlideMode; // 是否为滑动模式
@@ -158,8 +156,9 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
 {
     for (int i = 0; i < MAX_IMAGEVIEW; i++) {
         UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.backgroundColor = COLOR_IMAGE_BACK;
         imageView.frame = CGRectZero;
-        imageView.image = [UIImage imageNamed:@"default_background"];
+        imageView.image = DEFAULT_IMAGE;
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.tag = i + INIT_TAG;
         
@@ -289,28 +288,16 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
         UIImageView *imageView = [self viewWithTag:i + INIT_TAG];
         ComicContentModel *model = self.models[i];
         [imageView sd_setImageWithURL:[NSURL URLWithString:model.location]
-                     placeholderImage:[UIImage imageNamed:@"default_background"]];
+                     placeholderImage:DEFAULT_IMAGE];
         imageView.tag = i + RUN_TAG;
     }
     
     [self layoutSelfSubviews];
 }
 
-// 开始翻页
-- (void)startPageTurningAtCurrentPage:(NSInteger)currentPage
+// 刷新image，根据偏差值
+- (void)reloadImageWithValue:(CGFloat)value
 {
-    if (self.isSlideMode) {
-        return;
-    }
-    
-    self.isSlideMode = YES;
-    UIImageView *currentImageView = [self viewWithTag:RUN_TAG + self.currentImageIndex];
-    currentImageView.layer.shadowOpacity = 0.8;
-    CGRect currentImageNewFrame = [self scaleImageView:currentImageView frameWithMultiple:CURRENT_SCALE_VALUE AtPosition:ImagePositionCurrent];
-    [UIView animateWithDuration:IMAGE_UP_DELAY_TIME animations:^{
-        currentImageView.frame = currentImageNewFrame;
-    }];
-    
     // 计算当前视图下，其左右两边各有几个视图
     NSInteger leftImageCount = 0;
     NSInteger rightImageCount = 0;
@@ -325,39 +312,150 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
         rightImageCount = 2;
     }
     
-    // 把左边浮起来
-    for (int i = 1; i <= leftImageCount; i++) {
-        UIImageView *leftImage = [self viewWithTag:RUN_TAG + self.currentImageIndex + i];
-        leftImage.layer.shadowOpacity = 0.8;
-        CGRect leftImageFrame = [self scaleImageView:leftImage frameWithMultiple:CURRENT_SCALE_VALUE - i/10.0 AtPosition:ImagePositionLeft];
-        [self insertSubview:leftImage atIndex:0];
-        [UIView animateWithDuration:IMAGE_UP_DELAY_TIME animations:^{
-            leftImage.frame = leftImageFrame;
-        }];
+    // 设置视图的位置，在父视图中的层级位置
+    // 当前视图随滑块滑动后的偏移值
+    CGFloat offsetValue = value - self.currentImageIndex;
+    // 滑动过快，中间的断层页数，此设计偏移值不能差2页
+    NSInteger chasmValue = 0;
+    if (offsetValue > 0) {
+        chasmValue = offsetValue >= 2 ? (int)offsetValue - 1 : 0;
+        offsetValue -= chasmValue;
+    } else if (offsetValue < 0) {
+        chasmValue = offsetValue <= -2 ? (int)offsetValue + 1 : 0;
+        offsetValue -= chasmValue;
+    }
+    NSLog(@"chasmValue：%ld",chasmValue);
+    NSInteger totalLeft = leftImageCount;
+    NSInteger totalRight = rightImageCount;
+    for (int i = 0; i < MAX_IMAGEVIEW; i++) {
+        // 设置视图位置(position)，图层位置(indexPosition)
+        NSInteger position = 0;
+        NSInteger indexPosition = 0;
+        if (i == 0) {
+            position = 0;
+            indexPosition = MAX_IMAGEVIEW - 1;
+        } else if (totalLeft > 0) {
+            position = -i;
+            indexPosition = MAX_IMAGEVIEW - 1 - i;
+            totalLeft--;
+        } else if (totalLeft == 0 && totalRight > 0) {
+            position = i - leftImageCount;
+            indexPosition = MAX_IMAGEVIEW - 1 - position;
+            totalRight--;
+        }
+        
+        // 设置相对便宜缩放洗漱
+        CGFloat scaleOffset = 0;
+        if (position > 0) {
+            scaleOffset = (-offsetValue -  labs(position))/10.0;
+        } else if (position < 0) {
+            scaleOffset = (offsetValue -  labs(position))/10.0;
+        } else {
+            scaleOffset = (-fabs(offsetValue) -  labs(position))/10.0;
+        }
+        
+        UIImageView *imageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - position];
+        // 若存在断层值，则重新设置视图图片，修改视图位置和图层位置
+        if (chasmValue != 0) {
+            if (self.currentImageIndex - position + chasmValue < 0) {
+                position = -leftImageCount + (self.currentImageIndex - position + chasmValue);
+                indexPosition = -position;
+            } else if (self.currentImageIndex - position + chasmValue > self.totalCount - 1) {
+                position = self.currentImageIndex - position + chasmValue - self.totalCount + 1 + rightImageCount;
+                indexPosition = MAX_IMAGEVIEW - position - 1;
+            }
+            imageView.tag = RUN_TAG + self.currentImageIndex - position;
+            [self reloadImageView:imageView withChasmValue:chasmValue];
+        }
+        [self insertSubview:imageView atIndex:indexPosition];
+        NSLog(@"value：%.2f, current:%ld, opsition：%ld, tag：%ld",value, self.currentImageIndex, (long)position, imageView.tag);
+        CGRect imageNewFrame = [self scaleImageView:imageView frameWithMultiple:CURRENT_SCALE_VALUE + scaleOffset atPosition:position + offsetValue];
+        if (i == 0 && !self.isSlideMode) {
+            // 开始浮起当前页
+            [UIView animateWithDuration:IMAGE_UP_DELAY_TIME animations:^{
+                imageView.frame = imageNewFrame;
+            }];
+        } else {
+            imageView.frame = imageNewFrame;
+        }
     }
     
-    // 把右边浮起来
-    for (int i = 1; i <= rightImageCount; i++) {
-        UIImageView *rightImage = [self viewWithTag:RUN_TAG + self.currentImageIndex - i];
-        rightImage.layer.shadowOpacity = 0.8;
-        CGRect rightImageFrame = [self scaleImageView:rightImage frameWithMultiple:CURRENT_SCALE_VALUE - i/10.0 AtPosition:ImagePositionRight];
-        [self insertSubview:rightImage atIndex:0];
-        [UIView animateWithDuration:IMAGE_UP_DELAY_TIME animations:^{
-            rightImage.frame = rightImageFrame;
+    // 翻页（向左翻 --> 把最左页放到最右页之下；向右翻 --> 把最右页放到最左页下面）
+    if (fabs(offsetValue) >= 1) {
+        NSInteger minValue = offsetValue > 0 ? 2 : 3;
+        NSInteger maxValue = offsetValue > 0 ? self.totalCount - 4 : self.totalCount - 3;
+        if (self.currentImageIndex + chasmValue >= minValue && self.currentImageIndex + chasmValue <= maxValue) {
+            // 变化前后的相对位置
+            NSInteger beforeChangedPosition = offsetValue > 0 ? -rightImageCount : leftImageCount;
+            NSInteger afterChangedPosition = offsetValue > 0 ? -leftImageCount - 1 : rightImageCount + 1;
+            
+            // 删除视图内容，更新视图内容
+            UIImageView *changedImageView = [self viewWithTag:RUN_TAG + self.currentImageIndex + beforeChangedPosition + chasmValue];
+            [changedImageView sd_cancelCurrentAnimationImagesLoad];
+            changedImageView.image = nil;
+            changedImageView.tag = RUN_TAG + self.currentImageIndex - afterChangedPosition;
+            ComicContentModel *model = self.models[self.currentImageIndex - afterChangedPosition];
+            [changedImageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE options:SDWebImageCacheMemoryOnly progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                
+            }];
+            
+            // 更新位置
+            NSLog(@"更换位置：afterPosition:%ld, tag：%ld",afterChangedPosition, changedImageView.tag);
+            CGRect changedImageFrame = [self scaleImageView:changedImageView frameWithMultiple:CURRENT_SCALE_VALUE + (fabs(offsetValue) -  labs(afterChangedPosition) + 1)/10.0  atPosition:afterChangedPosition];
+            changedImageView.frame = changedImageFrame;
+            [self insertSubview:changedImageView atIndex:0];
+        }
+        
+        // 将将要显示的视图放在图层最上方
+        UIImageView *currentImage = [self viewWithTag:RUN_TAG + self.currentImageIndex + (int)offsetValue];
+        [UIView animateWithDuration:IMAGE_MOVE_TIME animations:^{
+            [self bringSubviewToFront:currentImage];
         }];
+        self.currentImageIndex += ((int)offsetValue + chasmValue);
     }
 }
 
+// 当快速滑动滑块时候，先刷新image再滑动位置
+- (void)reloadImageView:(UIImageView *)imageView withChasmValue:(NSInteger)chasmValue
+{
+    NSInteger index = imageView.tag - RUN_TAG + chasmValue;
+    if (index < 0 || index > self.totalCount - 1) {
+        return;
+    }
+    
+    ComicContentModel *model = self.models[index];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE
+                          options:SDWebImageCacheMemoryOnly
+                        completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL)
+    {
+        
+    }];
+    NSLog(@"断层原tag：%ld，新tag：%ld",imageView.tag, imageView.tag + chasmValue);
+    imageView.tag += chasmValue;
+}
+
+# pragma mark - Turning page
+
+// 开始翻页
+- (void)startPageTurningAtCurrentPage:(CGFloat)currentPage
+{
+    if (self.isSlideMode) {
+        return;
+    }
+    
+    [self reloadImageWithValue:currentPage];
+    self.isSlideMode = YES;
+}
+
 // 翻到该下标页
-- (void)turnToIndexPage:(NSInteger)indexPage
+- (void)turnToIndexPage:(CGFloat)indexPage
 {
     if (!self.isSlideMode) {
         return;
     }
     
-    // 记录变化的当前下标，但是不能用点语法，不能使用setter
-    _currentImageIndex = indexPage;
-    
+    [self reloadImageWithValue:indexPage];
 }
 
 // 停止翻页
@@ -368,16 +466,22 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
     }
     
     self.isSlideMode = NO;
-    self.scrollViewVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex)]];
-    if (self.currentImageIndex <= 2) {
-        self.firstImageVerticalScreenOffsetY = 0;
-    } else if (self.currentImageIndex >= self.totalCount - 3) {
-        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.totalCount - 5)]];
-    } else {
-        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex - 2)]];
-    }
-    
-    [self layoutSelfSubviews];
+//    CGFloat currentImageOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex)]];
+//    if (currentImageOffsetY + SCREEN_HEIGHT > self.totalImageHeight && self.scrollType == ScrollOrientationTypeVertical) {
+//        self.scrollViewVerticalScreenOffsetY = self.totalImageHeight - SCREEN_HEIGHT;
+//    } else {
+//        self.scrollViewVerticalScreenOffsetY = currentImageOffsetY;
+//    }
+//
+//    if (self.currentImageIndex <= 2) {
+//        self.firstImageVerticalScreenOffsetY = 0;
+//    } else if (self.currentImageIndex >= self.totalCount - 3) {
+//        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.totalCount - 5)]];
+//    } else {
+//        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex - 2)]];
+//    }
+//
+//    [self layoutSelfSubviews];
 }
 
 # pragma mark - Calculation
@@ -389,32 +493,44 @@ typedef NS_ENUM(NSInteger, ImagePosition) {
     return [sum floatValue];
 }
 
-// 计算缩放图片视图的frame
+/**
+ 计算缩放图片视图的frame
+
+ @param imageView   处理的图片
+ @param multiple    现在缩放的系数
+ @param position    相对位置当前位置，当前位置0，左边是负数，右边正数
+ */
 - (CGRect)scaleImageView:(UIImageView *)imageView
        frameWithMultiple:(CGFloat)multiple
-              AtPosition:(ImagePosition)position
+              atPosition:(CGFloat)position
 {
     // 确定当前可视界面的原始点
     CGPoint origin = CGPointZero;
-    if (self.scrollType == ScrollOrientationTypeVertical) {
+    if (self.scrollType == ScrollOrientationTypeHorizontal) {
+        origin = CGPointMake(SCREEN_WIDTH * self.currentImageIndex, 0);
+    } else if (self.scrollType == ScrollOrientationTypeVertical && self.screenType == ScreenOrientationTypeVertical) {
         origin = CGPointMake(0, self.scrollViewVerticalScreenOffsetY);
-    } else if (self.scrollType == ScrollOrientationTypeHorizontal) {
-        origin = CGPointMake(SCREEN_WIDTH, 0);
+    } else if (self.scrollType == ScrollOrientationTypeVertical && self.screenType == ScreenOrientationTypeHorizontal) {
+        origin = CGPointMake(0, self.scrollViewVerticalScreenOffsetY * SCREEN_SCALE); 
     }
+    
     CGRect frame = imageView.frame;
-    if (position == ImagePositionLeft) {
-        // 滑动中，在左边
-        frame.origin.y = origin.y + frame.size.height * (1 - multiple)/2;
-        frame.origin.x = origin.x + frame.size.width * (1 - CURRENT_SCALE_VALUE)/2 - LEFT_RIGHT_MARGIN * (CURRENT_SCALE_VALUE - multiple) * 10;
-    } else if (position == ImagePositionCurrent) {
-        frame.origin.y = origin.y + frame.size.height * (1 - multiple)/2;
-        frame.origin.x = origin.x + frame.size.width * (1 - multiple)/2;
-    } else if (position == ImagePositionRight) {
-        frame.origin.y = origin.y + frame.size.height * (1 - multiple)/2;
-        frame.origin.x = origin.x + frame.size.width * (0.5 - multiple + CURRENT_SCALE_VALUE/2.0) + LEFT_RIGHT_MARGIN * (CURRENT_SCALE_VALUE - multiple) * 10;
+    CGFloat imageWidth = SCREEN_WIDTH;
+    CGFloat imageHeight = [self.imageHeights[imageView.tag - RUN_TAG] floatValue];
+    CGFloat scale = self.screenType == ScreenOrientationTypeVertical ? 1 : 0.5;
+    frame.size.width = imageWidth * multiple * scale;
+    frame.size.height = imageHeight * multiple * scale;
+    
+    // 计算中心点下，origin
+    if (position < 0) {
+        position = -1;
+    } else if (position > 0) {
+        position = 1;
     }
-    frame.size.width *= multiple;
-    frame.size.height *= multiple;
+    scale += self.screenType == ScreenOrientationTypeVertical ? 0.1 : 0.5;
+    frame.origin.y = origin.y + (SCREEN_HEIGHT - frame.size.height)/2;
+    frame.origin.x = origin.x + (SCREEN_WIDTH - frame.size.width)/2 + position * scale * (CURRENT_SCALE_VALUE - multiple) * 10 * LEFT_RIGHT_MARGIN;
+    
     return frame;
 }
 

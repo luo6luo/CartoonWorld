@@ -54,10 +54,10 @@
 - (void)reloadData;
 
 // 开始翻页
-- (void)startPageTurningAtCurrentPage:(NSInteger)currentPage;
+- (void)startPageTurningAtCurrentPage:(CGFloat)currentPage;
 
 // 翻到该下标页
-- (void)turnToIndexPage:(NSInteger)indexPage;
+- (void)turnToIndexPage:(CGFloat)indexPage;
 
 // 停止翻页
 - (void)stopPageTurning;

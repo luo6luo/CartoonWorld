@@ -179,7 +179,7 @@
     }
     
     if ([self.delegate respondsToSelector:@selector(slider:startToSlideAtCurrentValue:)]) {
-        [self.delegate slider:sender startToSlideAtCurrentValue:ceil(sender.value)];
+        [self.delegate slider:sender startToSlideAtCurrentValue:sender.value];
     }
 }
 
@@ -191,9 +191,8 @@
         return;
     }
     
-    self.pageLabel.text = [NSString stringWithFormat:@"%d/%ld", (int)ceil(sender.value), (long)self.maxPage];
     if ([self.delegate respondsToSelector:@selector(slider:valueChanged:)]) {
-        [self.delegate slider:sender valueChanged:ceil(sender.value)];
+        [self.delegate slider:sender valueChanged:sender.value];
     }
 }
 
@@ -206,7 +205,7 @@
     }
     
     if ([self.delegate respondsToSelector:@selector(slider:stopToSlideAtCurrentValue:)]) {
-        [self.delegate slider:sender stopToSlideAtCurrentValue:ceil(sender.value)];
+        [self.delegate slider:sender stopToSlideAtCurrentValue:sender.value];
     }
 }
 

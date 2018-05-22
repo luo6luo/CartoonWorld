@@ -14,7 +14,7 @@
 + (UIImageView *)imageViewWithFrame:(CGRect)aFrame image:(NSString *)aImage
 {
     UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.backgroundColor = COLOR_BACK_GRAY;
+    imageView.backgroundColor = COLOR_IMAGE_BACK;
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     imageView.layer.masksToBounds = YES;
     imageView.frame = aFrame;

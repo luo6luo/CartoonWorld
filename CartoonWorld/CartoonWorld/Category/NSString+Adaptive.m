@@ -13,9 +13,9 @@
 - (CGSize)adaptiveSizeWithWidth:(CGFloat)width height:(CGFloat)height fontSize:(CGFloat)fontSize
 {
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    //换行
+    // 换行
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
-    //行间距8
+    // 行间距
     [paragraphStyle setLineSpacing:5];
     NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:fontSize],
                                  NSParagraphStyleAttributeName:paragraphStyle.copy};

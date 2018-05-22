@@ -56,12 +56,11 @@
     // 判断设备的方向
     CGFloat statusBaYHeight = 0;
     CGFloat navigationBarHeight = 0;
-    UIDeviceOrientation oriention = [UIDevice currentDevice].orientation;
-    if (oriention == UIDeviceOrientationPortrait) {
+    if (SCREEN_HEIGHT > SCREEN_WIDTH) {
         self.frame = CGRectMake(0, 0, SCREEN_WIDTH, NAVIGATIONBAR_HEIGHT_V);
         statusBaYHeight = STATUSBAR_HEIGHT;
         navigationBarHeight = NAVIGATIONBAR_HEIGHT_V;
-    } else if (UIDeviceOrientationLandscapeLeft) {
+    } else if (SCREEN_WIDTH  > SCREEN_HEIGHT) {
         self.frame = CGRectMake(0, 0, SCREEN_WIDTH, NAVIGATIONBAR_HEIGHT_H);
         statusBaYHeight = 0;
         navigationBarHeight = NAVIGATIONBAR_HEIGHT_H;

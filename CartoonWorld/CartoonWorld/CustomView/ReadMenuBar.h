@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger ,ButtonType) {
  @param slider       滑块
  @param currentValue 当前值
  */
-- (void)slider:(UISlider *)slider startToSlideAtCurrentValue:(NSInteger)currentValue;
+- (void)slider:(UISlider *)slider startToSlideAtCurrentValue:(CGFloat)currentValue;
 
 /**
  滑块值改变
@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger ,ButtonType) {
  @param slider   该滑块
  @param newValue 滑块新值
  */
-- (void)slider:(UISlider *)slider valueChanged:(NSInteger)newValue;
+- (void)slider:(UISlider *)slider valueChanged:(CGFloat)newValue;
 
 /**
  滑块停止滑动
@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger ,ButtonType) {
  @param slider       滑块
  @param currentValue 当前值
  */
-- (void)slider:(UISlider *)slider stopToSlideAtCurrentValue:(NSInteger)currentValue;
+- (void)slider:(UISlider *)slider stopToSlideAtCurrentValue:(CGFloat)currentValue;
 
 @end
 

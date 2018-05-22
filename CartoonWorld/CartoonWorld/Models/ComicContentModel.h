@@ -17,8 +17,8 @@
 @property (nonatomic, assign) NSInteger type;     // 图片类型
 @property (nonatomic, assign) NSInteger total_tucao;
 @property (nonatomic, strong) NSString *img50;
-@property (nonatomic, strong) NSString *img05;    // 图片url
-@property (nonatomic, strong) NSString *location; // 下载图片url
+@property (nonatomic, strong) NSString *img05;
+@property (nonatomic, strong) NSString *location; // 图片url
 @property (nonatomic, strong) NSArray *images; // 图片信息
 
 @end

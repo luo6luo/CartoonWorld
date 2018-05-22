@@ -260,21 +260,18 @@ static NSString *const kDeviceOrientation = @"orientation";
     }
 }
 
-- (void)slider:(UISlider *)slider startToSlideAtCurrentValue:(NSInteger)currentValue
+- (void)slider:(UISlider *)slider startToSlideAtCurrentValue:(CGFloat)currentValue
 {
-    NSLog(@"开始滑动：%ld",(long)currentValue);
     [self.scrollView startPageTurningAtCurrentPage:currentValue];
 }
 
-- (void)slider:(UISlider *)slider valueChanged:(NSInteger)newValue
+- (void)slider:(UISlider *)slider valueChanged:(CGFloat)newValue
 {
-    NSLog(@"第%ld页", (long)newValue);
     [self.scrollView turnToIndexPage:newValue];
 }
 
-- (void)slider:(UISlider *)slider stopToSlideAtCurrentValue:(NSInteger)currentValue
+- (void)slider:(UISlider *)slider stopToSlideAtCurrentValue:(CGFloat)currentValue
 {
-    NSLog(@"停止滑动：%ld",(long)currentValue);
     [self.scrollView stopPageTurning];
 }
 

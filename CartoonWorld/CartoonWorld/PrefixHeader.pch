@@ -37,7 +37,6 @@
 
 // 自定义常用类
 #import "RGBColor.h"
-#import "AllWay.h"
 #import "NetWorkingManager.h"
 
 // 三方

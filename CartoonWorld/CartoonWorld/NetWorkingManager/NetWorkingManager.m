@@ -31,7 +31,6 @@
 #import "ClassificationRankListModel.h"
 #import "ClassificationTopListModel.h"
 #import "ClassificationTopLIstTabModel.h"
-#import "SearchTabelViewModel.h"
 #import "SearchHotModel.h"
 
 @implementation NetWorkingManager
