@@ -295,7 +295,14 @@
     [self layoutSelfSubviews];
 }
 
-// 刷新image，根据偏差值
+/*
+ 刷新image，根据偏差值
+ 
+ 整理：
+ 1、根据 currentImageIndex 确定5个 UIImageView 的位置
+ 2、根据 value 和 currentImageIndex 确定当前 UIImageView 的相对中间视图的偏移量（offsetValue）和翻过的页数（chasmValue）
+ 3、根据 chasmValue，确定当前 UIImageView 是否已经翻页，如果翻页，则刷新frame和image
+ */
 - (void)reloadImageWithValue:(CGFloat)value
 {
     // 计算当前视图下，其左右两边各有几个视图
@@ -312,19 +319,20 @@
         rightImageCount = 2;
     }
     
-    // 设置视图的位置，在父视图中的层级位置
-    // 当前视图随滑块滑动后的偏移值
+    /*
+     offsetValue：当前视图随滑块滑动后的偏移值
+     chasmValue：offsetValue >= 1，则需要重新设置imageView的frame和image
+     */
     CGFloat offsetValue = value - self.currentImageIndex;
-    // 滑动过快，中间的断层页数，此设计偏移值不能差2页
     NSInteger chasmValue = 0;
-    if (offsetValue > 0) {
-        chasmValue = offsetValue >= 2 ? (int)offsetValue - 1 : 0;
-        offsetValue -= chasmValue;
-    } else if (offsetValue < 0) {
-        chasmValue = offsetValue <= -2 ? (int)offsetValue + 1 : 0;
-        offsetValue -= chasmValue;
+    if (offsetValue >= 2) {
+        chasmValue = (int)offsetValue - 1;
+    } else if (offsetValue <= -1) {
+        chasmValue = (int)offsetValue + 1;
     }
-    NSLog(@"chasmValue：%ld",chasmValue);
+    offsetValue -= chasmValue;
+    NSLog(@"chasmValue：%ld, offsetValue：%.2f",chasmValue, offsetValue);
+    
     NSInteger totalLeft = leftImageCount;
     NSInteger totalRight = rightImageCount;
     for (int i = 0; i < MAX_IMAGEVIEW; i++) {
@@ -344,7 +352,25 @@
             totalRight--;
         }
         
-        // 设置相对便宜缩放洗漱
+        UIImageView *imageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - position];
+        // 若翻页，判断翻页后该页面是否已存在且未显示，则刷新frame和image
+        if (chasmValue != 0) {
+            if (self.currentImageIndex - position + chasmValue < 0) {
+                // 新页小于0，则滑到左侧imageView图层下
+                position = -leftImageCount + (self.currentImageIndex - position + chasmValue);
+                indexPosition = -position;
+            } else if (self.currentImageIndex - position + chasmValue > self.totalCount - 1) {
+                // 翻页后位置大于最大页面，则滑到右侧imageView图层下
+                position = self.currentImageIndex - position + chasmValue - self.totalCount + 1 + rightImageCount;
+                indexPosition = MAX_IMAGEVIEW - position - 1;
+            }
+            
+            imageView.tag = RUN_TAG + self.currentImageIndex - position;
+            [self reloadImageView:imageView withChasmValue:chasmValue];
+            [self insertSubview:imageView atIndex:indexPosition];
+        }
+        
+        // 设置相对偏移缩放系数
         CGFloat scaleOffset = 0;
         if (position > 0) {
             scaleOffset = (-offsetValue -  labs(position))/10.0;
@@ -354,20 +380,6 @@
             scaleOffset = (-fabs(offsetValue) -  labs(position))/10.0;
         }
         
-        UIImageView *imageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - position];
-        // 若存在断层值，则重新设置视图图片，修改视图位置和图层位置
-        if (chasmValue != 0) {
-            if (self.currentImageIndex - position + chasmValue < 0) {
-                position = -leftImageCount + (self.currentImageIndex - position + chasmValue);
-                indexPosition = -position;
-            } else if (self.currentImageIndex - position + chasmValue > self.totalCount - 1) {
-                position = self.currentImageIndex - position + chasmValue - self.totalCount + 1 + rightImageCount;
-                indexPosition = MAX_IMAGEVIEW - position - 1;
-            }
-            imageView.tag = RUN_TAG + self.currentImageIndex - position;
-            [self reloadImageView:imageView withChasmValue:chasmValue];
-        }
-        [self insertSubview:imageView atIndex:indexPosition];
         NSLog(@"value：%.2f, current:%ld, opsition：%ld, tag：%ld",value, self.currentImageIndex, (long)position, imageView.tag);
         CGRect imageNewFrame = [self scaleImageView:imageView frameWithMultiple:CURRENT_SCALE_VALUE + scaleOffset atPosition:position + offsetValue];
         if (i == 0 && !self.isSlideMode) {
@@ -386,22 +398,22 @@
         NSInteger maxValue = offsetValue > 0 ? self.totalCount - 4 : self.totalCount - 3;
         if (self.currentImageIndex + chasmValue >= minValue && self.currentImageIndex + chasmValue <= maxValue) {
             // 变化前后的相对位置
-            NSInteger beforeChangedPosition = offsetValue > 0 ? -rightImageCount : leftImageCount;
+            NSInteger beforeChangedPosition = offsetValue > 0 ? rightImageCount : -leftImageCount;
             NSInteger afterChangedPosition = offsetValue > 0 ? -leftImageCount - 1 : rightImageCount + 1;
             
             // 删除视图内容，更新视图内容
-            UIImageView *changedImageView = [self viewWithTag:RUN_TAG + self.currentImageIndex + beforeChangedPosition + chasmValue];
+            UIImageView *changedImageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - beforeChangedPosition + chasmValue];
             [changedImageView sd_cancelCurrentAnimationImagesLoad];
             changedImageView.image = nil;
-            changedImageView.tag = RUN_TAG + self.currentImageIndex - afterChangedPosition;
-            ComicContentModel *model = self.models[self.currentImageIndex - afterChangedPosition];
+            changedImageView.tag = RUN_TAG + self.currentImageIndex + chasmValue - afterChangedPosition;
+            ComicContentModel *model = self.models[self.currentImageIndex + chasmValue - afterChangedPosition];
             [changedImageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE options:SDWebImageCacheMemoryOnly progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 
             }];
             
             // 更新位置
-            NSLog(@"更换位置：afterPosition:%ld, tag：%ld",afterChangedPosition, changedImageView.tag);
+            NSLog(@"beforeChangedPosition：%ld, afterPosition:%ld, tag：%ld",beforeChangedPosition,afterChangedPosition, changedImageView.tag);
             CGRect changedImageFrame = [self scaleImageView:changedImageView frameWithMultiple:CURRENT_SCALE_VALUE + (fabs(offsetValue) -  labs(afterChangedPosition) + 1)/10.0  atPosition:afterChangedPosition];
             changedImageView.frame = changedImageFrame;
             [self insertSubview:changedImageView atIndex:0];
@@ -431,8 +443,8 @@
     {
         
     }];
-    NSLog(@"断层原tag：%ld，新tag：%ld",imageView.tag, imageView.tag + chasmValue);
     imageView.tag += chasmValue;
+    NSLog(@"断层原tag：%ld，新tag：%ld",imageView.tag, imageView.tag + chasmValue);
 }
 
 # pragma mark - Turning page
