@@ -42,6 +42,7 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
     self.view.backgroundColor = COLOR_WHITE;
     self.searchHistoryArr = [UserModel defaultUser].searchHistory;
     
+    [self setupSubviews];
     [self loadSearchHotData];
 }
 
@@ -116,11 +117,14 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
 - (void)loadSearchHotData
 {
     WeakSelf(self);
+    [ActivityManager showLoadingInView:self.view];
     [[NetWorkingManager defualtManager] hotSearchSuccess:^(id responseBody) {
         weakself.searchHotArr = responseBody;
-        [weakself setupSubviews];
+        [weakself.searchList reloadData];
+        [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
     } failure:^(NSError *error) {
         NSLog(@"%@", error.localizedDescription);
+        [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
     }];
 }
 
@@ -154,7 +158,7 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
         // 搜索热门
         SearchHotCell *searchHotCell = [tableView dequeueReusableCellWithIdentifier:kSearchHotCell];
         if (!searchHotCell) {
-            searchHotCell = [[SearchHotCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kSearchHotCell hotArr:self.searchHotArr];
+            searchHotCell = [[SearchHotCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kSearchHotCell];
             
             WeakSelf(self);
             searchHotCell.tagBtnClickedBlock = ^(SearchHotModel *model) {
@@ -163,6 +167,7 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
                 [weakself.navigationController pushViewController:comicController animated:YES];
             };
         }
+        searchHotCell.hotArr = self.searchHotArr;
         return searchHotCell;
     }
 }

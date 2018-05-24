@@ -11,22 +11,29 @@
 
 @interface SearchHotCell()
 
-@property (nonatomic, strong) NSArray *hotArr;
+@property (nonatomic, assign) BOOL isSetup;
 
 @end
 
 @implementation SearchHotCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier hotArr:(NSArray *)hotArr
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.contentView.backgroundColor = COLOR_WHITE;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.hotArr = hotArr;
-        
-        [self setupSubviews];
+        self.isSetup = NO;
     }
     return self;
+}
+
+- (void)setHotArr:(NSArray *)hotArr
+{
+    _hotArr = hotArr;
+    if (!self.isSetup && hotArr.count > 0) {
+        [self setupSubviews];
+        self.isSetup = YES;
+    }
 }
 
 - (void)setupSubviews

@@ -413,6 +413,7 @@
 		6F1294121EEA41800099ABE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6FB217D420B69DF200986124 /* 启动页 */,
 				6F9841221F05FC0400A960AA /* 公共视图 */,
 				6F19F7351F04E41200B52375 /* 漫画 */,
 				6F12941A1EEA41800099ABE7 /* 二次元 */,
@@ -655,6 +656,13 @@
 				6F9841241F062A5800A960AA /* WebController.m */,
 			);
 			path = "公共视图";
+			sourceTree = "<group>";
+		};
+		6FB217D420B69DF200986124 /* 启动页 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "启动页";
 			sourceTree = "<group>";
 		};
 		6FB58EE91EF0D995002F5524 /* 二次元 */ = {

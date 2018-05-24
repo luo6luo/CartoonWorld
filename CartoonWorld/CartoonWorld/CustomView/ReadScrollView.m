@@ -301,11 +301,13 @@
  整理：
  1、根据 currentImageIndex 确定5个 UIImageView 的位置
  2、根据 value 和 currentImageIndex 确定当前 UIImageView 的相对中间视图的偏移量（offsetValue）和翻过的页数（chasmValue）
- 3、根据 chasmValue，确定当前 UIImageView 是否已经翻页，如果翻页，则刷新frame和image
+ 3、根据 chasmValue，确定当前 UIImageView 是否已经翻页 >= 2，如果是，则刷新所有imageView的frame和image，修改对饮的position 和 indexPosition
+ 4、根据 offsetValue 是否 > 1，如果是则将最左或者最右一页滑到另一侧，当前页滑入下一图层
  */
 - (void)reloadImageWithValue:(CGFloat)value
 {
     // 计算当前视图下，其左右两边各有几个视图
+    // leftImageCount/rightImageCount 是实时变动的，是现有实际上左右两边各多少imageView
     NSInteger leftImageCount = 0;
     NSInteger rightImageCount = 0;
     if (self.currentImageIndex >= 0 && self.currentImageIndex <= 2) {
@@ -333,8 +335,12 @@
     offsetValue -= chasmValue;
     NSLog(@"chasmValue：%ld, offsetValue：%.2f",chasmValue, offsetValue);
     
+    // 循环获取左右两边imageView的计数
     NSInteger totalLeft = leftImageCount;
     NSInteger totalRight = rightImageCount;
+    // 备份原左右两边imageView的个数
+    NSInteger initialLeftCount = leftImageCount;
+    NSInteger initialRightCount = rightImageCount;
     for (int i = 0; i < MAX_IMAGEVIEW; i++) {
         // 设置视图位置(position)，图层位置(indexPosition)
         NSInteger position = 0;
@@ -347,27 +353,35 @@
             indexPosition = MAX_IMAGEVIEW - 1 - i;
             totalLeft--;
         } else if (totalLeft == 0 && totalRight > 0) {
-            position = i - leftImageCount;
+            position = i - initialLeftCount;
             indexPosition = MAX_IMAGEVIEW - 1 - position;
             totalRight--;
         }
         
-        UIImageView *imageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - position];
         // 若翻页，判断翻页后该页面是否已存在且未显示，则刷新frame和image
+        UIImageView *imageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - position];
         if (chasmValue != 0) {
-            if (self.currentImageIndex - position + chasmValue < 0) {
-                // 新页小于0，则滑到左侧imageView图层下
-                position = -leftImageCount + (self.currentImageIndex - position + chasmValue);
-                indexPosition = -position;
-            } else if (self.currentImageIndex - position + chasmValue > self.totalCount - 1) {
-                // 翻页后位置大于最大页面，则滑到右侧imageView图层下
-                position = self.currentImageIndex - position + chasmValue - self.totalCount + 1 + rightImageCount;
+            NSInteger newTag = self.currentImageIndex - position + chasmValue;
+            if (newTag < 0 || (position > 2 && newTag > 0 && newTag < self.totalCount - 1)) {
+                // 两种情况将右侧imageView滑到左侧imageView图层下
+                // 1：滑到最右边，position = 1/2 变为 -3/-4
+                // 2：由最右边滑到中间，position = 3/4 变为 -1/-2
+                leftImageCount++;
+                rightImageCount--;
+                position = -initialLeftCount - (position > 2 ? position - 2 : initialRightCount - rightImageCount );
+                indexPosition = MAX_IMAGEVIEW - 1 + position;
+            } else if (newTag > self.totalCount - 1 || (position < -2 && newTag > 0 && newTag < self.totalCount - 1)) {
+                // 两种情况将左侧的imageView滑到右侧imageView图层下
+                // 1：滑到最左边，position = -1/-2 变为 3/4
+                // 2：由最左侧滑到中间，position = -3/-4 变为 1/2
+                leftImageCount--;
+                rightImageCount++;
+                position = initialRightCount - (position < -2 ? position + 2 : -(initialLeftCount - leftImageCount));
                 indexPosition = MAX_IMAGEVIEW - position - 1;
             }
             
             imageView.tag = RUN_TAG + self.currentImageIndex - position;
             [self reloadImageView:imageView withChasmValue:chasmValue];
-            [self insertSubview:imageView atIndex:indexPosition];
         }
         
         // 设置相对偏移缩放系数
@@ -380,6 +394,7 @@
             scaleOffset = (-fabs(offsetValue) -  labs(position))/10.0;
         }
         
+        [self insertSubview:imageView atIndex:indexPosition];
         NSLog(@"value：%.2f, current:%ld, opsition：%ld, tag：%ld",value, self.currentImageIndex, (long)position, imageView.tag);
         CGRect imageNewFrame = [self scaleImageView:imageView frameWithMultiple:CURRENT_SCALE_VALUE + scaleOffset atPosition:position + offsetValue];
         if (i == 0 && !self.isSlideMode) {
@@ -413,7 +428,7 @@
             }];
             
             // 更新位置
-            NSLog(@"beforeChangedPosition：%ld, afterPosition:%ld, tag：%ld",beforeChangedPosition,afterChangedPosition, changedImageView.tag);
+            NSLog(@"beforeChangedPosition：%ld, afterPosition:%ld, 现tag：%ld",beforeChangedPosition,afterChangedPosition, changedImageView.tag);
             CGRect changedImageFrame = [self scaleImageView:changedImageView frameWithMultiple:CURRENT_SCALE_VALUE + (fabs(offsetValue) -  labs(afterChangedPosition) + 1)/10.0  atPosition:afterChangedPosition];
             changedImageView.frame = changedImageFrame;
             [self insertSubview:changedImageView atIndex:0];
@@ -421,9 +436,8 @@
         
         // 将将要显示的视图放在图层最上方
         UIImageView *currentImage = [self viewWithTag:RUN_TAG + self.currentImageIndex + (int)offsetValue];
-        [UIView animateWithDuration:IMAGE_MOVE_TIME animations:^{
-            [self bringSubviewToFront:currentImage];
-        }];
+        [self bringSubviewToFront:currentImage];
+        
         self.currentImageIndex += ((int)offsetValue + chasmValue);
     }
 }
@@ -444,7 +458,7 @@
         
     }];
     imageView.tag += chasmValue;
-    NSLog(@"断层原tag：%ld，新tag：%ld",imageView.tag, imageView.tag + chasmValue);
+    NSLog(@"断层原tag：%ld，新tag：%ld",imageView.tag - chasmValue,imageView.tag);
 }
 
 # pragma mark - Turning page
@@ -478,22 +492,22 @@
     }
     
     self.isSlideMode = NO;
-//    CGFloat currentImageOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex)]];
-//    if (currentImageOffsetY + SCREEN_HEIGHT > self.totalImageHeight && self.scrollType == ScrollOrientationTypeVertical) {
-//        self.scrollViewVerticalScreenOffsetY = self.totalImageHeight - SCREEN_HEIGHT;
-//    } else {
-//        self.scrollViewVerticalScreenOffsetY = currentImageOffsetY;
-//    }
-//
-//    if (self.currentImageIndex <= 2) {
-//        self.firstImageVerticalScreenOffsetY = 0;
-//    } else if (self.currentImageIndex >= self.totalCount - 3) {
-//        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.totalCount - 5)]];
-//    } else {
-//        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex - 2)]];
-//    }
-//
-//    [self layoutSelfSubviews];
+    CGFloat currentImageOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex)]];
+    if (currentImageOffsetY + SCREEN_HEIGHT > self.totalImageHeight && self.scrollType == ScrollOrientationTypeVertical) {
+        self.scrollViewVerticalScreenOffsetY = self.totalImageHeight - SCREEN_HEIGHT;
+    } else {
+        self.scrollViewVerticalScreenOffsetY = currentImageOffsetY;
+    }
+
+    if (self.currentImageIndex <= 2) {
+        self.firstImageVerticalScreenOffsetY = 0;
+    } else if (self.currentImageIndex >= self.totalCount - 3) {
+        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.totalCount - 5)]];
+    } else {
+        self.firstImageVerticalScreenOffsetY = [self calculationSumOfTheArray:[self.imageHeights subarrayWithRange:NSMakeRange(0, self.currentImageIndex - 2)]];
+    }
+
+    [self layoutSelfSubviews];
 }
 
 # pragma mark - Calculation

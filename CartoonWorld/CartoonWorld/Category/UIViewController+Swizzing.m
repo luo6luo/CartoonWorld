@@ -44,7 +44,7 @@
     [self xxx_viewWillDisappear:animated];
     
     // 每次走系统方法都会额外走此方法
-    [ActivityManager dismissLoading];
+//    [ActivityManager dismissLoading];
 }
 
 

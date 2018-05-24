@@ -36,12 +36,7 @@ static NSString *const kTitleHeader = @"titleHeader";
 # pragma mark - 下载数据
 
 - (void)downloadData
-{
-    //添加活动指示器
-    if (!self.isFinishedDownload) {
-        [ActivityManager showLoadingInView:self.view];
-    }
-    
+{    
     //开始请求
     self.view.userInteractionEnabled = NO;
     [[NetWorkingManager defualtManager] VIPSuccess:^(id responseBody) {
@@ -49,12 +44,10 @@ static NSString *const kTitleHeader = @"titleHeader";
         
         [self.collectionView reloadData];
         [RefreshManager stopRefreshInView:self.collectionView];
-        [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
         self.view.userInteractionEnabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [RefreshManager stopRefreshInView:self.collectionView];
-        [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
         self.view.userInteractionEnabled = YES;
     }];
 }

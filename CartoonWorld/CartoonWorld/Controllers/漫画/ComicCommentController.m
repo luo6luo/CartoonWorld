@@ -35,7 +35,7 @@ static NSString *kCommentCell = @"commentCell";
 
 - (void)setupTabelView
 {
-    CGRect tableViewFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V);
+    CGRect tableViewFrame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT - NAVIGATIONBAR_HEIGHT_V + 44);
     self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = COLOR_BACK_WHITE;
@@ -86,6 +86,7 @@ static NSString *kCommentCell = @"commentCell";
 - (void)loadNewCommentData
 {
     self.commentPage = 1;
+    [self.commentModels removeAllObjects];
     [self loadCommentData];
 }
 
@@ -95,6 +96,9 @@ static NSString *kCommentCell = @"commentCell";
     if (self.hasMore) {
         self.commentPage++;
         [self loadCommentData];
+    } else {
+        [RefreshManager stopRefreshInView:self.tableView];
+        [AlertManager showInfo:@"没有更多了~"];
     }
 }
 

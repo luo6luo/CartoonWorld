@@ -40,14 +40,14 @@
         
         // 动画&图片
         self.imageView = [[UIImageView alloc] init];
-        self.imageView.frame = CGRectMake(0, 0, 100, 117);
+        self.imageView.frame = CGRectMake(0, 0, 75, 87);
         
         [self.backView addSubview:self.imageView];
         
         // 文字
         self.stateLabel = [UILabel labelWithText:@"" textColor:COLOR_PINK fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentCenter];
         self.stateLabel.font = [UIFont systemFontOfSize:FONT_CONTENT weight:3];
-        self.stateLabel.frame = CGRectMake(0, CGRectGetMaxY(self.imageView.frame), 100, 25);
+        self.stateLabel.frame = CGRectMake(0, CGRectGetMaxY(self.imageView.frame), 75, 20);
         [self.backView addSubview:self.stateLabel];
     }
     return self;
@@ -77,12 +77,15 @@
     if (!manager.backView || !supView) { return; }
     
     supView.userInteractionEnabled = NO;
+    [supView addSubview:manager.backView];
+    [manager.backView bringSubviewToFront:supView];
     
-    CGFloat width = 100;
-    CGFloat height = 117 + 25;
-    CGFloat x = supView.frame.size.width/2 - width/2;
-    CGFloat y = supView.frame.size.height/2 - height/2;
-    manager.backView.frame = CGRectMake(x, y, width, height);
+    CGFloat width = 76;
+    CGFloat height = 87 + 20;
+    CGFloat x = supView.frame.size.width/2;
+    CGFloat y = supView.frame.size.height * 3/7;
+    manager.backView.frame = CGRectMake(0, 0, width, height);
+    manager.backView.center = CGPointMake(x, y);
     
     manager.imageView.animationImages = manager.loadImages;
     manager.imageView.animationDuration = 2.0;
@@ -90,9 +93,6 @@
     [manager.imageView startAnimating];
     
     manager.stateLabel.text = @"正在加载。。。";
-    
-    [supView addSubview:manager.backView];
-    [manager.backView bringSubviewToFront:supView];
 }
 
 #pragma mark - dismiss

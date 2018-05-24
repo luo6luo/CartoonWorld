@@ -43,31 +43,25 @@ static NSString *const kSubscriptionCell = @"subscriptionCell";
 
 - (void)downloadData
 {
-    //添加活动指示器
-    if (!self.isFinishedDownload) {
-        [ActivityManager showLoadingInView:self.view];
-    }
-    
     //开始请求
+    WeakSelf(self);
     self.view.userInteractionEnabled = NO;
     [[NetWorkingManager defualtManager] subscriptionWithPage:self.page success:^(id responseBody) {
-        if (self.page == 1) {
-            self.modelArr.array = responseBody[@"models"];
+        if (weakself.page == 1) {
+            weakself.modelArr.array = responseBody[@"models"];
         } else {
-            self.modelArr.array = [self.modelArr arrayByAddingObjectsFromArray:responseBody[@"models"]];
+            weakself.modelArr.array = [weakself.modelArr arrayByAddingObjectsFromArray:responseBody[@"models"]];
         }
         
-        self.hasMore = [responseBody[@"hasMore"] boolValue];
+        weakself.hasMore = [responseBody[@"hasMore"] boolValue];
         
-        [self.tableView reloadData];
-        [RefreshManager stopRefreshInView:self.tableView];
-        [ActivityManager dismissLoadingInView:self.view status:ShowSuccess];
-        self.view.userInteractionEnabled = YES;
+        [weakself.tableView reloadData];
+        [RefreshManager stopRefreshInView:weakself.tableView];
+        weakself.view.userInteractionEnabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
-        [RefreshManager stopRefreshInView:self.tableView];
-        [ActivityManager dismissLoadingInView:self.view status:ShowFailure];
-        self.view.userInteractionEnabled = YES;
+        [RefreshManager stopRefreshInView:weakself.tableView];
+        weakself.view.userInteractionEnabled = YES;
     }];
 }
 
