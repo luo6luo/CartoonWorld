@@ -33,10 +33,8 @@
 
 - (void)initSubViews
 {
-    UserModel *user = [UserModel defaultUser];
-    
     // 头像
-    self.headerIcon = [[UIImageView alloc] initWithImage:[UIImage imageWithData:user.headerIcon]];
+    self.headerIcon = [[UIImageView alloc] initWithImage:nil];
     [self.contentView addSubview:self.headerIcon];
     [self.headerIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(LEFT_RIGHT);
@@ -46,7 +44,7 @@
     }];
     
     // 名字
-    self.nickNameLabel = [UILabel labelWithText:user.nickName textColor:COLOR_TEXT_BLACK fontSize:FONT_TITLE textAlignment:NSTextAlignmentLeft];
+    self.nickNameLabel = [UILabel labelWithText:nil textColor:COLOR_TEXT_BLACK fontSize:FONT_TITLE textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.nickNameLabel];
     [self.nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.headerIcon.mas_right).offset(2*MIDDLE_SPASE);
@@ -56,7 +54,7 @@
     }];
     
     // 描述
-    self.detailLabel = [UILabel labelWithText:user.descriptionStr textColor:COLOR_TEXT_BLACK fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
+    self.detailLabel = [UILabel labelWithText:nil textColor:COLOR_TEXT_BLACK fontSize:FONT_SUBTITLE textAlignment:NSTextAlignmentLeft];
     self.detailLabel.textAlignment = NSTextAlignmentLeft;
     self.detailLabel.numberOfLines = 0;
     [self.contentView addSubview:self.detailLabel];
@@ -76,6 +74,15 @@
         make.bottom.equalTo(self.contentView.mas_bottom);
         make.size.mas_equalTo(CGSizeMake(SCREEN_WIDTH, 1));
     }];
+}
+
+// 加载数据
+- (void)reloadData
+{
+    UserModel *user = [UserModel defaultUser];
+    self.headerIcon.image = [UIImage imageWithData:user.headerIcon];
+    self.nickNameLabel.text = user.nickName;
+    self.detailLabel.text = user.descriptionStr;
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "UserRelatedCell.h"
 #import "UserModel.h"
 
+#import "DatebaseManager.h"
 #import <QBImagePickerController.h>
 
 static NSString *kHeaderCell = @"headerCell";
@@ -175,10 +176,11 @@ static NSString *kTextCell = @"textCell";
     // 更新用户信息，刷新数据
     nickNameController.nickNameChangedBlock = ^(NSString *newNickName) {
         UserModel *user = [UserModel defaultUser];
-        user.nickName = newNickName;
-        [user archive];
-        
-        [weakself.tableView reloadData];
+        [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+            user.nickName = newNickName;
+        } completed:^{
+            [weakself.tableView reloadData];
+        }];
         
         // 刷新我的界面
         if (weakself.handleStatus) {
@@ -200,10 +202,11 @@ static NSString *kTextCell = @"textCell";
     // 更新用户信息，刷新数据
     detailController.edictTextBlock = ^(NSString *text) {
         UserModel *user = [UserModel defaultUser];
-        user.descriptionStr = text;
-        [user archive];
-        
-        [weakself.tableView reloadData];
+        [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+            user.descriptionStr = text;
+        } completed:^{
+            [weakself.tableView reloadData];
+        }];
         
         // 刷新我的数据
         if (weakself.handleStatus) {
@@ -220,9 +223,11 @@ static NSString *kTextCell = @"textCell";
         WeakSelf(self);
         [[PHImageManager defaultManager] requestImageDataForAsset:assets.firstObject options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
             UserModel *user = [UserModel defaultUser];
-            user.headerIcon = imageData;
-            [user archive];
-            [weakself.tableView reloadData];
+            [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+                user.headerIcon = imageData;
+            } completed:^{
+                [weakself.tableView reloadData];
+            }];
             
             if (weakself.handleStatus) {
                 weakself.handleStatus(YES);
@@ -245,9 +250,13 @@ static NSString *kTextCell = @"textCell";
     UIImage *photoImage = [info objectForKey:UIImagePickerControllerEditedImage];
     NSData *photoData = UIImagePNGRepresentation(photoImage);
     UserModel *user = [UserModel defaultUser];
-    user.headerIcon = photoData;
-    [user archive];
-    [self.tableView reloadData];
+    
+    WeakSelf(self);
+    [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+        user.headerIcon = photoData;
+    } completed:^{
+        [weakself.tableView reloadData];
+    }];
     
     if (self.handleStatus) {
         self.handleStatus(YES);

@@ -18,6 +18,9 @@
 
 #import "SearchHotModel.h"
 #import "UserModel.h"
+#import "StringObject.h"
+
+#import "DatebaseManager.h"
 
 static NSString *kSearchHotCell = @"searchHotCell";
 static NSString *kSearchHistoryCell = @"searchHistoryCell";
@@ -40,7 +43,11 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
 {
     [super viewDidLoad];
     self.view.backgroundColor = COLOR_WHITE;
-    self.searchHistoryArr = [UserModel defaultUser].searchHistory;
+    
+    self.searchHistoryArr = [NSMutableArray array];
+    for (StringObject *string in [UserModel defaultUser].searchHistories) {
+        [self.searchHistoryArr addObject:string.realmString];
+    }
     
     [self setupSubviews];
     [self loadSearchHotData];
@@ -73,8 +80,15 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
             
             // 储存搜索历史
             UserModel *user = [UserModel defaultUser];
-            [user.searchHistory addObject:weakself.searchString];
-            [user archive];
+            StringObject *string = [StringObject new];
+            string.realmString = weakself.searchString;
+            [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+                [user.searchHistories addObject:string];
+            } completed:^{
+                // 刷新搜索历史
+                [weakself.searchHistoryArr addObject:content];
+                [weakself.searchList reloadData];
+            }];
             
             // 跳转搜索结果
             SearchResultController *searchResultController = [[SearchResultController alloc] init];
@@ -162,6 +176,17 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
             
             WeakSelf(self);
             searchHotCell.tagBtnClickedBlock = ^(SearchHotModel *model) {
+                // 存入数据库
+                [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+                    StringObject *realmString = [StringObject new];
+                    realmString.realmString = model.tagName;
+                    [[UserModel defaultUser].searchHistories addObject:realmString];
+                } completed:^{
+                    // 刷新搜索历史列表
+                    [weakself.searchHistoryArr addObject:model.tagName];
+                    [weakself.searchList reloadData];
+                }];
+                
                 ComicController *comicController = [[ComicController alloc] init];
                 comicController.comicId = model.search_num;
                 [weakself.navigationController pushViewController:comicController animated:YES];
@@ -185,11 +210,9 @@ static NSString *kSearchHistoryHeader = @"searchHistryHeader";
             WeakSelf(self);
             historyHeader.deleteSearchHistoryBlock = ^{
                 [weakself.searchHistoryArr removeAllObjects];
-                UserModel *user = [UserModel defaultUser];
-                user.searchHistory = weakself.searchHistoryArr;
-                
-                [user archive];
-                [weakself.searchList reloadData];
+                [[DatebaseManager defaultDatebaseManager] deleteAllObjectCompleted:^{
+                    [weakself.searchList reloadData];
+                }];
             };
         }
         return historyHeader;

@@ -67,7 +67,7 @@
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSMutableArray * types = [NSMutableArray array];
                 types.array = [RecommendTypeModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"comicLists"]];
-                [types removeObjectAtIndex:0];
+//                [types removeObjectAtIndex:0];
                 NSArray * bannerArr = [AdvertisementModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"galleryItems"]];
                 
                 if (bannerArr && types) {

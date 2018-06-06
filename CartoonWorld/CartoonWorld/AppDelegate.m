@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "StyleManager.h"
+#import "DatebaseManager.h"
 #import "DZRRootTabBarController.h"
 
 @interface AppDelegate ()
@@ -25,6 +26,7 @@
     self.window.rootViewController = tab;
     
     [StyleManager setStyle];
+    [DatebaseManager migrationVersion];
     
     [self.window makeKeyAndVisible];
     return YES;

@@ -18,4 +18,11 @@
 #define SYSTEM_VERSION_SAME_THAN(ver) ([[[UIDevice currentDevice] systemVersion] compare:ver options:NSNumericSearch] == NSOrderedSame) // 等于ver
 #define SYSTEM_VERSION_MORE_THAN(ver) ([[[UIDevice currentDevice] systemVersion] compare:ver options:NSNumericSearch] == NSOrderedDescending) // 大于ver
 
+// NSUserDefaults
+#define GET_USER_DEFAULTS(key) [[NSUserDefaults standardUserDefaults] objectForKey:key]
+#define SET_USER_DEFAULTS(obj, key) [[NSUserDefaults standardUserDefaults] setObject:obj forKey:key]
+
+// app版本号
+#define VERSION [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
+
 #endif /* Method_h */

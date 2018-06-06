@@ -11,6 +11,7 @@
 		6F005ABA1F46C0B100DCBC81 /* MoreOtherController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F005AB91F46C0B100DCBC81 /* MoreOtherController.m */; };
 		6F005ABE1F46CD0D00DCBC81 /* MoreOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F005ABC1F46CD0D00DCBC81 /* MoreOtherCell.m */; };
 		6F005AC21F46DBE900DCBC81 /* MoreTopicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F005AC11F46DBE900DCBC81 /* MoreTopicModel.m */; };
+		6F0C301C20BD4DE900C337ED /* StringObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0C301B20BD4DE900C337ED /* StringObject.m */; };
 		6F0F16721F5E9599005B0FA2 /* CommentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0F16711F5E9599005B0FA2 /* CommentModel.m */; };
 		6F1293F31EEA3DED0099ABE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1293F21EEA3DED0099ABE7 /* main.m */; };
 		6F1293F61EEA3DED0099ABE7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1293F51EEA3DED0099ABE7 /* AppDelegate.m */; };
@@ -71,6 +72,7 @@
 		6F9106191FB0410A00C55B39 /* SearchHotController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9106181FB0410A00C55B39 /* SearchHotController.m */; };
 		6F91061C1FB05D3100C55B39 /* SearchHotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F91061B1FB05D3100C55B39 /* SearchHotModel.m */; };
 		6F91061F1FB05FB200C55B39 /* SearchHotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F91061E1FB05FB200C55B39 /* SearchHotCell.m */; };
+		6F929DD120BFC8A50030CB8B /* DatebaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F929DD020BFC8A50030CB8B /* DatebaseManager.m */; };
 		6F98121C1F9895B2007EEC57 /* OtherWorksListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F98121B1F9895B2007EEC57 /* OtherWorksListController.m */; };
 		6F9841251F062A5800A960AA /* WebController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9841241F062A5800A960AA /* WebController.m */; };
 		6F9841291F06405600A960AA /* UIViewController+Swizzing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9841281F06405600A960AA /* UIViewController+Swizzing.m */; };
@@ -85,6 +87,8 @@
 		6FB36E9F1FAB05BB004BF972 /* ClassificationTopListDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB36E9E1FAB05BB004BF972 /* ClassificationTopListDetailController.m */; };
 		6FB58EEF1EF12307002F5524 /* RecommendRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB58EEE1EF12307002F5524 /* RecommendRankCell.m */; };
 		6FB975361EF7D5700073A200 /* VIPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FB975351EF7D5700073A200 /* VIPController.m */; };
+		6FBB0CBC20C12B610010FBA0 /* SearchHistoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBB0CBB20C12B610010FBA0 /* SearchHistoryController.m */; };
+		6FBB0CBF20C141F70010FBA0 /* AnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FBB0CBE20C141F70010FBA0 /* AnimationView.m */; };
 		6FC3C9361F4E779400B785B2 /* CatalogCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FC3C9341F4E779400B785B2 /* CatalogCell.m */; };
 		6FC3C9371F4E779400B785B2 /* CatalogCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FC3C9351F4E779400B785B2 /* CatalogCell.xib */; };
 		6FC3C93A1F4E77C900B785B2 /* CatalogHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FC3C9391F4E77C900B785B2 /* CatalogHeader.m */; };
@@ -115,6 +119,8 @@
 		6F005ABC1F46CD0D00DCBC81 /* MoreOtherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreOtherCell.m; sourceTree = "<group>"; };
 		6F005AC01F46DBE900DCBC81 /* MoreTopicModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreTopicModel.h; sourceTree = "<group>"; };
 		6F005AC11F46DBE900DCBC81 /* MoreTopicModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MoreTopicModel.m; sourceTree = "<group>"; };
+		6F0C301A20BD4DE900C337ED /* StringObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringObject.h; sourceTree = "<group>"; };
+		6F0C301B20BD4DE900C337ED /* StringObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StringObject.m; sourceTree = "<group>"; };
 		6F0F16701F5E9599005B0FA2 /* CommentModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentModel.h; sourceTree = "<group>"; };
 		6F0F16711F5E9599005B0FA2 /* CommentModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentModel.m; sourceTree = "<group>"; };
 		6F1293EE1EEA3DED0099ABE7 /* CartoonWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CartoonWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,6 +243,8 @@
 		6F91061B1FB05D3100C55B39 /* SearchHotModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHotModel.m; sourceTree = "<group>"; };
 		6F91061D1FB05FB200C55B39 /* SearchHotCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHotCell.h; sourceTree = "<group>"; };
 		6F91061E1FB05FB200C55B39 /* SearchHotCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHotCell.m; sourceTree = "<group>"; };
+		6F929DCF20BFC8A50030CB8B /* DatebaseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatebaseManager.h; sourceTree = "<group>"; };
+		6F929DD020BFC8A50030CB8B /* DatebaseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatebaseManager.m; sourceTree = "<group>"; };
 		6F98121A1F9895B2007EEC57 /* OtherWorksListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OtherWorksListController.h; sourceTree = "<group>"; };
 		6F98121B1F9895B2007EEC57 /* OtherWorksListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OtherWorksListController.m; sourceTree = "<group>"; };
 		6F9841231F062A5800A960AA /* WebController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebController.h; sourceTree = "<group>"; };
@@ -265,6 +273,10 @@
 		6FB58EEE1EF12307002F5524 /* RecommendRankCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecommendRankCell.m; sourceTree = "<group>"; };
 		6FB975341EF7D5700073A200 /* VIPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VIPController.h; sourceTree = "<group>"; };
 		6FB975351EF7D5700073A200 /* VIPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VIPController.m; sourceTree = "<group>"; };
+		6FBB0CBA20C12B610010FBA0 /* SearchHistoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHistoryController.h; sourceTree = "<group>"; };
+		6FBB0CBB20C12B610010FBA0 /* SearchHistoryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHistoryController.m; sourceTree = "<group>"; };
+		6FBB0CBD20C141F70010FBA0 /* AnimationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationView.h; sourceTree = "<group>"; };
+		6FBB0CBE20C141F70010FBA0 /* AnimationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimationView.m; sourceTree = "<group>"; };
 		6FC3C9331F4E779400B785B2 /* CatalogCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CatalogCell.h; sourceTree = "<group>"; };
 		6FC3C9341F4E779400B785B2 /* CatalogCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CatalogCell.m; sourceTree = "<group>"; };
 		6FC3C9351F4E779400B785B2 /* CatalogCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CatalogCell.xib; sourceTree = "<group>"; };
@@ -334,6 +346,15 @@
 				334C7C871CA6F29E23A15956 /* Pods-CartoonWorld.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		6F0C301920BD4D6B00C337ED /* RealmModel */ = {
+			isa = PBXGroup;
+			children = (
+				6F0C301A20BD4DE900C337ED /* StringObject.h */,
+				6F0C301B20BD4DE900C337ED /* StringObject.m */,
+			);
+			name = RealmModel;
 			sourceTree = "<group>";
 		};
 		6F1293E51EEA3DEC0099ABE7 = {
@@ -461,6 +482,8 @@
 				6F7FD4901FC7BE6D00063247 /* ChangeDetailController.m */,
 				6F3FCE291FCE9CBE00636553 /* ChangeNickNameController.h */,
 				6F3FCE2A1FCE9CBE00636553 /* ChangeNickNameController.m */,
+				6FBB0CBA20C12B610010FBA0 /* SearchHistoryController.h */,
+				6FBB0CBB20C12B610010FBA0 /* SearchHistoryController.m */,
 			);
 			path = "我的";
 			sourceTree = "<group>";
@@ -496,6 +519,7 @@
 		6F1294461EEA41800099ABE7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6F0C301920BD4D6B00C337ED /* RealmModel */,
 				6FD3F0291FB1A4CA008F5C10 /* 我的 */,
 				6F46F2311FA1A9D000BFEFB7 /* 搜索 */,
 				6FB58EEA1EF0DB16002F5524 /* 作品 */,
@@ -553,6 +577,8 @@
 				6F188FE01F7A37A3009A1159 /* ActivityManager.m */,
 				6F66E76D2085CBDA00E05341 /* Enumerator.h */,
 				6F66E76E2085CBDA00E05341 /* Enumerator.m */,
+				6F929DCF20BFC8A50030CB8B /* DatebaseManager.h */,
+				6F929DD020BFC8A50030CB8B /* DatebaseManager.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -774,6 +800,8 @@
 				6FF6D33620A190C4007A449A /* LightStateView.m */,
 				6FF6D33820A1A3CC007A449A /* BrightnessControlView.h */,
 				6FF6D33920A1A3CC007A449A /* BrightnessControlView.m */,
+				6FBB0CBD20C141F70010FBA0 /* AnimationView.h */,
+				6FBB0CBE20C141F70010FBA0 /* AnimationView.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -789,7 +817,6 @@
 				6F1293EA1EEA3DED0099ABE7 /* Sources */,
 				6F1293EB1EEA3DED0099ABE7 /* Frameworks */,
 				6F1293EC1EEA3DED0099ABE7 /* Resources */,
-				CE623156723BBF60657C91D8 /* [CP] Embed Pods Frameworks */,
 				D75721795C836064361BEDEE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -853,30 +880,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		CE623156723BBF60657C91D8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D75721795C836064361BEDEE /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld-resources.sh",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -889,13 +906,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CartoonWorld-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -932,11 +952,13 @@
 				6F0F16721F5E9599005B0FA2 /* CommentModel.m in Sources */,
 				6F9841291F06405600A960AA /* UIViewController+Swizzing.m in Sources */,
 				6FD142E7207F4FD9000FF9D9 /* ReadMenuBar.m in Sources */,
+				6FBB0CBF20C141F70010FBA0 /* AnimationView.m in Sources */,
 				6F1294FF1EEA41810099ABE7 /* OtherUserCell.m in Sources */,
 				6F1294DB1EEA41800099ABE7 /* ComicModel.m in Sources */,
 				6F91061F1FB05FB200C55B39 /* SearchHotCell.m in Sources */,
 				6F1294E81EEA41810099ABE7 /* StyleManager.m in Sources */,
 				6F1294CE1EEA41800099ABE7 /* MyController.m in Sources */,
+				6FBB0CBC20C12B610010FBA0 /* SearchHistoryController.m in Sources */,
 				6FF6D33720A190C4007A449A /* LightStateView.m in Sources */,
 				6F7696FD1F6FB9100098311F /* OtherWorksCell.m in Sources */,
 				6F1294111EEA416F0099ABE7 /* UIView+Initialization.m in Sources */,
@@ -971,6 +993,7 @@
 				6F9A57061EFCE31800C361BC /* RefreshManager.m in Sources */,
 				6FAFFA881F711B45005B8935 /* CommentCell.m in Sources */,
 				6F1293F61EEA3DED0099ABE7 /* AppDelegate.m in Sources */,
+				6F0C301C20BD4DE900C337ED /* StringObject.m in Sources */,
 				6F98121C1F9895B2007EEC57 /* OtherWorksListController.m in Sources */,
 				6F3FCE2B1FCE9CBE00636553 /* ChangeNickNameController.m in Sources */,
 				6FC3C9361F4E779400B785B2 /* CatalogCell.m in Sources */,
@@ -993,6 +1016,7 @@
 				6F68BA851FE7925B008242F1 /* InputContentCell.m in Sources */,
 				6FB0BCA41F7B84BA0091354E /* UIView+BackBtn.m in Sources */,
 				6F7492E91F5FDAF300B234B7 /* MonthlyTicketCell.m in Sources */,
+				6F929DD120BFC8A50030CB8B /* DatebaseManager.m in Sources */,
 				6FD3F0351FB1B4AB008F5C10 /* SearchHistoryCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

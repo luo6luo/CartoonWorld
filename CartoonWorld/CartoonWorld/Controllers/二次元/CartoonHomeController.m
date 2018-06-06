@@ -73,7 +73,7 @@
       DZROptionUnselectorItemTitleColor: COLOR_TEXT_UNSELECT,
       DZROptionIndicatorColor: [UIColor whiteColor],
       DZROptionItemsCenter: @(YES),
-      DZROptionCanBounceHorizontal: @(YES),
+      DZROptionCanBounceHorizontal: @(NO),
       DZROptionIndicatorNeedToCutTheRoundedCorners: @(YES)
     };
     

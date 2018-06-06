@@ -84,6 +84,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 #pragma mark - Init
@@ -240,8 +241,12 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
     // 设置menuScrollerView
     self.menuScrollView = [[UIScrollView alloc] init];
     self.menuScrollView.alwaysBounceHorizontal = self.canBounceHorizontal;
+    self.menuScrollView.alwaysBounceVertical = NO;
     self.menuScrollView.backgroundColor = self.menuColor;
     [self.view addSubview:self.menuScrollView];
+    if (@available(iOS 11.0, *)) {
+        self.menuScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+    }
     
     // 设置controllerScrollView
     self.controllerScrollView = [[UIScrollView alloc] init];
@@ -265,7 +270,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
     // 禁止滑到顶部
     self.menuScrollView.scrollsToTop = NO;
     self.controllerScrollView.scrollsToTop = NO;
-
+    
     // 设置指示器
     self.indicatorView = [[UIView alloc] init];
     if (self.didIndicatorNeedToCutTheRoundedCorner) {
@@ -382,7 +387,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
     self.controllerScrollView.contentSize = CGSizeMake(self.pageCount * kScreen_Width, kScreen_Height - self.menuHeight);
     
     // 设置offset
-    [self.controllerScrollView setContentOffset:CGPointMake(self.currentPage * kScreen_Width, 0.0) animated:NO]; 
+    [self.controllerScrollView setContentOffset:CGPointMake(self.currentPage * kScreen_Width, 0.0) animated:NO];
     CGFloat menuOffsetX = 0.0;
     menuOffsetX = self.controllerScrollView.contentOffset.x * self.offsetScale;
     [self.menuScrollView setContentOffset:CGPointMake(menuOffsetX, 0.0) animated:NO];
@@ -419,7 +424,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
         [self addChildViewController:childVC];
         [childVC didMoveToParentViewController:self];
         
-//        NSLog(@"%@",[NSString stringWithFormat:@"%ld将要出来了",(long)indexPage]);
+        //        NSLog(@"%@",[NSString stringWithFormat:@"%ld将要出来了",(long)indexPage]);
     }
 }
 
@@ -432,7 +437,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
             [self.delegate pageMenu:self didMoveTheChildController:childVC atIndexPage:indexPage];
         }
         
-//        NSLog(@"%@",[NSString stringWithFormat:@"%ld已经出来了",(long)indexPage]);
+        //        NSLog(@"%@",[NSString stringWithFormat:@"%ld已经出来了",(long)indexPage]);
     }
 }
 
@@ -446,7 +451,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
         [childVC removeFromParentViewController];
         [childVC didMoveToParentViewController:nil];
         
-//        NSLog(@"%@",[NSString stringWithFormat:@"%ld移除",(long)indexPage]);
+        //        NSLog(@"%@",[NSString stringWithFormat:@"%ld移除",(long)indexPage]);
     }
 }
 
@@ -545,7 +550,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
             self.currentPage = nowIndexPage;
             
             [self didMoveContrller:nowIndexPage];
-
+            
             // 将移除的视图移除
             CGFloat leftRemovePage = nowIndexPage - 2;
             if ([self.pageMutaleArray containsObject:@(leftRemovePage)]) {
@@ -589,7 +594,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
             [self.pageMutaleArray removeObject:@(indexPage)];
         }
     }
-
+    
     // 更新最新偏移量
     self.currentControllerScrollOffset = scrollView.contentOffset.x;
     
@@ -600,7 +605,7 @@ NSString * const DZROptionCanBounceHorizontal                 = @"canBounceHoriz
 - (void)scrollViewScrollAnimationFinished:(UIScrollView *)scrollView
 {
     if (![scrollView isEqual:self.controllerScrollView]) { return; }
-
+    
     [self didMoveContrller:self.currentPage];
     
     // 移除除了当前视图之外的所有视图

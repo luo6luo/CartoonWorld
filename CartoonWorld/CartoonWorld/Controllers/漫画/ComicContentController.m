@@ -70,7 +70,7 @@ static NSString *const kDeviceOrientation = @"orientation";
 - (CustomNavigationBar *)navigationBar
 {
     if (!_navigationBar) {
-        _navigationBar = [[CustomNavigationBar alloc] init];
+        _navigationBar = [[CustomNavigationBar alloc] initWithBarType:BarTypeMissingRightBtn];
         _navigationBar.title = self.title;
         _navigationBar.barColor = COLOR_TOOL_BAR;
         
@@ -207,15 +207,12 @@ static NSString *const kDeviceOrientation = @"orientation";
     };
     
     WeakSelf(self);
-    [ActivityManager showLoadingInView:self.view];
     [[NetWorkingManager defualtManager] comicContentSuccess:^(id responseBody) {
         weakself.dataSource = responseBody;
         weakself.menuBar.maxPage = weakself.dataSource.count;
         [weakself.scrollView reloadData];
-        [ActivityManager dismissLoadingInView:weakself.view status:ShowSuccess];
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
-        [ActivityManager dismissLoadingInView:weakself.view status:ShowFailure];
     }];
 }
 

@@ -62,7 +62,7 @@
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle setLineSpacing:lineSpacing];
     
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:content];
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:content?content:@""];
     [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [content length])];
     return attributedString;
 }

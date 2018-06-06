@@ -10,8 +10,7 @@
 
 @interface UserHeaderCell : UITableViewCell
 
-@property (nonatomic, strong) NSString *nickName;     // 昵称
-@property (nonatomic, strong) NSData *headerIconData; // 头像
-@property (nonatomic, strong) NSString *detail;       // 描述
+// 加载数据
+- (void)reloadData;
 
 @end

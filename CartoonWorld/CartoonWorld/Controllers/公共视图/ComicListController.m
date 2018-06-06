@@ -152,6 +152,7 @@ static NSString *kComicListCell = @"comicListCell";
 {
     ComicController *comicController = [[ComicController alloc] init];
     comicController.comicId = [self.dataArr[indexPath.row] comicId];
+    comicController.model = self.dataArr[indexPath.row];
     comicController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:comicController animated:YES];
 }

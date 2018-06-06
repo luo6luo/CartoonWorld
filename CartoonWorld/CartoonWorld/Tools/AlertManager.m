@@ -34,6 +34,23 @@
     [vc presentViewController:aler animated:YES completion:nil];
 }
 
+// 两个按钮的提示框
++ (void)alerAddToController:(UIViewController *)vc message:(NSString *)message sure:(void(^)())sureBlock cancel:(void(^)())cancelBlock
+{
+    UIAlertController *aler = [UIAlertController alertControllerWithTitle:@"温馨提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+//    if (!sureBlock) {
+//        sureBlock = nil;
+//    }
+//    if (!cancelBlock) {
+//        cancelBlock = nil;
+//    }
+    UIAlertAction *sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:sureBlock];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:cancelBlock];
+    [aler addAction:sureAction];
+    [aler addAction:cancelAction];
+    [vc presentViewController:aler animated:YES completion:nil];
+}
+
 # pragma mark - find current view controller
 
 + (UIView *)currentView

@@ -27,11 +27,16 @@
 #define TABBAR_HEIGHT      (iPhoneX ? 83:49)     // tabBar高度
 #define STATUSBAR_HEIGHT   (iPhoneX ? 44:20)     // 状态栏高度
 #define NAVIGATIONBAR_HEIGHT_V (iPhoneX ? 88:64) // 竖屏navigationBar高度(包含了statusBar)
-#define NAVIGATIONBAR_HEIGHT_H 32 // 横屏navigationBar高度(包含了statusBar)
+#define NAVIGATIONBAR_HEIGHT_H 49 // 横屏navigationBar高度(包含了statusBar)
 #define CORNERRADIUS  5   // 切圆角大小
 #define LABEL_HEIGHT  20  // label高
 #define ICON_HEIGHT   30  // 图标高宽
 #define LINE_HEIGHT   1   // 分割线高度
+
+// 自定义navigationBar
+#define BTN_LEFT_RIGHT    10.0 // 按钮的左右边距
+#define BTN_WIDHT_HEIGHT  30.0 // 按钮的宽高
+#define TITLE_HEIGHT      30.0 // 标题的高度
 
 
 // 二次元

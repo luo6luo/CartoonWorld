@@ -18,7 +18,7 @@
 
 /**配置菜单栏的选项*/
 - (NSDictionary *)setupPageMenuWithOptions;
-    
+
 @end
 
 @protocol DZRPageMenuDelegate <NSObject>
@@ -52,7 +52,7 @@
  1. 可以采用继承的方式使用
  2. 可以使用添加view的方式使用
  
- 注意: 
+ 注意:
  1. 继承的使用方式不限初始化方法
  2. 添加view的方式，只能使用含有代理的初始化
  =============================================================
@@ -65,7 +65,7 @@
 /**
  初始化
  注意：采用添加view的方式时，必须使用此初始化方式
-
+ 
  @param frame view的位子
  @param controller 代理控制器
  @return 初始化结果

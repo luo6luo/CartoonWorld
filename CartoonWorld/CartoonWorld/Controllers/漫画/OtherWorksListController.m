@@ -7,9 +7,12 @@
 //
 
 #import "OtherWorksListController.h"
+
 #import "ComicController.h"
 #import "RecommendCell.h"
+
 #import "OtherWorksModel.h"
+#import "ComicModel.h"
 
 static NSString *kRecommendCell = @"recommendCell";
 @interface OtherWorksListController ()<UICollectionViewDelegateFlowLayout>
@@ -22,7 +25,7 @@ static NSString *kRecommendCell = @"recommendCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"其他作品集";
+
     self.view.backgroundColor = COLOR_BACK_WHITE;
     
     self.collectionView.backgroundColor = COLOR_BACK_WHITE;
@@ -30,6 +33,11 @@ static NSString *kRecommendCell = @"recommendCell";
     
     // 注册cell
     [self.collectionView registerClass:[RecommendCell class] forCellWithReuseIdentifier:kRecommendCell];
+    
+    // 判断是否有内容
+    if (self.otherWorks.count <= 0) {
+        [AlertManager showInfo:[NSString stringWithFormat:@"没有%@哟",self.title]];
+    }
 }
 
 #pragma mark - Collection view data source
@@ -56,9 +64,22 @@ static NSString *kRecommendCell = @"recommendCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    OtherWorksModel *model = self.otherWorks[indexPath.row];
+    id model = self.otherWorks[indexPath.row];
+    
+    // 转换模拟数据
+    ComicModel *comicModel = [ComicModel new];
+    if ([model isKindOfClass:[OtherWorksModel class]]) {
+        comicModel.comicId = [model comicId];
+        comicModel.cover = [model coverUrl];
+        comicModel.name = [model name];
+        comicModel.cornerInfo = [NSString stringWithFormat:@"%ld",[model passChapterNum]];
+    } else if ([model isKindOfClass:[ComicModel class]]) {
+        comicModel = model;
+    }
+    
     ComicController *comicController = [[ComicController alloc] init];
-    comicController.comicId = model.comicId;
+    comicController.comicId = [model comicId];
+    comicController.model = comicModel;
     comicController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:comicController animated:YES];
 }

@@ -6,23 +6,31 @@
 //  Copyright © 2017年 顿顿. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Realm/Realm.h>
+@class ComicModel;
+@class StringObject;
 
-@interface UserModel : NSObject<NSCoding>
+// 添加了协议才能使用RLMArray功能
+RLM_ARRAY_TYPE(ComicModel);
+RLM_ARRAY_TYPE(StringObject);
 
+// https://www.jianshu.com/p/50e0efb66bdf
+@interface UserModel : RLMObject<NSCopying>
+
+/**用户id*/
+@property NSInteger userID;
 /**昵称*/
-@property (nonatomic, strong) NSString *nickName;
+@property NSString *nickName;
 /**描述*/
-@property (nonatomic, strong) NSString *descriptionStr;
+@property NSString *descriptionStr;
 /**头像*/
-@property (nonatomic, strong) NSData *headerIcon;
+@property NSData *headerIcon;
+/**收藏夹（存漫画model）*/
+@property RLMArray<ComicModel *><ComicModel> *favorites;
 /**搜索历史(存字符串)*/
-@property (nonatomic, strong) NSMutableArray *searchHistory;
+@property RLMArray<StringObject *><StringObject> *searchHistories;
 
 /**获取用户对象*/
 + (UserModel *)defaultUser;
-
-/**归档*/
-- (void)archive;
 
 @end

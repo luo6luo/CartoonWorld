@@ -46,21 +46,16 @@
     
     if (self.mainViewIsUp) {
         // 目录在上方
-        
-        if (direciton == ScrollDown && scrollView.contentOffset.y <= 0) {
+        if (direciton == ScrollDown && scrollView.contentOffset.y < 0) {
             // 下拉，整体视图下滑动
             if (self.scrollBlock) {
                 scrollView.scrollEnabled = NO;
                 self.scrollBlock(ScrollDown);
             }
-        } else if (direciton == ScrollUp && scrollView.contentSize.height <= self.view.height) {
-            // 上拉，整体不动
-            scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
         }
     } else if (!self.mainViewIsUp) {
         // 目录在下方
-        
-        if (direciton == ScrollUp) {
+        if (direciton == ScrollUp && scrollView.contentOffset.y > 0) {
             // 上拉，整体视图上滑动
             if (self.scrollBlock) {
                 scrollView.scrollEnabled = NO;

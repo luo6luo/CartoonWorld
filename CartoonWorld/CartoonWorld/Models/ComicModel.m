@@ -10,9 +10,20 @@
 
 @implementation ComicModel
 
-+ (NSDictionary *)mj_replacedKeyFromPropertyName
+- (id)copyWithZone:(NSZone *)zone
 {
-    return @{@"descriptionStr": @"description"};
+    ComicModel *comicModel = [[[self class] allocWithZone:zone] init];
+    comicModel.comicId = self.comicId;
+    comicModel.cover = self.cover;
+    comicModel.name = self.name;
+    comicModel.cornerInfo = self.cornerInfo;
+    return comicModel;
+}
+
+// 设置忽略属性
++ (NSArray<NSString *> *)ignoredProperties
+{
+    return @[@"descriptionStr", @"is_vip", @"tags", @"author_name", @"newestChapter", @"conTag", @"author"];
 }
 
 @end

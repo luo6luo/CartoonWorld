@@ -187,6 +187,7 @@ static NSString *kResultHeader = @"resultHeader";
     ComicModel *model = self.resultArr[indexPath.row];
     ComicController *comicController = [[ComicController alloc] init];
     comicController.comicId = model.comicId;
+    comicController.model = model;
     comicController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:comicController animated:YES];
 }

@@ -14,8 +14,13 @@
 #import "ComicHeadView.h"
 #import "CustomNavigationBar.h"
 
+#import "ComicModel.h"
+#import "UserModel.h"
 #import "ComicInfoModel.h"
 #import "ComicDetailModel.h"
+
+#import "AnimationView.h"
+#import "DatebaseManager.h"
 
 #import <DZRPageMenuController.h>
 
@@ -33,6 +38,7 @@
 @property (nonatomic, assign) CGFloat lastOffsetY;   // 上次y轴偏移量
 @property (nonatomic, assign) BOOL isUp;             // 菜单栏是否顶头
 @property (nonatomic, assign) BOOL isScrolling;      // 判断是否正在滚动
+@property (nonatomic, assign) BOOL isFavorite;       // 是否被收藏
 
 // 数据
 @property (nonatomic, strong) ComicDetailModel *detailModel;  // 漫画详情
@@ -163,12 +169,48 @@
 - (CustomNavigationBar *)navigationBar
 {
     if (!_navigationBar) {
-        _navigationBar = [[CustomNavigationBar alloc] init];
+        BarType barType = self.model ? BarTypeMissingNone : BarTypeMissingRightBtn;
+        _navigationBar = [[CustomNavigationBar alloc] initWithBarType:barType];
+        ComicModel *model = [[DatebaseManager defaultDatebaseManager] checkObject:self.model Key:@"comicId" value:[NSString stringWithFormat:@"%ld",self.model.comicId]];
+        if (model) {
+            // 已经收藏
+            _navigationBar.rightImageName = @"favorite";
+            self.isFavorite = YES;
+        } else {
+            _navigationBar.rightImageName = @"unfavorite";
+            self.isFavorite = NO;
+        }
         
         // 点击左按钮
         WeakSelf(self);
         _navigationBar.leftBtnClickedBlock = ^{
             [weakself.navigationController popViewControllerAnimated:YES];
+        };
+        
+        // 点击右按钮
+        _navigationBar.rightBtnClickedBlock = ^{
+            if (weakself.isFavorite) {
+                // 从数据库删除
+                [[DatebaseManager defaultDatebaseManager] deleteObject:weakself.model key:@"comicId" value:[NSString stringWithFormat:@"%ld",weakself.model.comicId] completed:^{
+                    weakself.navigationBar.rightImageName = @"unfavorite";
+                    weakself.isFavorite = NO;
+                }];
+            } else {
+                CGFloat btnY = STATUSBAR_HEIGHT + (NAVIGATIONBAR_HEIGHT_V - STATUSBAR_HEIGHT)/2 - BTN_WIDHT_HEIGHT/2;
+                CGRect endFrame = CGRectMake(SCREEN_WIDTH/2.0f - 30.f, weakself.view.height/3.0f, 60.f, 60.f);
+                CGRect startFrame = CGRectMake(weakself.view.maxX - BTN_WIDHT_HEIGHT - BTN_LEFT_RIGHT, weakself.view.minY + btnY , BTN_WIDHT_HEIGHT, BTN_WIDHT_HEIGHT);
+                [AnimationView animationWithImageName:@"big_favorite" atView:weakself.view startingFrame:startFrame endFrame:endFrame];
+                
+                // 写进数据库
+                UserModel *user = [UserModel defaultUser];
+                [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+                    // 存入数据库的是副本，避免删除后再访问
+                    [user.favorites addObject:[weakself.model copy]];
+                } completed:^{
+                    weakself.navigationBar.rightImageName = @"favorite";
+                    weakself.isFavorite = YES;
+                }];
+            }
         };
     }
     return _navigationBar;
@@ -318,6 +360,7 @@
     self.mainScrollView.contentSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HEIGHT + HEIGHT_HEADER_COMICDETAIL);
     self.mainScrollView.scrollEnabled = NO;
     self.mainScrollView.bounces = NO;
+    self.mainScrollView.scrollsToTop = NO;
     self.mainScrollView.delegate = self;
     [self.view addSubview:self.mainScrollView];
     
@@ -363,7 +406,7 @@
       DZROptionUnselectorItemTitleColor: COLOR_TEXT_UNSELECT,
       DZROptionIndicatorColor: [UIColor whiteColor],
       DZROptionItemsCenter: @(YES),
-      DZROptionCanBounceHorizontal: @(YES),
+      DZROptionCanBounceHorizontal: @(NO),
       DZROptionIndicatorNeedToCutTheRoundedCorners: @(YES)
     };
     

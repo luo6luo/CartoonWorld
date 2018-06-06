@@ -178,7 +178,8 @@ static NSString *const kTitleHeader = @"titleHeader";
 
     if (section == 0) {
         return 0;
-    } else if (section == 1) {
+    } else if (typeModel.comicType == 6) {
+        // 强力推荐作品
         return 6;
     } else if (typeModel.comicType == 5 || typeModel.comicType == 9) {
         // 网站
@@ -351,6 +352,9 @@ referenceSizeForHeaderInSection:(NSInteger)section
             ComicModel * comicModel = typeModel.comics[indexPath.row];
             ComicController * comicController = [[ComicController alloc] init];
             comicController.comicId = comicModel.comicId;
+            if (!comicModel.invalidated) {
+                comicController.model = comicModel;
+            }
             comicController.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:comicController animated:YES];
         }

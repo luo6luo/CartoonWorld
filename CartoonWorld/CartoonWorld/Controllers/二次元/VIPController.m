@@ -165,6 +165,7 @@ referenceSizeForHeaderInSection:(NSInteger)section
     ComicModel * comicModel = typeModel.comics[indexPath.row];
     ComicController * comicController = [[ComicController alloc] init];
     comicController.comicId = comicModel.comicId;
+    comicController.model = comicModel;
     comicController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:comicController animated:YES];
 }

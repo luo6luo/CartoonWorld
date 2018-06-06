@@ -42,4 +42,16 @@
     self.titleLabel.text = text;
 }
 
+- (void)setType:(ColorType)type
+{
+    _type = type;
+    if (type == ColorTypePink) {
+        self.contentView.backgroundColor = COLOR_PINK;
+        self.titleLabel.textColor = COLOR_WHITE;
+    } else if (type == ColorTypeLightBlue) {
+        self.contentView.backgroundColor = COLOR_BACK_WHITE;
+        self.titleLabel.textColor = COLOR_TEXT_LIGHTBLUE;
+    }
+}
+
 @end

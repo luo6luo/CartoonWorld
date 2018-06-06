@@ -92,7 +92,7 @@
     manager.imageView.animationRepeatCount = 0;
     [manager.imageView startAnimating];
     
-    manager.stateLabel.text = @"正在加载。。。";
+    manager.stateLabel.text = @"正在加载...";
 }
 
 #pragma mark - dismiss

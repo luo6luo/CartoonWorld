@@ -2,16 +2,16 @@ platform:ios, '8.0'
 
 target 'CartoonWorld' do
 
-pod 'AFNetworking'
-pod 'MJRefresh'
-pod 'SDWebImage'
-pod 'Masonry'
-pod 'MJExtension'
-pod 'DZRPageMenuController'
-pod 'MBProgressHUD'
-pod 'SDCycleScrollView'
-pod 'JRSwizzle'
-pod 'QBImagePickerController'
+pod 'AFNetworking', '~> 3.1.0'
+pod 'MJRefresh', '~> 3.1.12'
+pod 'SDWebImage', '~> 4.0.0'
+pod 'Masonry', '~> 1.0.2'
+pod 'MJExtension', '~> 3.0.13'
+pod 'DZRPageMenuController', '~> 1.1.3'
+pod 'MBProgressHUD', '~> 1.0.0'
+pod 'SDCycleScrollView', '~> 1.66'
+pod 'JRSwizzle', '~> 1.0'
+pod 'QBImagePickerController', '~> 3.4.0'
 pod 'Realm', '~>3.0.2'
 
 end

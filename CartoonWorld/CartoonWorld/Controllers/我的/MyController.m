@@ -8,9 +8,15 @@
 
 #import "MyController.h"
 #import "UserInfoController.h"
+#import "OtherWorksListController.h"
+#import "SearchHistoryController.h"
+
 #import "UserHeaderCell.h"
 #import "OtherUserCell.h"
+
+#import "StringObject.h"
 #import "UserModel.h"
+#import "DatebaseManager.h"
 
 static NSString *kUserHeaderCell = @"userHeaderCell";
 static NSString *kUserOtherCell = @"userOtherCell";
@@ -52,7 +58,7 @@ static NSString *kUserOtherCell = @"userOtherCell";
     self.dataArr = @[
       @[@"search_history", @"历史记录"],
       @[@"my_collection", @"我的收藏"],
-      @[@"setting", @"设置"]
+      @[@"setting", @"清除缓存"]
     ];
 }
 
@@ -79,6 +85,7 @@ static NSString *kUserOtherCell = @"userOtherCell";
         if (!headerCell) {
             headerCell = [[UserHeaderCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUserHeaderCell];
         }
+        [headerCell reloadData];
         return headerCell;
     } else {
         OtherUserCell * otherCell = [tableView dequeueReusableCellWithIdentifier:kUserOtherCell];
@@ -119,6 +126,16 @@ static NSString *kUserOtherCell = @"userOtherCell";
     }
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [UIView new];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [UIView new];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -128,10 +145,26 @@ static NSString *kUserOtherCell = @"userOtherCell";
         
         WeakSelf(self);
         userInfoController.handleStatus = ^(BOOL isHandel) {
-            
+            [weakself.myTableView reloadData];
         };
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
+        // 历史记录
+        SearchHistoryController *historyController = [[SearchHistoryController alloc] init];
+        historyController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:historyController animated:YES];
+    } else if (indexPath.section == 1 && indexPath.row == 1) {
+        // 我的收藏
+        OtherWorksListController *otherController = [[OtherWorksListController alloc] initWithCollectionViewLayout:[UICollectionViewFlowLayout new]];
+        otherController.otherWorks = (NSArray *)[UserModel defaultUser].favorites;
+        otherController.title = @"我的收藏";
+        otherController.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:otherController animated:YES];
     } else {
-        
+        // 清除缓存
+        [AlertManager alerAddToController:self message:@"您确定要清除所有缓存么？" sure:^{
+            [[SDImageCache sharedImageCache] clearMemory];
+            [[DatebaseManager defaultDatebaseManager] deleteAllObjectCompleted:nil];
+        } cancel:nil];
     }
 }
 

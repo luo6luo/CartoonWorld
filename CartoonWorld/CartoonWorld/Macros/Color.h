@@ -26,11 +26,12 @@
 #define COLOR_BACK_COMIC_READ RGB(247, 244, 228)  // 漫画阅读界面
 
 // 文字
-#define COLOR_TEXT_WHITE       [UIColor whiteColor]                   // 白色
 #define COLOR_TEXT_UNSELECT    [UIColor colorWithWhite:0.9 alpha:1.0] // 未选中灰白色
-#define COLOR_TEXT_GRAY        RGB(102, 102, 102)                     // 灰色文字
-#define COLOR_TEXT_BLACK       RGB(51, 51, 51)                        // 黑色文字
-#define COLOR_TEXT_ORANGE      RGB(217, 89, 31)                       // 橘色文字
+#define COLOR_TEXT_WHITE       [UIColor whiteColor] // 白色
+#define COLOR_TEXT_GRAY        RGB(102, 102, 102)   // 灰色文字
+#define COLOR_TEXT_BLACK       RGB(51, 51, 51)      // 黑色文字
+#define COLOR_TEXT_ORANGE      RGB(217, 89, 31)     // 橘色文字
+#define COLOR_TEXT_LIGHTBLUE   RGB(30, 144, 255)   // 橘色文字
 
 // 按钮
 #define DEFUALT_BTN_COLOR  [UIColor colorWithWhite:0.9 alpha:1]  // 按钮默认字体颜色（暗灰白）

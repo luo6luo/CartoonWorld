@@ -17,6 +17,7 @@
 #import "MonthlyTicketCell.h"
 #import "GuessLikeCell.h"
 
+#import "ComicModel.h"
 #import "ComicInfoModel.h"
 #import "ComicDetailModel.h"
 #import "GuessLikeModel.h"
@@ -55,13 +56,8 @@ static NSString *kGuessLickCell = @"guessLikeCell";
     self.tableView = [[UITableView alloc] initWithFrame:tableViewFrame style:UITableViewStylePlain];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = COLOR_BACK_WHITE;
-    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-    self.tableView.estimatedRowHeight = 0;
-    self.tableView.estimatedSectionFooterHeight =0;
-    self.tableView.estimatedSectionHeaderHeight = 0;
     [self.view addSubview:self.tableView];
     
     // 注册cell
@@ -107,9 +103,17 @@ static NSString *kGuessLickCell = @"guessLikeCell";
 
 - (void)imageViewClickedWithModel:(GuessLikeModel *)model
 {
+    // 转换模拟数据
+    ComicModel *comicModel = [ComicModel new];
+    comicModel.comicId = model.comic_id;
+    comicModel.cover = model.cover;
+    comicModel.name = model.name;
+    comicModel.cornerInfo = @"5";
+    
     // 漫画
     ComicController * comicController = [[ComicController alloc] init];
     comicController.comicId = model.comic_id;
+    comicController.model = comicModel;
     comicController.hidesBottomBarWhenPushed = YES;
     
     [self.rootController.navigationController pushViewController:comicController animated:YES];
@@ -206,6 +210,7 @@ static NSString *kGuessLickCell = @"guessLikeCell";
         // 跳转其他作品集
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         OtherWorksListController *otherWorksListController = [[OtherWorksListController alloc] initWithCollectionViewLayout:layout];
+        otherWorksListController.title = @"其他作品集";
         otherWorksListController.hidesBottomBarWhenPushed = YES;
         otherWorksListController.otherWorks = self.otherWorkModels;
         [self.rootController.navigationController pushViewController:otherWorksListController animated:YES];

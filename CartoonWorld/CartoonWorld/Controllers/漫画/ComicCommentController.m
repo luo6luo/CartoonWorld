@@ -40,10 +40,6 @@ static NSString *kCommentCell = @"commentCell";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = COLOR_BACK_WHITE;
     
-    self.tableView.estimatedRowHeight = 0.0;
-    self.tableView.estimatedSectionFooterHeight = 0.0;
-    self.tableView.estimatedSectionHeaderHeight = 0.0;
-    
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
         
