@@ -9,9 +9,12 @@
 #import "AppDelegate.h"
 #import "StyleManager.h"
 #import "DatebaseManager.h"
+#import "CustomLaunchView.h"
 #import "DZRRootTabBarController.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, strong) CustomLaunchView *launchView;
 
 @end
 
@@ -24,11 +27,30 @@
     
     DZRRootTabBarController * tab = [[DZRRootTabBarController alloc] init];
     self.window.rootViewController = tab;
+    [self.window makeKeyAndVisible];
+    
+    // 设置启动页
+    self.launchView = [[CustomLaunchView alloc] initWithFrame:self.window.bounds];
+    [self.launchView launchView];
+    [self.window addSubview:self.launchView];
+    [self.window bringSubviewToFront:self.launchView];
+    
+    WeakSelf(self);
+    self.launchView.startToUseAppBlock = ^{
+        [UIView animateWithDuration:0.3 animations:^{
+            weakself.launchView.alpha = 0.0;
+            if ([GET_USER_DEFAULTS(@"isLaunched") boolValue]) {
+                weakself.launchView.layer.transform = CATransform3DScale(CATransform3DIdentity, 2.0f, 2.0f, 1.0f);
+            }
+        } completion:^(BOOL finished) {
+            [weakself.launchView removeFromSuperview];
+            weakself.launchView = nil;
+        }];
+    };
     
     [StyleManager setStyle];
     [DatebaseManager migrationVersion];
     
-    [self.window makeKeyAndVisible];
     return YES;
 }
 

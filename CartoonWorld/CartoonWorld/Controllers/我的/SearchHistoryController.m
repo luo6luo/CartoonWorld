@@ -16,6 +16,8 @@
 #import "StringObject.h"
 #import "DatebaseManager.h"
 
+#import "UIImageView+FindingView.h"
+
 static NSString *const kHistoryHeader = @"historyHeader";
 static NSString *const kHistoryNilHeader = @"nilHeader";
 static NSString *const kHistoryCell = @"historyCell";
@@ -62,26 +64,9 @@ static NSString *const kHistoryCell = @"historyCell";
 - (UIImageView *)line
 {
     if (!_line) {
-        _line = [self findingSeparationLineWithView:self.navigationController.navigationBar];
+        _line = [UIImageView findingSeparationLineWithView:self.navigationController.navigationBar];
     }
     return _line;
-}
-
-// 寻找导航条下的那个线
-- (UIImageView *)findingSeparationLineWithView:(UIView *)view
-{
-    if ([view isKindOfClass:[UIImageView class]] && view.height <= 1.0) {
-        return (UIImageView *)view;
-    }
-    
-    for (UIView *subview in view.subviews) {
-        UIImageView *imageView = [self findingSeparationLineWithView:subview];
-        if (imageView) {
-            return imageView;
-        }
-    }
-    
-    return nil;
 }
 
 // 设置数据

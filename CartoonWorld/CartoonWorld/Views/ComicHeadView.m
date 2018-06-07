@@ -137,7 +137,7 @@
     [self.coverImage sd_setImageWithURL:[NSURL URLWithString:comicInfoModel.cover]];
     self.comicName.text = comicInfoModel.name;
     self.author.text = comicInfoModel.author[@"name"];
-    self.shortDescription.text = comicInfoModel.short_description;
+    self.shortDescription.text = comicInfoModel.short_descriptionStr;
     self.tags.text = [comicInfoModel.theme_ids componentsJoinedByString:@"  "];
 }
 

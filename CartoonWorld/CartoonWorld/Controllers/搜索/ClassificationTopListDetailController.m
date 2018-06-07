@@ -10,12 +10,14 @@
 #import "ComicListController.h"
 
 #import "ClassificationTopLIstTabModel.h"
+#import "UIImageView+FindingView.h"
 
 @interface ClassificationTopListDetailController ()
 
 @property (nonatomic, strong) DZRPageMenuController *detailPageMenu;
 @property (nonatomic, strong) NSMutableArray *childController;
 @property (nonatomic, strong) NSMutableDictionary *childLoadedDataDic;
+@property (nonatomic, strong) UIImageView *line; // 导航栏下的分割线
 
 @end
 
@@ -30,6 +32,32 @@
     self.childLoadedDataDic = [NSMutableDictionary dictionary];
     
     [self setupMenu];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    // 隐藏导航栏下面的线条
+    self.line.hidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    // 显示导航栏下面的线条
+    self.line.hidden = NO;
+}
+
+# pragma mark - Getter
+
+- (UIImageView *)line
+{
+    if (!_line) {
+        _line = [UIImageView findingSeparationLineWithView:self.navigationController.navigationBar];
+    }
+    return _line;
 }
 
 # pragma mark - Set up

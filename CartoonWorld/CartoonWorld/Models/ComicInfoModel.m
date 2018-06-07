@@ -10,9 +10,4 @@
 
 @implementation ComicInfoModel
 
-+ (NSDictionary *)mj_replacedKeyFromPropertyName
-{
-    return @{@"descriptionStr": @"description"};
-}
-
 @end

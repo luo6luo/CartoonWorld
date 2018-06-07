@@ -38,7 +38,6 @@
 		6F1295001EEA41810099ABE7 /* RecommendCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1294B51EEA41800099ABE7 /* RecommendCell.m */; };
 		6F1295051EEA41810099ABE7 /* TitleViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1294BF1EEA41800099ABE7 /* TitleViewHeader.m */; };
 		6F1295061EEA41810099ABE7 /* UserHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1294C11EEA41800099ABE7 /* UserHeaderCell.m */; };
-		6F1295091EEA41980099ABE7 /* c497b618b6cbada07d4e1ff977aa40a3副本.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6F1295081EEA41980099ABE7 /* c497b618b6cbada07d4e1ff977aa40a3副本.jpeg */; };
 		6F1485CF1FA1AD1000F993DF /* SearchBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1485CE1FA1AD1000F993DF /* SearchBarView.m */; };
 		6F1485D41FA1D2C100F993DF /* ClassifitionSearchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1485D21FA1D2C100F993DF /* ClassifitionSearchCell.m */; };
 		6F16FA211F5D3CFC00644C79 /* ComicDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F16FA201F5D3CFC00644C79 /* ComicDetailModel.m */; };
@@ -69,6 +68,13 @@
 		6F81F1D31F0F678C00AF0D7D /* ComicCatalogController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F81F1D21F0F678C00AF0D7D /* ComicCatalogController.m */; };
 		6F81F1D61F0F67C000AF0D7D /* ComicCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F81F1D51F0F67C000AF0D7D /* ComicCommentController.m */; };
 		6F8845A61FC3F15600A911AA /* UserRelatedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F8845A51FC3F15600A911AA /* UserRelatedCell.m */; };
+		6F89DB4520C8CF5700306BEB /* UIImageView+FindingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F89DB4420C8CF5700306BEB /* UIImageView+FindingView.m */; };
+		6F89DB4A20C8D98800306BEB /* CustomLaunchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F89DB4920C8D98800306BEB /* CustomLaunchView.m */; };
+		6F89DB5020C8DA9000306BEB /* launchIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F89DB4F20C8DA9000306BEB /* launchIcon.png */; };
+		6F89DB5A20C9098F00306BEB /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F89DB5720C9098F00306BEB /* 1.png */; };
+		6F89DB5B20C9098F00306BEB /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F89DB5820C9098F00306BEB /* 2.png */; };
+		6F89DB5C20C9098F00306BEB /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F89DB5920C9098F00306BEB /* 3.png */; };
+		6F89DB5E20C9104600306BEB /* launchedImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F89DB5D20C9104600306BEB /* launchedImage.png */; };
 		6F9106191FB0410A00C55B39 /* SearchHotController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F9106181FB0410A00C55B39 /* SearchHotController.m */; };
 		6F91061C1FB05D3100C55B39 /* SearchHotModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F91061B1FB05D3100C55B39 /* SearchHotModel.m */; };
 		6F91061F1FB05FB200C55B39 /* SearchHotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F91061E1FB05FB200C55B39 /* SearchHotCell.m */; };
@@ -177,7 +183,6 @@
 		6F1294BF1EEA41800099ABE7 /* TitleViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TitleViewHeader.m; sourceTree = "<group>"; };
 		6F1294C01EEA41800099ABE7 /* UserHeaderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHeaderCell.h; sourceTree = "<group>"; };
 		6F1294C11EEA41800099ABE7 /* UserHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserHeaderCell.m; sourceTree = "<group>"; };
-		6F1295081EEA41980099ABE7 /* c497b618b6cbada07d4e1ff977aa40a3副本.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "c497b618b6cbada07d4e1ff977aa40a3副本.jpeg"; sourceTree = "<group>"; };
 		6F12950A1EEA44690099ABE7 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		6F1485CD1FA1AD1000F993DF /* SearchBarView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchBarView.h; sourceTree = "<group>"; };
 		6F1485CE1FA1AD1000F993DF /* SearchBarView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchBarView.m; sourceTree = "<group>"; };
@@ -237,6 +242,15 @@
 		6F81F1D51F0F67C000AF0D7D /* ComicCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComicCommentController.m; sourceTree = "<group>"; };
 		6F8845A41FC3F15600A911AA /* UserRelatedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserRelatedCell.h; sourceTree = "<group>"; };
 		6F8845A51FC3F15600A911AA /* UserRelatedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserRelatedCell.m; sourceTree = "<group>"; };
+		6F89DB4320C8CF5700306BEB /* UIImageView+FindingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImageView+FindingView.h"; sourceTree = "<group>"; };
+		6F89DB4420C8CF5700306BEB /* UIImageView+FindingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+FindingView.m"; sourceTree = "<group>"; };
+		6F89DB4820C8D98800306BEB /* CustomLaunchView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomLaunchView.h; sourceTree = "<group>"; };
+		6F89DB4920C8D98800306BEB /* CustomLaunchView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomLaunchView.m; sourceTree = "<group>"; };
+		6F89DB4F20C8DA9000306BEB /* launchIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchIcon.png; sourceTree = "<group>"; };
+		6F89DB5720C9098F00306BEB /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		6F89DB5820C9098F00306BEB /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
+		6F89DB5920C9098F00306BEB /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		6F89DB5D20C9104600306BEB /* launchedImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchedImage.png; sourceTree = "<group>"; };
 		6F9106171FB0410A00C55B39 /* SearchHotController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHotController.h; sourceTree = "<group>"; };
 		6F9106181FB0410A00C55B39 /* SearchHotController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHotController.m; sourceTree = "<group>"; };
 		6F91061A1FB05D3100C55B39 /* SearchHotModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHotModel.h; sourceTree = "<group>"; };
@@ -411,6 +425,8 @@
 		6F1294081EEA416F0099ABE7 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				6F89DB4320C8CF5700306BEB /* UIImageView+FindingView.h */,
+				6F89DB4420C8CF5700306BEB /* UIImageView+FindingView.m */,
 				6F1294091EEA416F0099ABE7 /* UIButton+Initialization.h */,
 				6F12940A1EEA416F0099ABE7 /* UIButton+Initialization.m */,
 				6F12940B1EEA416F0099ABE7 /* UILabel+Initialization.h */,
@@ -597,7 +613,11 @@
 		6F1295071EEA41860099ABE7 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				6F1295081EEA41980099ABE7 /* c497b618b6cbada07d4e1ff977aa40a3副本.jpeg */,
+				6F89DB5D20C9104600306BEB /* launchedImage.png */,
+				6F89DB4F20C8DA9000306BEB /* launchIcon.png */,
+				6F89DB5720C9098F00306BEB /* 1.png */,
+				6F89DB5820C9098F00306BEB /* 2.png */,
+				6F89DB5920C9098F00306BEB /* 3.png */,
 			);
 			name = Resource;
 			sourceTree = "<group>";
@@ -687,6 +707,8 @@
 		6FB217D420B69DF200986124 /* 启动页 */ = {
 			isa = PBXGroup;
 			children = (
+				6F89DB4820C8D98800306BEB /* CustomLaunchView.h */,
+				6F89DB4920C8D98800306BEB /* CustomLaunchView.m */,
 			);
 			path = "启动页";
 			sourceTree = "<group>";
@@ -868,11 +890,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F68BA861FE7925B008242F1 /* InputContentCell.xib in Resources */,
+				6F89DB5A20C9098F00306BEB /* 1.png in Resources */,
 				6FC3C9371F4E779400B785B2 /* CatalogCell.xib in Resources */,
 				6F1294011EEA3DED0099ABE7 /* LaunchScreen.storyboard in Resources */,
+				6F89DB5E20C9104600306BEB /* launchedImage.png in Resources */,
+				6F89DB5020C8DA9000306BEB /* launchIcon.png in Resources */,
+				6F89DB5C20C9098F00306BEB /* 3.png in Resources */,
 				6F1293FE1EEA3DED0099ABE7 /* Assets.xcassets in Resources */,
+				6F89DB5B20C9098F00306BEB /* 2.png in Resources */,
 				6FA1753C1F6BAEA700C99295 /* GuessLikeCell.xib in Resources */,
-				6F1295091EEA41980099ABE7 /* c497b618b6cbada07d4e1ff977aa40a3副本.jpeg in Resources */,
 				6F7696FF1F6FB93B0098311F /* OtherWorksCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -932,6 +958,7 @@
 				6F81F1D31F0F678C00AF0D7D /* ComicCatalogController.m in Sources */,
 				6F762A511F95CE9300D1C85F /* ComicBaseScrollView.m in Sources */,
 				6F1294CB1EEA41800099ABE7 /* DZRRootTabBarController.m in Sources */,
+				6F89DB4A20C8D98800306BEB /* CustomLaunchView.m in Sources */,
 				6FD142E4207F4FA4000FF9D9 /* ReadScrollView.m in Sources */,
 				6F1295061EEA41810099ABE7 /* UserHeaderCell.m in Sources */,
 				6F7492EE1F5FE5BE00B234B7 /* GuessLikeCell.m in Sources */,
@@ -990,6 +1017,7 @@
 				6F9A570C1EFD056900C361BC /* SubscriptionController.m in Sources */,
 				6F1294C81EEA41800099ABE7 /* RecommendController.m in Sources */,
 				6FD5343A1F135A2A00E7218B /* ComicInfoModel.m in Sources */,
+				6F89DB4520C8CF5700306BEB /* UIImageView+FindingView.m in Sources */,
 				6F9A57061EFCE31800C361BC /* RefreshManager.m in Sources */,
 				6FAFFA881F711B45005B8935 /* CommentCell.m in Sources */,
 				6F1293F61EEA3DED0099ABE7 /* AppDelegate.m in Sources */,
@@ -1130,7 +1158,6 @@
 			baseConfigurationReference = 427F1AAA9BECC9C88809ADFF /* Pods-CartoonWorld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -1151,7 +1178,6 @@
 			baseConfigurationReference = 334C7C871CA6F29E23A15956 /* Pods-CartoonWorld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;

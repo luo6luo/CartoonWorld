@@ -15,7 +15,7 @@
 @property (nonatomic, assign) NSInteger thread_id;         // 线程id（评论需要）
 @property (nonatomic, strong) NSArray *theme_ids;          // 标签
 @property (nonatomic, strong) NSString *descriptionStr;    // 作品描述
-@property (nonatomic, strong) NSString *short_description; // 短描述
+@property (nonatomic, strong) NSString *short_descriptionStr; // 短描述
 @property (nonatomic, strong) NSString *cover;             // 封面
 @property (nonatomic, strong) NSString *ori;               // 原封面
 @property (nonatomic, strong) NSString *name;              // 名字
