@@ -21,7 +21,7 @@
              foo   -->  http://eg.com/v1/foo
              foo/  -->  http://eg.com/v1/foo
  
- 此处很容易就把URL给拼错了。。。TAT
+ 此处很容易就把URL给拼错了。。。
  */
 
 // 基础接口

@@ -18,6 +18,8 @@
 #import "UserModel.h"
 #import "DatebaseManager.h"
 
+#import <SDWebImage/SDImageCache.h>
+
 static NSString *kUserHeaderCell = @"userHeaderCell";
 static NSString *kUserOtherCell = @"userOtherCell";
 

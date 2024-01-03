@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		65D7B8C2B31AC622565B3D50 /* libPods-CartoonWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 920E9A4BEB67EB82FA6BBC38 /* libPods-CartoonWorld.a */; };
 		6F005ABA1F46C0B100DCBC81 /* MoreOtherController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F005AB91F46C0B100DCBC81 /* MoreOtherController.m */; };
 		6F005ABE1F46CD0D00DCBC81 /* MoreOtherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F005ABC1F46CD0D00DCBC81 /* MoreOtherCell.m */; };
 		6F005AC21F46DBE900DCBC81 /* MoreTopicModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F005AC11F46DBE900DCBC81 /* MoreTopicModel.m */; };
@@ -114,9 +113,11 @@
 		6FD655EB1F8CBCE00053D0FA /* CustomNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD655EA1F8CBCE00053D0FA /* CustomNavigationBar.m */; };
 		6FF6D33720A190C4007A449A /* LightStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6D33620A190C4007A449A /* LightStateView.m */; };
 		6FF6D33A20A1A3CC007A449A /* BrightnessControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF6D33920A1A3CC007A449A /* BrightnessControlView.m */; };
+		F62682AC9EE09C50C2A4576F /* Pods_CartoonWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10ED1FE0868C7094AD6B1116 /* Pods_CartoonWorld.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		10ED1FE0868C7094AD6B1116 /* Pods_CartoonWorld.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CartoonWorld.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		334C7C871CA6F29E23A15956 /* Pods-CartoonWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CartoonWorld.release.xcconfig"; path = "Pods/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld.release.xcconfig"; sourceTree = "<group>"; };
 		427F1AAA9BECC9C88809ADFF /* Pods-CartoonWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CartoonWorld.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		6F005AB81F46C0B100DCBC81 /* MoreOtherController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoreOtherController.h; sourceTree = "<group>"; };
@@ -329,7 +330,6 @@
 		6FF6D33620A190C4007A449A /* LightStateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LightStateView.m; sourceTree = "<group>"; };
 		6FF6D33820A1A3CC007A449A /* BrightnessControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BrightnessControlView.h; sourceTree = "<group>"; };
 		6FF6D33920A1A3CC007A449A /* BrightnessControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrightnessControlView.m; sourceTree = "<group>"; };
-		920E9A4BEB67EB82FA6BBC38 /* libPods-CartoonWorld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CartoonWorld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -337,7 +337,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65D7B8C2B31AC622565B3D50 /* libPods-CartoonWorld.a in Frameworks */,
+				F62682AC9EE09C50C2A4576F /* Pods_CartoonWorld.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,7 +348,7 @@
 			isa = PBXGroup;
 			children = (
 				6FF6D33320A18FA0007A449A /* AVFoundation.framework */,
-				920E9A4BEB67EB82FA6BBC38 /* libPods-CartoonWorld.a */,
+				10ED1FE0868C7094AD6B1116 /* Pods_CartoonWorld.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -839,7 +839,7 @@
 				6F1293EA1EEA3DED0099ABE7 /* Sources */,
 				6F1293EB1EEA3DED0099ABE7 /* Frameworks */,
 				6F1293EC1EEA3DED0099ABE7 /* Resources */,
-				D75721795C836064361BEDEE /* [CP] Copy Pods Resources */,
+				E295F8B51F3EB0F09FDEAF48 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -857,12 +857,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0830;
-				ORGANIZATIONNAME = "顿顿";
+				ORGANIZATIONNAME = drui;
 				TargetAttributes = {
 					6F1293ED1EEA3DED0099ABE7 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = F49QM6ZJ4K;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -871,6 +870,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -906,24 +906,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D75721795C836064361BEDEE /* [CP] Copy Pods Resources */ = {
+		E295F8B51F3EB0F09FDEAF48 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld-resources.sh",
-				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
+				"${PODS_ROOT}/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/DZRPageMenuController/DZRPageMenuController.framework",
+				"${BUILT_PRODUCTS_DIR}/JRSwizzle/JRSwizzle.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
+				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/SDCycleScrollView/SDCycleScrollView.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/TZImagePickerController/TZImagePickerController.framework",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZRPageMenuController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JRSwizzle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDCycleScrollView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TZImagePickerController.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CartoonWorld/Pods-CartoonWorld-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F15BAA10B8BB9DF5B601A09B /* [CP] Check Pods Manifest.lock */ = {
@@ -1160,13 +1178,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F49QM6ZJ4K;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1.0.0;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CartoonWorld/PrefixHeader.pch";
 				INFOPLIST_FILE = CartoonWorld/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dundun.CartoonWorld;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1180,13 +1200,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = F49QM6ZJ4K;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1.0.0;
+				DEVELOPMENT_TEAM = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CartoonWorld/PrefixHeader.pch";
 				INFOPLIST_FILE = CartoonWorld/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.dundun.CartoonWorld;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -14,14 +14,14 @@
 #import "UserModel.h"
 
 #import "DatebaseManager.h"
-#import <QBImagePickerController.h>
+#import <TZImagePickerController.h>
 
 static NSString *kHeaderCell = @"headerCell";
 static NSString *kTextCell = @"textCell";
 
-@interface UserInfoController ()<QBImagePickerControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface UserInfoController ()<TZImagePickerControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
-@property (nonatomic, strong) QBImagePickerController *pickerPhoto;
+@property (nonatomic, strong) TZImagePickerController *pickerPhoto;
 @property (nonatomic, strong) UIImagePickerController *pickerCamera;
 
 @end
@@ -45,11 +45,13 @@ static NSString *kTextCell = @"textCell";
 
 # pragma mark - Getter
 
-- (QBImagePickerController *)pickerPhoto
+- (TZImagePickerController *)pickerPhoto
 {
     if (!_pickerPhoto) {
-        _pickerPhoto = [QBImagePickerController new];
-        _pickerPhoto.delegate = self;
+      _pickerPhoto = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
+      _pickerPhoto.allowTakeVideo = NO;
+      _pickerPhoto.allowTakePicture = NO;
+      _pickerPhoto.allowPickingVideo = NO;
     }
     return _pickerPhoto;
 }
@@ -215,32 +217,24 @@ static NSString *kTextCell = @"textCell";
     };
 }
 
-# pragma mark - QBImage picke controller delegate
+# pragma mark - TZImage picke controller delegate
 
-- (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didFinishPickingAssets:(NSArray *)assets
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto infos:(NSArray<NSDictionary *> *)infos
 {
-    if (assets.count > 0) {
-        WeakSelf(self);
-        [[PHImageManager defaultManager] requestImageDataForAsset:assets.firstObject options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            UserModel *user = [UserModel defaultUser];
-            [[DatebaseManager defaultDatebaseManager] modifyObject:^{
-                user.headerIcon = imageData;
-            } completed:^{
-                [weakself.tableView reloadData];
-            }];
-            
-            if (weakself.handleStatus) {
-                weakself.handleStatus(YES);
-            }
-        }];
+    if (photos.count > 0) {
+      WeakSelf(self);
+      NSData *imageData = UIImagePNGRepresentation(photos[0]);
+      UserModel *user = [UserModel defaultUser];
+      [[DatebaseManager defaultDatebaseManager] modifyObject:^{
+          user.headerIcon = imageData;
+      } completed:^{
+          [weakself.tableView reloadData];
+      }];
+      
+      if (weakself.handleStatus) {
+          weakself.handleStatus(YES);
+      }
     }
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 # pragma mark - UIImage picker controller delegate

@@ -418,14 +418,11 @@
             
             // 删除视图内容，更新视图内容
             UIImageView *changedImageView = [self viewWithTag:RUN_TAG + self.currentImageIndex - beforeChangedPosition + chasmValue];
-            [changedImageView sd_cancelCurrentAnimationImagesLoad];
+            [changedImageView sd_cancelCurrentImageLoad];
             changedImageView.image = nil;
             changedImageView.tag = RUN_TAG + self.currentImageIndex + chasmValue - afterChangedPosition;
             ComicContentModel *model = self.models[self.currentImageIndex + chasmValue - afterChangedPosition];
-            [changedImageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE options:SDWebImageCacheMemoryOnly progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                
-            }];
+          [changedImageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE];
             
             // 更新位置
             NSLog(@"beforeChangedPosition：%ld, afterPosition:%ld, 现tag：%ld",beforeChangedPosition,afterChangedPosition, changedImageView.tag);
@@ -451,12 +448,7 @@
     }
     
     ComicContentModel *model = self.models[index];
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE
-                          options:SDWebImageCacheMemoryOnly
-                        completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL)
-    {
-        
-    }];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.location] placeholderImage:DEFAULT_IMAGE];
     imageView.tag += chasmValue;
     NSLog(@"断层原tag：%ld，新tag：%ld",imageView.tag - chasmValue,imageView.tag);
 }

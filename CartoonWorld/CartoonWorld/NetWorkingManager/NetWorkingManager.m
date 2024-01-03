@@ -27,7 +27,7 @@
 #import "GuessLikeModel.h"
 #import "ComicContentModel.h"
 
-//搜搜搜
+// 搜搜搜
 #import "ClassificationRankListModel.h"
 #import "ClassificationTopListModel.h"
 #import "ClassificationTopLIstTabModel.h"
@@ -37,12 +37,12 @@
 
 - (instancetype)init
 {
-    @throw [NSException exceptionWithName:@"Cannot be involked" reason:@"Singleton" userInfo:nil];
+    @throw [NSException exceptionWithName:@"Singleton" reason:@"Cannot be involked" userInfo:nil];
 }
 
 + (instancetype)defualtManager
 {
-    static NetWorkingManager * singleton = nil;
+    static NetWorkingManager *singleton = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         if (!singleton) {
@@ -59,15 +59,22 @@
     return self;
 }
 
+- (void)GET:(NSString *)URLString
+ parameters:(nullable id)parameters
+    success:(nullable void (^)(NSURLSessionDataTask * _Nonnull, id _Nullable))success
+    failure:(nullable void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nonnull))failure
+{
+    [self.baseManager GET:URLString parameters:parameters headers:nil progress:nil success:success failure:failure];
+}
+
 // 二次元推荐
 - (void)recommendSuccess:(SuccessBlock)success  failure:(FailureBlock)failure
 {
-    [self.baseManager GET:Recommend_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:Recommend_URL parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSMutableArray * types = [NSMutableArray array];
                 types.array = [RecommendTypeModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"comicLists"]];
-//                [types removeObjectAtIndex:0];
                 NSArray * bannerArr = [AdvertisementModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"galleryItems"]];
                 
                 if (bannerArr && types) {
@@ -79,7 +86,8 @@
                 }
             }
         }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    }
+     failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         failure(error);
     }];
 }
@@ -87,7 +95,7 @@
 // 二次元VIP
 - (void)VIPSuccess:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:VIP_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:VIP_URL parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSArray * models = [VIPTypeModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"newVipList"]];
@@ -105,7 +113,7 @@
     NSDictionary *parameters = @{
       @"page": @(page)
     };
-    [self.baseManager GET:Subscription_URL parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:Subscription_URL parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSArray *models = [ComicModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"comics"]];
@@ -124,7 +132,10 @@
 // 漫画目录
 - (void)comicCatalogWithcomicID:(NSInteger)comicID success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:Comic_Catalog_URL parameters:@{@"comicid": @(comicID)} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSDictionary *params = @{
+      @"comicid": @(comicID)
+    };
+    [self GET:Comic_Catalog_URL parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 if (responseObject[@"data"][@"returnData"]) {
@@ -152,7 +163,7 @@
 - (void)comicDetailWitComicID:(NSInteger)comicId success:(SuccessBlock)success failure:(FailureBlock)failure
 {
     NSDictionary *patameters = @{@"comicid": @(comicId)};
-    [self.baseManager GET:Comic_Detail_URL parameters:patameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:Comic_Detail_URL parameters:patameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 if (responseObject[@"data"][@"returnData"]) {
@@ -169,8 +180,12 @@
 // 漫画评论
 - (void)comicCommentWithComicID:(NSInteger)comicId page:(NSInteger)page threadID:(NSInteger)threadId success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    NSDictionary *parameter = @{@"object_id": @(comicId), @"page": @(page), @"thread_id": @(threadId)};
-    [self.baseManager GET:Comic_Comment_URL parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSDictionary *parameter = @{
+      @"object_id": @(comicId),
+      @"page": @(page),
+      @"thread_id": @(threadId)
+    };
+    [self.baseManager GET:Comic_Comment_URL parameters:parameter headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 if (responseObject[@"data"][@"returnData"]) {
@@ -192,7 +207,8 @@
 // 猜你喜欢
 - (void)comicGuessLikeWithComicID:(NSInteger)comicId success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:Comic_GuessLike_URL parameters:@{@"comic_id": @(comicId)} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSDictionary *params = @{@"comic_id": @(comicId)};
+    [self GET:Comic_GuessLike_URL parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 if (responseObject[@"data"][@"returnData"]) {
@@ -209,7 +225,7 @@
 // 漫画内容
 - (void)comicContentSuccess:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:Comic_Content_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:Comic_Content_URL parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 if (responseObject[@"data"][@"returnData"]) {
@@ -229,8 +245,13 @@
 // 二次元更多漫画
 - (void)moreComicWithPage:(NSInteger)page argCon:(NSInteger)argCon argName:(NSString *)argName argValue:(NSInteger)argValue success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    NSDictionary *parameters = @{@"argCon": @(argCon), @"argName": argName, @"argValue": @(argValue), @"page": @(page)};
-    [self.baseManager GET:More_Comic_URL parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSDictionary *parameters = @{
+      @"argCon": @(argCon),
+      @"argName": argName,
+      @"argValue": @(argValue),
+      @"page": @(page)
+    };
+    [self GET:More_Comic_URL parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSDictionary *data = responseObject[@"data"][@"returnData"];
@@ -255,8 +276,13 @@
 // 二次元更多每日漫条
 - (void)moreDailycomicsWithPage:(NSInteger)page argCon:(NSInteger)argCon argName:(NSString *)argName argValue:(NSInteger)argValue success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    NSDictionary *parameters = @{@"argCon": @(argCon), @"argName": argName, @"argValue": @(argValue), @"page": @(page)};
-    [self.baseManager GET:More_dailycomics_URL parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSDictionary *parameters = @{
+      @"argCon": @(argCon),
+      @"argName": argName,
+      @"argValue": @(argValue),
+      @"page": @(page)
+    };
+    [self GET:More_dailycomics_URL parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSDictionary *data = responseObject[@"data"][@"returnData"];
@@ -281,7 +307,11 @@
 // 二次元专题更多
 - (void)moreTopicWithArgCon:(NSInteger)argCon page:(NSInteger)page success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:More_Topic_URL parameters:@{@"argCon": @(argCon), @"page": @(page)} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+  NSDictionary *params = @{
+    @"argCon": @(argCon),
+    @"page": @(page)
+  };
+    [self GET:More_Topic_URL parameters:params success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSDictionary *data = responseObject[@"data"][@"returnData"];
@@ -305,7 +335,7 @@
 // 搜索分类
 - (void)searchClassificationSuccess:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:Search_Classification_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:Search_Classification_URL parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSArray *classificationModel = [ClassificationRankListModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"][@"rankingList"]];
@@ -325,7 +355,7 @@
 // 热门搜索条
 - (void)hotSearchSuccess:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    [self.baseManager GET:Search_Hot_URL parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self GET:Search_Hot_URL parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSArray *searchHotArr = [SearchHotModel mj_objectArrayWithKeyValuesArray:responseObject[@"data"][@"returnData"]];
@@ -340,9 +370,12 @@
 // 根据关键字搜索
 - (void)searchWithString:(NSString *)string page:(NSInteger)page success:(SuccessBlock)success failure:(FailureBlock)failure
 {
-    NSString *searchStr = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *parameters = @{@"page": @(page), @"q": searchStr};
-    [self.baseManager GET:Search_Value_URL parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSString *searchStr = [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSDictionary *parameters = @{
+      @"page": @(page),
+      @"q": searchStr
+    };
+    [self GET:Search_Value_URL parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if ([responseObject[@"code"] integerValue] == 1) {
             if ([responseObject[@"data"][@"stateCode"] integerValue] == 1) {
                 NSDictionary *dic = responseObject[@"data"][@"returnData"];

@@ -1,75 +1,80 @@
 PODS:
-  - AFNetworking (3.1.0):
-    - AFNetworking/NSURLSession (= 3.1.0)
-    - AFNetworking/Reachability (= 3.1.0)
-    - AFNetworking/Security (= 3.1.0)
-    - AFNetworking/Serialization (= 3.1.0)
-    - AFNetworking/UIKit (= 3.1.0)
-  - AFNetworking/NSURLSession (3.1.0):
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.1.0)
-  - AFNetworking/Security (3.1.0)
-  - AFNetworking/Serialization (3.1.0)
-  - AFNetworking/UIKit (3.1.0):
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
   - DZRPageMenuController (1.1.3)
   - JRSwizzle (1.0)
-  - Masonry (1.0.2)
-  - MBProgressHUD (1.0.0)
-  - MJExtension (3.0.13)
-  - MJRefresh (3.1.15.3)
-  - QBImagePickerController (3.4.0)
-  - Realm (3.0.2):
-    - Realm/Headers (= 3.0.2)
-  - Realm/Headers (3.0.2)
-  - SDCycleScrollView (1.75):
-    - SDWebImage (>= 4.0.0)
-  - SDWebImage (4.0.0):
-    - SDWebImage/Core (= 4.0.0)
-  - SDWebImage/Core (4.0.0)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.2.0)
+  - MJExtension (3.4.1)
+  - MJRefresh (3.7.6)
+  - Realm (10.44.0):
+    - Realm/Headers (= 10.44.0)
+  - Realm/Headers (10.44.0)
+  - SDCycleScrollView (1.82):
+    - SDWebImage (>= 5.0.0)
+  - SDWebImage (5.18.8):
+    - SDWebImage/Core (= 5.18.8)
+  - SDWebImage/Core (5.18.8)
+  - TZImagePickerController (3.8.4):
+    - TZImagePickerController/Basic (= 3.8.4)
+    - TZImagePickerController/Location (= 3.8.4)
+  - TZImagePickerController/Basic (3.8.4)
+  - TZImagePickerController/Location (3.8.4)
 
 DEPENDENCIES:
-  - AFNetworking (~> 3.1.0)
+  - AFNetworking (~> 4.0.1)
   - DZRPageMenuController (~> 1.1.3)
-  - JRSwizzle (~> 1.0)
-  - Masonry (~> 1.0.2)
-  - MBProgressHUD (~> 1.0.0)
-  - MJExtension (~> 3.0.13)
-  - MJRefresh (~> 3.1.12)
-  - QBImagePickerController (~> 3.4.0)
-  - Realm (~> 3.0.2)
-  - SDCycleScrollView (~> 1.66)
-  - SDWebImage (~> 4.0.0)
+  - JRSwizzle
+  - Masonry (~> 1.1.0)
+  - MBProgressHUD (~> 1.2.0)
+  - MJExtension (~> 3.4.1)
+  - MJRefresh (~> 3.7.6)
+  - Realm (~> 10.44.0)
+  - SDCycleScrollView (~> 1.82)
+  - SDWebImage (~> 5.18.7)
+  - TZImagePickerController
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - AFNetworking
+  https://github.com/CocoaPods/Specs.git:
     - DZRPageMenuController
     - JRSwizzle
+  trunk:
+    - AFNetworking
     - Masonry
     - MBProgressHUD
     - MJExtension
     - MJRefresh
-    - QBImagePickerController
     - Realm
     - SDCycleScrollView
     - SDWebImage
+    - TZImagePickerController
 
 SPEC CHECKSUMS:
-  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
   DZRPageMenuController: c87a7c9ea83c218564b2203e29257d8d92ddb372
-  JRSwizzle: dd5ead5d913a0f29e7f558200165849f006bb1e3
-  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
-  MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
-  MJExtension: 5932755f451458eefa24239358817f8d291240c7
-  MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
-  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
-  Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
-  SDCycleScrollView: 884b88f0266dd4708a0e1934975c69cb971707b1
-  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  JRSwizzle: 2bef81a8176f9a93fb6d7ae96147654601efd860
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
+  MJRefresh: 2fe7fb43a5167ceda20bb7e63f130c04fd1814a5
+  Realm: 0419a32457873acb720df25bf1d658df36967cf2
+  SDCycleScrollView: a0d74c3384caa72bdfc81470bdbc8c14b3e1fbcf
+  SDWebImage: a81bbb3ba4ea5f810f4069c68727cb118467a04a
+  TZImagePickerController: f1c9f1cae6ac0e30b31aaa9698f9bf4a7cf5b84f
 
-PODFILE CHECKSUM: 9f7873a84f91362a7efe95f80ba5d3633fe9e29a
+PODFILE CHECKSUM: b55ab5b5288fe4da33122ae4775dd36b1bcdacfb
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.14.3
